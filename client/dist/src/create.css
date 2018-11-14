@@ -2470,7 +2470,10 @@
     text-decoration: none;
     color: #fff;
 }
-.gs-sticker {
+
+.margin-left {
+    margin-left: auto;
+}.gs-sticker {
     margin: 20px;
     border-radius: 3px;
     overflow: hidden;

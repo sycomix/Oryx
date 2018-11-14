@@ -6,7 +6,7 @@ module.exports = {
     'dataSource': 'mongodb',
     'mongodb': {
         'port': 27017,
-        'host': 'localhost',
+        'host': 'docker.for.mac.localhost',
         'dbName': 'stickersDB',
         'stickerCollectionName': 'stickers',
         'orderCollectionName': 'orders',

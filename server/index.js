@@ -7,7 +7,6 @@ const fs = require('fs');
 const app = express();
 
 const browse = require('./routes/browse.js');
-const create = require('./routes/create.js');
 const cart = require('./routes/cart.js');
 const checkout = require('./routes/checkout.js');
 const feedback = require('./routes/feedback.js');
@@ -29,7 +28,6 @@ app.use(function stickerCacheSetup(req, res, next) {
 });
 
 app.use('/browse', browse);
-app.use('/create', create);
 app.use('/cart', cart);
 app.use('/checkout', checkout);
 app.use('/feedback', feedback);

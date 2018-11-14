@@ -10,7 +10,6 @@ class CheckoutContainer extends React.Component {
         return (
             <div>
                 <HeaderView pageName="cart" cartCount="0"/>
-                // @ts-ignore
                 <CheckoutView />
             </div>
         );

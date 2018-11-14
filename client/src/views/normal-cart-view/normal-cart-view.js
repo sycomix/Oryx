@@ -104,13 +104,9 @@ export default React.createClass({
                         <input placeholder="required" className="gs-cartview-normal-rightpane-input" name="checkout-name" min="1" />
                         <div className="gs-cartview-normal-rightpane-label">Email Address</div>
                         <input placeholder="required" className="gs-cartview-normal-rightpane-input" name="checkout-email" type="email" min="1" />
-                        <div className="gs-cartview-normal-rightpane-disclaimer">
-                            *You will be able to pick up your stickers right after the demo. No physical address required
-                        </div>
                         <div className="gs-cartview-normal-rightpane-submitcontainer">
                             <button type="submit" className="gs-cartview-normal-rightpane-submit">
-                                <Icon className="gs-cartview-normal-rightpane-submit-icon" name="lock" size="lg" />
-                                <div>Print my stickers</div>
+                                <div>Place order</div>
                             </button>
                         </div>
                     </div>

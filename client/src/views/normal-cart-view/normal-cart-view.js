@@ -5,7 +5,7 @@ import { createRemoveFromCartAction } from '../../actions/cart-actions';
 import StickerListView from '../../views/sticker-list-view/sticker-list-view';
 import { createExpandItemAction } from '../../actions/browse-actions';
 
-import axios from 'axios';
+import axios from "axios";
 
 import './normal-cart-view.css';
 

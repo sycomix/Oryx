@@ -33230,7 +33230,6 @@
 	            console.log('Response Data: ' + data);
 	        }).catch(function (err, res) {
 	            console.log(err);
-	            console.log(res);
 	        });
 	    },
 	    render: function render() {
@@ -33346,13 +33345,7 @@
 	                        )
 	                    )
 	                )
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'gs-cartview-normal-header' },
-	                'Recommended based on your selection:'
-	            ),
-	            _react2.default.createElement(_stickerListView2.default, { items: recommendedItems, createExpandItemAction: _browseActions.createExpandItemAction })
+	            )
 	        );
 	    }
 	});

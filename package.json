@@ -8,6 +8,7 @@
     "start": "node server/index.js"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "1.15.0",
     "classname": "0.0.0",
     "express": "4.13.4",

@@ -54,7 +54,7 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _feedbackContainer = __webpack_require__(252);
+	var _feedbackContainer = __webpack_require__(278);
 	
 	var _feedbackContainer2 = _interopRequireDefault(_feedbackContainer);
 	
@@ -21331,19 +21331,45 @@
 /* 242 */,
 /* 243 */,
 /* 244 */,
-/* 245 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
+/* 245 */,
 /* 246 */,
 /* 247 */,
 /* 248 */,
 /* 249 */,
 /* 250 */,
 /* 251 */,
-/* 252 */
+/* 252 */,
+/* 253 */,
+/* 254 */,
+/* 255 */,
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */,
+/* 261 */,
+/* 262 */,
+/* 263 */,
+/* 264 */,
+/* 265 */,
+/* 266 */,
+/* 267 */,
+/* 268 */,
+/* 269 */,
+/* 270 */,
+/* 271 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 272 */,
+/* 273 */,
+/* 274 */,
+/* 275 */,
+/* 276 */,
+/* 277 */,
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21362,7 +21388,7 @@
 	
 	var _headerView2 = _interopRequireDefault(_headerView);
 	
-	var _feedbackView = __webpack_require__(253);
+	var _feedbackView = __webpack_require__(279);
 	
 	var _feedbackView2 = _interopRequireDefault(_feedbackView);
 	
@@ -21403,7 +21429,7 @@
 	exports.default = FeedbackContainer;
 
 /***/ },
-/* 253 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21418,9 +21444,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	__webpack_require__(245);
+	__webpack_require__(271);
 	
-	__webpack_require__(254);
+	__webpack_require__(280);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -21478,7 +21504,7 @@
 	exports.default = FeedbackView;
 
 /***/ },
-/* 254 */
+/* 280 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

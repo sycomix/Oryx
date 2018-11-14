@@ -54,7 +54,7 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _checkoutContainer = __webpack_require__(243);
+	var _checkoutContainer = __webpack_require__(269);
 	
 	var _checkoutContainer2 = _interopRequireDefault(_checkoutContainer);
 	
@@ -21329,7 +21329,33 @@
 /* 240 */,
 /* 241 */,
 /* 242 */,
-/* 243 */
+/* 243 */,
+/* 244 */,
+/* 245 */,
+/* 246 */,
+/* 247 */,
+/* 248 */,
+/* 249 */,
+/* 250 */,
+/* 251 */,
+/* 252 */,
+/* 253 */,
+/* 254 */,
+/* 255 */,
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */,
+/* 260 */,
+/* 261 */,
+/* 262 */,
+/* 263 */,
+/* 264 */,
+/* 265 */,
+/* 266 */,
+/* 267 */,
+/* 268 */,
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21348,7 +21374,7 @@
 	
 	var _headerView2 = _interopRequireDefault(_headerView);
 	
-	var _checkoutView = __webpack_require__(244);
+	var _checkoutView = __webpack_require__(270);
 	
 	var _checkoutView2 = _interopRequireDefault(_checkoutView);
 	
@@ -21389,7 +21415,7 @@
 	exports.default = CheckoutContainer;
 
 /***/ },
-/* 244 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21405,7 +21431,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	__webpack_require__(245);
+	__webpack_require__(271);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -21443,17 +21469,6 @@
 	                            'Your Order is Complete!'
 	                        )
 	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'gs-feedback-subheading' },
-	                        'Thank you for trying out the GetStickers demo for ',
-	                        _react2.default.createElement(
-	                            'a',
-	                            { href: 'http://getglimpse.com/' },
-	                            'Glimpse'
-	                        ),
-	                        '.'
-	                    ),
 	                    _react2.default.createElement('textarea', { placeholder: 'Please leave us your feedback here!', className: 'gs-feedback-commentarea', name: 'feedback' }),
 	                    _react2.default.createElement(
 	                        'div',
@@ -21461,7 +21476,7 @@
 	                        _react2.default.createElement(
 	                            'a',
 	                            { href: '/browse' },
-	                            'Browser for more stickers'
+	                            'Browse for more stickers'
 	                        ),
 	                        _react2.default.createElement(
 	                            'button',
@@ -21480,7 +21495,7 @@
 	exports.default = CheckoutView;
 
 /***/ },
-/* 245 */
+/* 271 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

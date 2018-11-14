@@ -2,6 +2,10 @@ import React from 'react';
 import Icon from 'react-fa';
 import { v4 } from 'node-uuid'; // Yes this works in the browser too
 import { createRemoveFromCartAction } from '../../actions/cart-actions';
+import StickerListView from '../../views/sticker-list-view/sticker-list-view';
+import { createExpandItemAction } from '../../actions/browse-actions';
+
+import axios from 'axios';
 
 import './normal-cart-view.css';
 
@@ -74,10 +78,54 @@ export default React.createClass({
         items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
     },
 
+    componentDidMount() {
+        axios.get(`https://recommender-test-4.azurewebsites.net/api/GetRecommendations?code=GHvuTHyv5jd5EsTK44lwQgwTQEwk2PbI6zkS7rugaVVjM7dInG4SQA==`)
+            .then(res => {
+                const data = res.data.data.children.map(obj => obj.data);
+                console.log(`Response Data: ${data}` );
+            });
+    },
+
     render() {
         const items = this.props.items;
         // TODO: items is an array of IDs, need to look up or convert to whole objects
         const itemRows = items.map((item) => <ItemRow item={item} key={item.id} />);
+        const recommendedItems = [
+            {
+                id: '1',
+                tags: ['Deployment'],
+                name: 'Docker',
+                description: 'The Docker container-based platform deployment system',
+                author: 'Docker',
+                size: {
+                    width: '2in',
+                    height: '2in'
+                },
+                image: '/img/logo/docker.png'
+            }, {
+                id: '2',
+                tags: ['Service'],
+                name: 'Trello',
+                description: 'The Trello project management service',
+                author: 'Trello',
+                size: {
+                    width: '2in',
+                    height: '2in'
+                },
+                image: '/img/logo/trello.png'
+            }, {
+                id: '3',
+                tags: ['Framework'],
+                name: 'Ember',
+                description: 'The Ember JavaScript framework',
+                author: 'Ember',
+                size: {
+                    width: '2in',
+                    height: '2in'
+                },
+                image: '/img/logo/ember.png'
+            }
+        ];
         return (
             <div className="gs-cartview-normal">
 
@@ -112,6 +160,10 @@ export default React.createClass({
                     </div>
                 </form>
 
+                <div className="gs-cartview-normal-header">
+                    Recommended based on your selection:
+                </div>
+                <StickerListView items={recommendedItems} createExpandItemAction={createExpandItemAction} />
             </div>
         );
     }

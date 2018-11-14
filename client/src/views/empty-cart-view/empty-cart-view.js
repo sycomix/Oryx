@@ -9,7 +9,7 @@ export default React.createClass({
     render() {
         return (
             <div className="gs-cartview-empty">
-                <div className="gs-cartview-empty-tagline">Your shopping cart is empty</div>
+                <div className="gs-cartview-empty-tagline">Your shopping cart is empty :(</div>
                 <img src="/img/Computer-with-stickers.png" />
                 <a className="gs-cartview-empty-browse" href="/browse">Browse Stickers</a>
             </div>

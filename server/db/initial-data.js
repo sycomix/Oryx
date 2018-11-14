@@ -87,7 +87,7 @@ module.exports = [
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/travisci.png'
+        image: '/img/logo/travisCi.png'
     }, {
         id: '9',
         tags: [ 'Deployment' ],

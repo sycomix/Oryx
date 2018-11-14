@@ -83,6 +83,8 @@ export default React.createClass({
             .then(res => {
                 const data = res.data.data.children.map(obj => obj.data);
                 console.log(`Response Data: ${data}` );
+            }).catch((err, res) => {
+                console.log(err);
             });
     },
 

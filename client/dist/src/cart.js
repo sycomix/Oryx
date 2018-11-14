@@ -33228,6 +33228,9 @@
 	                return obj.data;
 	            });
 	            console.log('Response Data: ' + data);
+	        }).catch(function (err, res) {
+	            console.log(err);
+	            console.log(res);
 	        });
 	    },
 	    render: function render() {

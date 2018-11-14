@@ -15,6 +15,8 @@ const config = require('./config.js');
 
 const PROJECT_ROOT = path.join(__dirname, '..');
 
+
+
 app.set('etag', false);
 
 app.set('views', path.join(PROJECT_ROOT, 'templates'));

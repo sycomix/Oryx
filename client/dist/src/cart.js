@@ -33217,12 +33217,13 @@
 	exports.default = _react2.default.createClass({
 	
 	    displayName: 'normal-cart-view',
-	
+	    recommendedItems: null,
 	    propTypes: {
 	        items: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.object).isRequired
 	    },
 	
 	    componentDidMount: function componentDidMount() {
+	        // this.recommendedItems = 
 	        _axios2.default.get('https://recommender-test-4.azurewebsites.net/api/GetRecommendations?code=GHvuTHyv5jd5EsTK44lwQgwTQEwk2PbI6zkS7rugaVVjM7dInG4SQA==').then(function (res) {
 	            var data = res.data.data.children.map(function (obj) {
 	                return obj.data;
@@ -33238,7 +33239,7 @@
 	        var itemRows = items.map(function (item) {
 	            return _react2.default.createElement(ItemRow, { item: item, key: item.id });
 	        });
-	        var recommendedItems = [{
+	        this.recommendedItems = [{
 	            id: '1',
 	            tags: ['Deployment'],
 	            name: 'Docker',
@@ -33272,6 +33273,7 @@
 	            },
 	            image: '/img/logo/ember.png'
 	        }];
+	
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'gs-cartview-normal' },
@@ -33345,7 +33347,13 @@
 	                        )
 	                    )
 	                )
-	            )
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'gs-cartview-normal-header' },
+	                'Recommended based on your selection:'
+	            ),
+	            _react2.default.createElement(_stickerListView2.default, { items: this.recommendedItems, createExpandItemAction: _browseActions.createExpandItemAction })
 	        );
 	    }
 	});

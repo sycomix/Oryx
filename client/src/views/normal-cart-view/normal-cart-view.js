@@ -73,12 +73,13 @@ const ItemRow = React.createClass({
 export default React.createClass({
 
     displayName: 'normal-cart-view',
-
+    recommendedItems: null,
     propTypes: {
         items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
     },
 
     componentDidMount() {
+        // this.recommendedItems = 
         axios.get(`https://recommender-test-4.azurewebsites.net/api/GetRecommendations?code=GHvuTHyv5jd5EsTK44lwQgwTQEwk2PbI6zkS7rugaVVjM7dInG4SQA==`)
             .then(res => {
                 const data = res.data.data.children.map(obj => obj.data);
@@ -92,7 +93,7 @@ export default React.createClass({
         const items = this.props.items;
         // TODO: items is an array of IDs, need to look up or convert to whole objects
         const itemRows = items.map((item) => <ItemRow item={item} key={item.id} />);
-        const recommendedItems = [
+        this.recommendedItems = [
             {
                 id: '1',
                 tags: ['Deployment'],
@@ -128,6 +129,8 @@ export default React.createClass({
                 image: '/img/logo/ember.png'
             }
         ];
+
+
         return (
             <div className="gs-cartview-normal">
 
@@ -162,10 +165,10 @@ export default React.createClass({
                     </div>
                 </form>
 
-                {/* <div className="gs-cartview-normal-header">
+                <div className="gs-cartview-normal-header">
                     Recommended based on your selection:
                 </div>
-                <StickerListView items={recommendedItems} createExpandItemAction={createExpandItemAction} /> */}
+                <StickerListView items={this.recommendedItems} createExpandItemAction={createExpandItemAction} />
             </div>
         );
     }

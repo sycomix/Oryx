@@ -1,16 +1,18 @@
 import { ReduceStore } from 'flux/utils';
 import dispatcher from '../dispatcher';
 import { CART_ACTIONS } from '../actions/actions';
-import { updateItems } from '../utils/api/cart-api';
+import { updateItems, getRecommendations } from '../utils/api/cart-api';
 
 // Kickstart the initial fetch of items
 updateItems();
+getRecommendations();
 
 class CartStore extends ReduceStore {
 
     getInitialState() {
         return {
-            items: []
+            items: [],
+            recommendations: []
         };
     }
 
@@ -18,10 +20,19 @@ class CartStore extends ReduceStore {
         switch (action.actionType) {
             case CART_ACTIONS.ITEMS_UPDATED_ACTION: {
                 return {
-                    items: action.items
+                    items: action.items,
+                    recommendations: state.recommendations
                 };
             }
 
+            case CART_ACTIONS.RECS_ADDED_ACTION: {
+                return {
+                    items: state.items,
+                    recommendations: action.items
+                }
+            }
+
+            
             default: {
                 return state;
             }

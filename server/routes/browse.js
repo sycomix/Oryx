@@ -22,7 +22,6 @@ router.get('/api/items', function stickerRouteApiBrowse(req, res) {
         if (tags) {
             console.log('Tags used in filter: ', tags);
         }
-
         res.send({ items });
     }, () => {
         res.send({ items: [] });

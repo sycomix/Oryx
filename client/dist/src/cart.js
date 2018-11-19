@@ -54,7 +54,7 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _cartContainer = __webpack_require__(238);
+	var _cartContainer = __webpack_require__(264);
 	
 	var _cartContainer2 = _interopRequireDefault(_cartContainer);
 	
@@ -27777,7 +27777,7 @@
 	
 	var _stickerView2 = _interopRequireDefault(_stickerView);
 	
-	__webpack_require__(229);
+	__webpack_require__(255);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -27824,7 +27824,7 @@
 	
 	var _cartActions = __webpack_require__(198);
 	
-	__webpack_require__(228);
+	__webpack_require__(254);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -27914,9 +27914,11 @@
 	    value: true
 	});
 	exports.createItemsUpdatedAction = createItemsUpdatedAction;
+	exports.createRecommendationsUpdatedAction = createRecommendationsUpdatedAction;
 	exports.createUpdateFailedAction = createUpdateFailedAction;
 	exports.createAddToCartAction = createAddToCartAction;
 	exports.createRemoveFromCartAction = createRemoveFromCartAction;
+	exports.createRecommendationsAddedAction = createRecommendationsAddedAction;
 	
 	var _dispatcher = __webpack_require__(199);
 	
@@ -27935,6 +27937,13 @@
 	    });
 	}
 	
+	function createRecommendationsUpdatedAction(items) {
+	    _dispatcher2.default.dispatch({
+	        actionType: _actions.CART_ACTIONS.RECS_ADDED_ACTION,
+	        items: items
+	    });
+	}
+	
 	function createUpdateFailedAction() {
 	    _dispatcher2.default.dispatch({
 	        actionType: _actions.CART_ACTIONS.UPDATE_FAILED_ACTION
@@ -27947,6 +27956,10 @@
 	
 	function createRemoveFromCartAction(item) {
 	    (0, _cartApi.removeItem)(item);
+	}
+	
+	function createRecommendationsAddedAction() {
+	    (0, _cartApi.getRecommendations)();
 	}
 
 /***/ },
@@ -28243,7 +28256,8 @@
 	
 	var CART_ACTIONS = exports.CART_ACTIONS = Object.freeze({
 	    ITEMS_UPDATED_ACTION: 'CART_ITEMS_UPDATED_ACTION',
-	    UPDATE_FAILED_ACTION: 'CART_UPDATE_FAILED_ACTION'
+	    UPDATE_FAILED_ACTION: 'CART_UPDATE_FAILED_ACTION',
+	    RECS_ADDED_ACTION: 'CART_RECS_ADDED_ACTION'
 	});
 
 /***/ },
@@ -28256,12 +28270,19 @@
 	    value: true
 	});
 	exports.updateItems = updateItems;
+	exports.getRecommendations = getRecommendations;
 	exports.addItem = addItem;
 	exports.removeItem = removeItem;
 	
 	var _cartActions = __webpack_require__(198);
 	
 	var _api = __webpack_require__(204);
+	
+	var _axios = __webpack_require__(228);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function updateItems() {
 	    (0, _api.request)({
@@ -28272,6 +28293,18 @@
 	            return;
 	        }
 	        (0, _cartActions.createItemsUpdatedAction)(res.items);
+	    });
+	}
+	
+	function getRecommendations() {
+	    _axios2.default.get('https://recommender-test-4.azurewebsites.net/api/GetRecommendations?code=GHvuTHyv5jd5EsTK44lwQgwTQEwk2PbI6zkS7rugaVVjM7dInG4SQA==').then(function (res) {
+	        console.log("REsponse data: " + res.data);
+	
+	        // The API returns the complete list of items to force the system to get
+	        // in sync, in case something bad happened to get it out of sync
+	        (0, _cartActions.createRecommendationsUpdatedAction)(res.data);
+	    }).catch(function (err, res) {
+	        console.log(err);
 	    });
 	}
 	
@@ -32709,671 +32742,20 @@
 
 /***/ },
 /* 228 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	// removed by extract-text-webpack-plugin
+	module.exports = __webpack_require__(229);
 
 /***/ },
 /* 229 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 230 */,
-/* 231 */,
-/* 232 */,
-/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.updateItems = updateItems;
-	
-	var _browseActions = __webpack_require__(234);
-	
-	var _api = __webpack_require__(204);
-	
-	var _cookies = __webpack_require__(235);
-	
-	function updateItems() {
-	    var tags = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-	
-	    // Update cookie here
-	    (0, _cookies.createCookie)('searchTags', JSON.stringify(tags), 30);
-	
-	    (0, _api.request)({
-	        url: 'browse/api/items',
-	        payload: { tags: tags }
-	    }, function (err, res) {
-	        if (err) {
-	            (0, _browseActions.createUpdateFailedAction)();
-	            return;
-	        }
-	        (0, _browseActions.createItemsUpdatedAction)(res.items);
-	    });
-	}
-
-/***/ },
-/* 234 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.createAddTagFilterAction = createAddTagFilterAction;
-	exports.createRemoveTagFilterAction = createRemoveTagFilterAction;
-	exports.createExpandItemAction = createExpandItemAction;
-	exports.createCloseExpandedItemAction = createCloseExpandedItemAction;
-	exports.createUpdateFailedAction = createUpdateFailedAction;
-	exports.createItemsUpdatedAction = createItemsUpdatedAction;
-	
-	var _dispatcher = __webpack_require__(199);
-	
-	var _dispatcher2 = _interopRequireDefault(_dispatcher);
-	
-	var _actions = __webpack_require__(202);
-	
-	var _browseApi = __webpack_require__(233);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var tags = [];
-	
-	function createAddTagFilterAction(tag) {
-	    tags.push(tag);
-	    (0, _browseApi.updateItems)(tags);
-	    _dispatcher2.default.dispatch({
-	        actionType: _actions.BROWSE_ACTIONS.ADD_TAG_FILTER_ACTION,
-	        tag: tag
-	    });
-	}
-	
-	function createRemoveTagFilterAction(tag) {
-	    var tagIndex = tags.indexOf(tag);
-	    if (tagIndex !== -1) {
-	        tags.splice(tagIndex, 1);
-	        (0, _browseApi.updateItems)(tags);
-	    }
-	    _dispatcher2.default.dispatch({
-	        actionType: _actions.BROWSE_ACTIONS.REMOVE_TAG_FILTER_ACTION,
-	        tag: tag
-	    });
-	}
-	
-	function createExpandItemAction(id) {
-	    _dispatcher2.default.dispatch({
-	        actionType: _actions.BROWSE_ACTIONS.EXPAND_ITEM_ACTION,
-	        id: id
-	    });
-	}
-	
-	function createCloseExpandedItemAction() {
-	    _dispatcher2.default.dispatch({
-	        actionType: _actions.BROWSE_ACTIONS.CLOSE_EXPANDED_ITEM_ACTION
-	    });
-	}
-	
-	function createUpdateFailedAction() {
-	    _dispatcher2.default.dispatch({
-	        actionType: _actions.BROWSE_ACTIONS.UPDATE_FAILED_ACTION
-	    });
-	}
-	
-	function createItemsUpdatedAction(items) {
-	    _dispatcher2.default.dispatch({
-	        actionType: _actions.BROWSE_ACTIONS.ITEMS_UPDATED_ACTION,
-	        items: items
-	    });
-	}
-
-/***/ },
-/* 235 */
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.createCookie = createCookie;
-	exports.readCookie = readCookie;
-	function createCookie(name, value, days) {
-	    var expires = '';
-	    if (days) {
-	        var date = new Date();
-	        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-	        expires = '; expires=' + date.toUTCString();
-	    }
-	    document.cookie = name + '=' + value + expires + '; path=/';
-	}
-	
-	function readCookie(name) {
-	    var nameEQ = name + '=';
-	    var ca = document.cookie.split(';');
-	    for (var i = 0; i < ca.length; i++) {
-	        var c = ca[i];
-	        while (c.charAt(0) == ' ') {
-	            c = c.substring(1, c.length);
-	        }
-	        if (c.indexOf(nameEQ) == 0) {
-	            return c.substring(nameEQ.length, c.length);
-	        }
-	    }
-	    return null;
-	}
-
-/***/ },
-/* 236 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _utils = __webpack_require__(167);
-	
-	var _dispatcher = __webpack_require__(199);
-	
-	var _dispatcher2 = _interopRequireDefault(_dispatcher);
-	
-	var _actions = __webpack_require__(202);
-	
-	var _cartApi = __webpack_require__(203);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	// Kickstart the initial fetch of items
-	(0, _cartApi.updateItems)();
-	
-	var CartStore = function (_ReduceStore) {
-	    _inherits(CartStore, _ReduceStore);
-	
-	    function CartStore() {
-	        _classCallCheck(this, CartStore);
-	
-	        return _possibleConstructorReturn(this, (CartStore.__proto__ || Object.getPrototypeOf(CartStore)).apply(this, arguments));
-	    }
-	
-	    _createClass(CartStore, [{
-	        key: 'getInitialState',
-	        value: function getInitialState() {
-	            return {
-	                items: []
-	            };
-	        }
-	    }, {
-	        key: 'reduce',
-	        value: function reduce(state, action) {
-	            switch (action.actionType) {
-	                case _actions.CART_ACTIONS.ITEMS_UPDATED_ACTION:
-	                    {
-	                        return {
-	                            items: action.items
-	                        };
-	                    }
-	
-	                default:
-	                    {
-	                        return state;
-	                    }
-	            }
-	        }
-	    }]);
-	
-	    return CartStore;
-	}(_utils.ReduceStore);
-	
-	exports.default = new CartStore(_dispatcher2.default);
-
-/***/ },
-/* 237 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 238 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _utils = __webpack_require__(167);
-	
-	var _headerView = __webpack_require__(185);
-	
-	var _headerView2 = _interopRequireDefault(_headerView);
-	
-	var _emptyCartView = __webpack_require__(239);
-	
-	var _emptyCartView2 = _interopRequireDefault(_emptyCartView);
-	
-	var _normalCartView = __webpack_require__(241);
-	
-	var _normalCartView2 = _interopRequireDefault(_normalCartView);
-	
-	var _cartStore = __webpack_require__(236);
-	
-	var _cartStore2 = _interopRequireDefault(_cartStore);
-	
-	__webpack_require__(237);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var CartContainer = function (_React$Component) {
-	    _inherits(CartContainer, _React$Component);
-	
-	    function CartContainer() {
-	        _classCallCheck(this, CartContainer);
-	
-	        return _possibleConstructorReturn(this, (CartContainer.__proto__ || Object.getPrototypeOf(CartContainer)).apply(this, arguments));
-	    }
-	
-	    _createClass(CartContainer, [{
-	        key: 'render',
-	        value: function render() {
-	            var cartView = this.state.cart.items.length === 0 ? _react2.default.createElement(_emptyCartView2.default, null) : _react2.default.createElement(_normalCartView2.default, { items: this.state.cart.items });
-	            return _react2.default.createElement(
-	                'div',
-	                null,
-	                _react2.default.createElement(_headerView2.default, { pageName: 'cart', cartCount: this.state.cart.items.length }),
-	                cartView
-	            );
-	        }
-	    }]);
-	
-	    return CartContainer;
-	}(_react2.default.Component);
-	
-	CartContainer.getStores = function () {
-	    return [_cartStore2.default];
-	};
-	
-	CartContainer.calculateState = function () {
-	    return {
-	        cart: _cartStore2.default.getState()
-	    };
-	};
-	
-	exports.default = _utils.Container.create(CartContainer);
-
-/***/ },
-/* 239 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	__webpack_require__(240);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	exports.default = _react2.default.createClass({
-	
-	    displayName: 'empty-cart-view',
-	
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'gs-cartview-empty' },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'gs-cartview-empty-tagline' },
-	                'Your shopping cart is empty :('
-	            ),
-	            _react2.default.createElement('img', { src: '/img/Computer-with-stickers.png' }),
-	            _react2.default.createElement(
-	                'a',
-	                { className: 'gs-cartview-empty-browse', href: '/browse' },
-	                'Browse Stickers'
-	            )
-	        );
-	    }
-	});
-
-/***/ },
-/* 240 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 241 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactFa = __webpack_require__(187);
-	
-	var _reactFa2 = _interopRequireDefault(_reactFa);
-	
-	var _nodeUuid = __webpack_require__(205);
-	
-	var _cartActions = __webpack_require__(198);
-	
-	var _stickerListView = __webpack_require__(196);
-	
-	var _stickerListView2 = _interopRequireDefault(_stickerListView);
-	
-	var _browseActions = __webpack_require__(234);
-	
-	var _axios = __webpack_require__(242);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	__webpack_require__(268);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// Temporary until we implement actual auth
-	if (!localStorage.token) {
-	    localStorage.token = (0, _nodeUuid.v4)();
-	} // Yes this works in the browser too
-	
-	var token = localStorage.token;
-	
-	var ItemRow = _react2.default.createClass({
-	
-	    displayName: 'item-row',
-	
-	    propTypes: {
-	        item: _react2.default.PropTypes.object
-	    },
-	
-	    getInitialState: function getInitialState() {
-	        return {
-	            quantity: 1
-	        };
-	    },
-	    onQuantityChanged: function onQuantityChanged(e) {
-	        this.setState({ quantity: e.target.value });
-	    },
-	    onItemRemoved: function onItemRemoved() {
-	        (0, _cartActions.createRemoveFromCartAction)(this.props.item);
-	    },
-	    render: function render() {
-	        var item = this.props.item;
-	        return _react2.default.createElement(
-	            'div',
-	            { key: item.id, className: 'gs-cartview-normal-leftpane-row' },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'gs-cartview-normal-leftpane-row-product' },
-	                _react2.default.createElement('img', { src: item.image }),
-	                _react2.default.createElement(
-	                    'div',
-	                    null,
-	                    _react2.default.createElement(
-	                        'div',
-	                        null,
-	                        _react2.default.createElement(
-	                            'span',
-	                            { className: 'gs-cartview-normal-leftpane-row-product-name' },
-	                            item.name
-	                        ),
-	                        _react2.default.createElement(
-	                            'span',
-	                            { className: 'gs-cartview-normal-leftpane-row-product-by' },
-	                            ' by '
-	                        ),
-	                        _react2.default.createElement(
-	                            'span',
-	                            { className: 'gs-cartview-normal-leftpane-row-product-author' },
-	                            item.author
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'gs-cartview-normal-leftpane-row-product-size' },
-	                        item.size.width,
-	                        ' x ',
-	                        item.size.height
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'gs-cartview-normal-leftpane-row-total' },
-	                'Free'
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'gs-cartview-normal-leftpane-row-quantity' },
-	                _react2.default.createElement(
-	                    'select',
-	                    { name: 'checkout-items[' + item.id + '][quantity]',
-	                        value: this.state.quantity,
-	                        onChange: this.onQuantityChanged,
-	                        'data-item-id': item.id },
-	                    _react2.default.createElement(
-	                        'option',
-	                        { value: '1' },
-	                        '1'
-	                    ),
-	                    _react2.default.createElement(
-	                        'option',
-	                        { value: '2' },
-	                        '2'
-	                    ),
-	                    _react2.default.createElement(
-	                        'option',
-	                        { value: '3' },
-	                        '3'
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(_reactFa2.default, { name: 'close', className: 'gs-cartview-normal-leftpane-close', onClick: this.onItemRemoved }),
-	            _react2.default.createElement('input', { type: 'hidden', value: item.id, name: 'checkout-items[' + item.id + '][id]' })
-	        );
-	    }
-	});
-	
-	exports.default = _react2.default.createClass({
-	
-	    displayName: 'normal-cart-view',
-	    recommendedItems: null,
-	    propTypes: {
-	        items: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.object).isRequired
-	    },
-	
-	    componentDidMount: function componentDidMount() {
-	        // this.recommendedItems = 
-	        _axios2.default.get('https://recommender-test-4.azurewebsites.net/api/GetRecommendations?code=GHvuTHyv5jd5EsTK44lwQgwTQEwk2PbI6zkS7rugaVVjM7dInG4SQA==').then(function (res) {
-	            var data = res.data.data.children.map(function (obj) {
-	                return obj.data;
-	            });
-	            console.log('Response Data: ' + data);
-	        }).catch(function (err, res) {
-	            console.log(err);
-	        });
-	    },
-	    render: function render() {
-	        var items = this.props.items;
-	        // TODO: items is an array of IDs, need to look up or convert to whole objects
-	        var itemRows = items.map(function (item) {
-	            return _react2.default.createElement(ItemRow, { item: item, key: item.id });
-	        });
-	        this.recommendedItems = [{
-	            id: '1',
-	            tags: ['Deployment'],
-	            name: 'Docker',
-	            description: 'The Docker container-based platform deployment system',
-	            author: 'Docker',
-	            size: {
-	                width: '2in',
-	                height: '2in'
-	            },
-	            image: '/img/logo/docker.png'
-	        }, {
-	            id: '2',
-	            tags: ['Service'],
-	            name: 'Trello',
-	            description: 'The Trello project management service',
-	            author: 'Trello',
-	            size: {
-	                width: '2in',
-	                height: '2in'
-	            },
-	            image: '/img/logo/trello.png'
-	        }, {
-	            id: '3',
-	            tags: ['Framework'],
-	            name: 'Ember',
-	            description: 'The Ember JavaScript framework',
-	            author: 'Ember',
-	            size: {
-	                width: '2in',
-	                height: '2in'
-	            },
-	            image: '/img/logo/ember.png'
-	        }];
-	
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'gs-cartview-normal' },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'gs-cartview-normal-header' },
-	                'You have ',
-	                _react2.default.createElement(
-	                    'span',
-	                    { className: 'gs-cartview-normal-header-count' },
-	                    items.length
-	                ),
-	                ' ',
-	                items.length === 1 ? 'item' : 'items',
-	                ' in your cart.'
-	            ),
-	            _react2.default.createElement(
-	                'form',
-	                { className: 'gs-cartview-normal-body', action: '/checkout', method: 'post' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'gs-cartview-normal-leftpane' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'gs-cartview-normal-leftpane-header' },
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'gs-cartview-normal-leftpane-header-products' },
-	                            'Products'
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'gs-cartview-normal-leftpane-header-total' },
-	                            'Total'
-	                        ),
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'gs-cartview-normal-leftpane-header-quantity' },
-	                            'Quantity'
-	                        )
-	                    ),
-	                    itemRows,
-	                    _react2.default.createElement('input', { type: 'hidden', name: 'token', value: token })
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'gs-cartview-normal-rightpane' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'gs-cartview-normal-rightpane-label' },
-	                        'Name'
-	                    ),
-	                    _react2.default.createElement('input', { placeholder: 'required', className: 'gs-cartview-normal-rightpane-input', name: 'checkout-name', min: '1' }),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'gs-cartview-normal-rightpane-label' },
-	                        'Email Address'
-	                    ),
-	                    _react2.default.createElement('input', { placeholder: 'required', className: 'gs-cartview-normal-rightpane-input', name: 'checkout-email', type: 'email', min: '1' }),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'gs-cartview-normal-rightpane-submitcontainer' },
-	                        _react2.default.createElement(
-	                            'button',
-	                            { type: 'submit', className: 'gs-cartview-normal-rightpane-submit' },
-	                            _react2.default.createElement(
-	                                'div',
-	                                null,
-	                                'Place order'
-	                            )
-	                        )
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'gs-cartview-normal-header' },
-	                'Recommended based on your selection:'
-	            ),
-	            _react2.default.createElement(_stickerListView2.default, { items: this.recommendedItems, createExpandItemAction: _browseActions.createExpandItemAction })
-	        );
-	    }
-	});
-
-/***/ },
-/* 242 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(243);
-
-/***/ },
-/* 243 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var utils = __webpack_require__(244);
-	var bind = __webpack_require__(245);
-	var Axios = __webpack_require__(247);
-	var defaults = __webpack_require__(248);
+	var utils = __webpack_require__(230);
+	var bind = __webpack_require__(231);
+	var Axios = __webpack_require__(233);
+	var defaults = __webpack_require__(234);
 	
 	/**
 	 * Create an instance of Axios
@@ -33406,15 +32788,15 @@
 	};
 	
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(265);
-	axios.CancelToken = __webpack_require__(266);
-	axios.isCancel = __webpack_require__(262);
+	axios.Cancel = __webpack_require__(251);
+	axios.CancelToken = __webpack_require__(252);
+	axios.isCancel = __webpack_require__(248);
 	
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(267);
+	axios.spread = __webpack_require__(253);
 	
 	module.exports = axios;
 	
@@ -33423,13 +32805,13 @@
 
 
 /***/ },
-/* 244 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var bind = __webpack_require__(245);
-	var isBuffer = __webpack_require__(246);
+	var bind = __webpack_require__(231);
+	var isBuffer = __webpack_require__(232);
 	
 	/*global toString:true*/
 	
@@ -33732,7 +33114,7 @@
 
 
 /***/ },
-/* 245 */
+/* 231 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33749,7 +33131,7 @@
 
 
 /***/ },
-/* 246 */
+/* 232 */
 /***/ function(module, exports) {
 
 	/*!
@@ -33776,15 +33158,15 @@
 
 
 /***/ },
-/* 247 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var defaults = __webpack_require__(248);
-	var utils = __webpack_require__(244);
-	var InterceptorManager = __webpack_require__(259);
-	var dispatchRequest = __webpack_require__(260);
+	var defaults = __webpack_require__(234);
+	var utils = __webpack_require__(230);
+	var InterceptorManager = __webpack_require__(245);
+	var dispatchRequest = __webpack_require__(246);
 	
 	/**
 	 * Create a new instance of Axios
@@ -33861,13 +33243,13 @@
 
 
 /***/ },
-/* 248 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var utils = __webpack_require__(244);
-	var normalizeHeaderName = __webpack_require__(249);
+	var utils = __webpack_require__(230);
+	var normalizeHeaderName = __webpack_require__(235);
 	
 	var DEFAULT_CONTENT_TYPE = {
 	  'Content-Type': 'application/x-www-form-urlencoded'
@@ -33883,10 +33265,10 @@
 	  var adapter;
 	  if (typeof XMLHttpRequest !== 'undefined') {
 	    // For browsers use XHR adapter
-	    adapter = __webpack_require__(250);
+	    adapter = __webpack_require__(236);
 	  } else if (typeof process !== 'undefined') {
 	    // For node use HTTP adapter
-	    adapter = __webpack_require__(250);
+	    adapter = __webpack_require__(236);
 	  }
 	  return adapter;
 	}
@@ -33964,12 +33346,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 249 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(230);
 	
 	module.exports = function normalizeHeaderName(headers, normalizedName) {
 	  utils.forEach(headers, function processHeader(value, name) {
@@ -33982,18 +33364,18 @@
 
 
 /***/ },
-/* 250 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
-	var utils = __webpack_require__(244);
-	var settle = __webpack_require__(251);
-	var buildURL = __webpack_require__(254);
-	var parseHeaders = __webpack_require__(255);
-	var isURLSameOrigin = __webpack_require__(256);
-	var createError = __webpack_require__(252);
-	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(257);
+	var utils = __webpack_require__(230);
+	var settle = __webpack_require__(237);
+	var buildURL = __webpack_require__(240);
+	var parseHeaders = __webpack_require__(241);
+	var isURLSameOrigin = __webpack_require__(242);
+	var createError = __webpack_require__(238);
+	var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(243);
 	
 	module.exports = function xhrAdapter(config) {
 	  return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -34090,7 +33472,7 @@
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(258);
+	      var cookies = __webpack_require__(244);
 	
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -34169,12 +33551,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 251 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var createError = __webpack_require__(252);
+	var createError = __webpack_require__(238);
 	
 	/**
 	 * Resolve or reject a Promise based on response status.
@@ -34201,12 +33583,12 @@
 
 
 /***/ },
-/* 252 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var enhanceError = __webpack_require__(253);
+	var enhanceError = __webpack_require__(239);
 	
 	/**
 	 * Create an Error with the specified message, config, error code, request and response.
@@ -34225,7 +33607,7 @@
 
 
 /***/ },
-/* 253 */
+/* 239 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34252,12 +33634,12 @@
 
 
 /***/ },
-/* 254 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(230);
 	
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -34324,12 +33706,12 @@
 
 
 /***/ },
-/* 255 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(230);
 	
 	// Headers whose duplicates are ignored by node
 	// c.f. https://nodejs.org/api/http.html#http_message_headers
@@ -34383,12 +33765,12 @@
 
 
 /***/ },
-/* 256 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(230);
 	
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -34457,7 +33839,7 @@
 
 
 /***/ },
-/* 257 */
+/* 243 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34499,12 +33881,12 @@
 
 
 /***/ },
-/* 258 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(230);
 	
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -34558,12 +33940,12 @@
 
 
 /***/ },
-/* 259 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(230);
 	
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -34616,17 +33998,17 @@
 
 
 /***/ },
-/* 260 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(244);
-	var transformData = __webpack_require__(261);
-	var isCancel = __webpack_require__(262);
-	var defaults = __webpack_require__(248);
-	var isAbsoluteURL = __webpack_require__(263);
-	var combineURLs = __webpack_require__(264);
+	var utils = __webpack_require__(230);
+	var transformData = __webpack_require__(247);
+	var isCancel = __webpack_require__(248);
+	var defaults = __webpack_require__(234);
+	var isAbsoluteURL = __webpack_require__(249);
+	var combineURLs = __webpack_require__(250);
 	
 	/**
 	 * Throws a `Cancel` if cancellation has been requested.
@@ -34708,12 +34090,12 @@
 
 
 /***/ },
-/* 261 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var utils = __webpack_require__(244);
+	var utils = __webpack_require__(230);
 	
 	/**
 	 * Transform the data for a request or a response
@@ -34734,7 +34116,7 @@
 
 
 /***/ },
-/* 262 */
+/* 248 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34745,7 +34127,7 @@
 
 
 /***/ },
-/* 263 */
+/* 249 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34765,7 +34147,7 @@
 
 
 /***/ },
-/* 264 */
+/* 250 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34785,7 +34167,7 @@
 
 
 /***/ },
-/* 265 */
+/* 251 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34810,12 +34192,12 @@
 
 
 /***/ },
-/* 266 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Cancel = __webpack_require__(265);
+	var Cancel = __webpack_require__(251);
 	
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -34873,7 +34255,7 @@
 
 
 /***/ },
-/* 267 */
+/* 253 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -34904,6 +34286,625 @@
 	  };
 	};
 
+
+/***/ },
+/* 254 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 255 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 256 */,
+/* 257 */,
+/* 258 */,
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.updateItems = updateItems;
+	
+	var _browseActions = __webpack_require__(260);
+	
+	var _api = __webpack_require__(204);
+	
+	var _cookies = __webpack_require__(261);
+	
+	function updateItems() {
+	    var tags = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	
+	    // Update cookie here
+	    (0, _cookies.createCookie)('searchTags', JSON.stringify(tags), 30);
+	
+	    (0, _api.request)({
+	        url: 'browse/api/items',
+	        payload: { tags: tags }
+	    }, function (err, res) {
+	        if (err) {
+	            (0, _browseActions.createUpdateFailedAction)();
+	            return;
+	        }
+	        (0, _browseActions.createItemsUpdatedAction)(res.items);
+	    });
+	}
+
+/***/ },
+/* 260 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.createAddTagFilterAction = createAddTagFilterAction;
+	exports.createRemoveTagFilterAction = createRemoveTagFilterAction;
+	exports.createExpandItemAction = createExpandItemAction;
+	exports.createCloseExpandedItemAction = createCloseExpandedItemAction;
+	exports.createUpdateFailedAction = createUpdateFailedAction;
+	exports.createItemsUpdatedAction = createItemsUpdatedAction;
+	
+	var _dispatcher = __webpack_require__(199);
+	
+	var _dispatcher2 = _interopRequireDefault(_dispatcher);
+	
+	var _actions = __webpack_require__(202);
+	
+	var _browseApi = __webpack_require__(259);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var tags = [];
+	
+	function createAddTagFilterAction(tag) {
+	    tags.push(tag);
+	    (0, _browseApi.updateItems)(tags);
+	    _dispatcher2.default.dispatch({
+	        actionType: _actions.BROWSE_ACTIONS.ADD_TAG_FILTER_ACTION,
+	        tag: tag
+	    });
+	}
+	
+	function createRemoveTagFilterAction(tag) {
+	    var tagIndex = tags.indexOf(tag);
+	    if (tagIndex !== -1) {
+	        tags.splice(tagIndex, 1);
+	        (0, _browseApi.updateItems)(tags);
+	    }
+	    _dispatcher2.default.dispatch({
+	        actionType: _actions.BROWSE_ACTIONS.REMOVE_TAG_FILTER_ACTION,
+	        tag: tag
+	    });
+	}
+	
+	function createExpandItemAction(id) {
+	    _dispatcher2.default.dispatch({
+	        actionType: _actions.BROWSE_ACTIONS.EXPAND_ITEM_ACTION,
+	        id: id
+	    });
+	}
+	
+	function createCloseExpandedItemAction() {
+	    _dispatcher2.default.dispatch({
+	        actionType: _actions.BROWSE_ACTIONS.CLOSE_EXPANDED_ITEM_ACTION
+	    });
+	}
+	
+	function createUpdateFailedAction() {
+	    _dispatcher2.default.dispatch({
+	        actionType: _actions.BROWSE_ACTIONS.UPDATE_FAILED_ACTION
+	    });
+	}
+	
+	function createItemsUpdatedAction(items) {
+	    _dispatcher2.default.dispatch({
+	        actionType: _actions.BROWSE_ACTIONS.ITEMS_UPDATED_ACTION,
+	        items: items
+	    });
+	}
+
+/***/ },
+/* 261 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.createCookie = createCookie;
+	exports.readCookie = readCookie;
+	function createCookie(name, value, days) {
+	    var expires = '';
+	    if (days) {
+	        var date = new Date();
+	        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+	        expires = '; expires=' + date.toUTCString();
+	    }
+	    document.cookie = name + '=' + value + expires + '; path=/';
+	}
+	
+	function readCookie(name) {
+	    var nameEQ = name + '=';
+	    var ca = document.cookie.split(';');
+	    for (var i = 0; i < ca.length; i++) {
+	        var c = ca[i];
+	        while (c.charAt(0) == ' ') {
+	            c = c.substring(1, c.length);
+	        }
+	        if (c.indexOf(nameEQ) == 0) {
+	            return c.substring(nameEQ.length, c.length);
+	        }
+	    }
+	    return null;
+	}
+
+/***/ },
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _utils = __webpack_require__(167);
+	
+	var _dispatcher = __webpack_require__(199);
+	
+	var _dispatcher2 = _interopRequireDefault(_dispatcher);
+	
+	var _actions = __webpack_require__(202);
+	
+	var _cartApi = __webpack_require__(203);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	// Kickstart the initial fetch of items
+	(0, _cartApi.updateItems)();
+	(0, _cartApi.getRecommendations)();
+	
+	var CartStore = function (_ReduceStore) {
+	    _inherits(CartStore, _ReduceStore);
+	
+	    function CartStore() {
+	        _classCallCheck(this, CartStore);
+	
+	        return _possibleConstructorReturn(this, (CartStore.__proto__ || Object.getPrototypeOf(CartStore)).apply(this, arguments));
+	    }
+	
+	    _createClass(CartStore, [{
+	        key: 'getInitialState',
+	        value: function getInitialState() {
+	            return {
+	                items: [],
+	                recommendations: []
+	            };
+	        }
+	    }, {
+	        key: 'reduce',
+	        value: function reduce(state, action) {
+	            switch (action.actionType) {
+	                case _actions.CART_ACTIONS.ITEMS_UPDATED_ACTION:
+	                    {
+	                        return {
+	                            items: action.items,
+	                            recommendations: state.recommendations
+	                        };
+	                    }
+	
+	                case _actions.CART_ACTIONS.RECS_ADDED_ACTION:
+	                    {
+	                        return {
+	                            items: state.items,
+	                            recommendations: action.items
+	                        };
+	                    }
+	
+	                default:
+	                    {
+	                        return state;
+	                    }
+	            }
+	        }
+	    }]);
+	
+	    return CartStore;
+	}(_utils.ReduceStore);
+	
+	exports.default = new CartStore(_dispatcher2.default);
+
+/***/ },
+/* 263 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 264 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _utils = __webpack_require__(167);
+	
+	var _headerView = __webpack_require__(185);
+	
+	var _headerView2 = _interopRequireDefault(_headerView);
+	
+	var _emptyCartView = __webpack_require__(265);
+	
+	var _emptyCartView2 = _interopRequireDefault(_emptyCartView);
+	
+	var _normalCartView = __webpack_require__(267);
+	
+	var _normalCartView2 = _interopRequireDefault(_normalCartView);
+	
+	var _cartStore = __webpack_require__(262);
+	
+	var _cartStore2 = _interopRequireDefault(_cartStore);
+	
+	__webpack_require__(263);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var CartContainer = function (_React$Component) {
+	    _inherits(CartContainer, _React$Component);
+	
+	    function CartContainer() {
+	        _classCallCheck(this, CartContainer);
+	
+	        return _possibleConstructorReturn(this, (CartContainer.__proto__ || Object.getPrototypeOf(CartContainer)).apply(this, arguments));
+	    }
+	
+	    _createClass(CartContainer, [{
+	        key: 'render',
+	        value: function render() {
+	            console.log("Recommendations:" + this.state.cart.recommendations);
+	            var cartView = this.state.cart.items.length === 0 ? _react2.default.createElement(_emptyCartView2.default, null) : _react2.default.createElement(_normalCartView2.default, { items: this.state.cart.items, recommendations: this.state.cart.recommendations });
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(_headerView2.default, { pageName: 'cart', cartCount: this.state.cart.items.length }),
+	                cartView
+	            );
+	        }
+	    }]);
+	
+	    return CartContainer;
+	}(_react2.default.Component);
+	
+	CartContainer.getStores = function () {
+	    return [_cartStore2.default];
+	};
+	
+	CartContainer.calculateState = function () {
+	    return {
+	        cart: _cartStore2.default.getState()
+	    };
+	};
+	
+	exports.default = _utils.Container.create(CartContainer);
+
+/***/ },
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	__webpack_require__(266);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = _react2.default.createClass({
+	
+	    displayName: 'empty-cart-view',
+	
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'gs-cartview-empty' },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'gs-cartview-empty-tagline' },
+	                'Your shopping cart is empty :('
+	            ),
+	            _react2.default.createElement('img', { src: '/img/Computer-with-stickers.png' }),
+	            _react2.default.createElement(
+	                'a',
+	                { className: 'gs-cartview-empty-browse', href: '/browse' },
+	                'Browse Stickers'
+	            )
+	        );
+	    }
+	});
+
+/***/ },
+/* 266 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactFa = __webpack_require__(187);
+	
+	var _reactFa2 = _interopRequireDefault(_reactFa);
+	
+	var _nodeUuid = __webpack_require__(205);
+	
+	var _cartActions = __webpack_require__(198);
+	
+	var _stickerListView = __webpack_require__(196);
+	
+	var _stickerListView2 = _interopRequireDefault(_stickerListView);
+	
+	var _browseActions = __webpack_require__(260);
+	
+	var _axios = __webpack_require__(228);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	__webpack_require__(268);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// Temporary until we implement actual auth
+	if (!localStorage.token) {
+	    localStorage.token = (0, _nodeUuid.v4)();
+	} // Yes this works in the browser too
+	
+	var token = localStorage.token;
+	
+	var ItemRow = _react2.default.createClass({
+	
+	    displayName: 'item-row',
+	
+	    propTypes: {
+	        item: _react2.default.PropTypes.object
+	    },
+	
+	    getInitialState: function getInitialState() {
+	        return {
+	            quantity: 1
+	        };
+	    },
+	    onQuantityChanged: function onQuantityChanged(e) {
+	        this.setState({ quantity: e.target.value });
+	    },
+	    onItemRemoved: function onItemRemoved() {
+	        (0, _cartActions.createRemoveFromCartAction)(this.props.item);
+	    },
+	    render: function render() {
+	        var item = this.props.item;
+	        return _react2.default.createElement(
+	            'div',
+	            { key: item.id, className: 'gs-cartview-normal-leftpane-row' },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'gs-cartview-normal-leftpane-row-product' },
+	                _react2.default.createElement('img', { src: item.image }),
+	                _react2.default.createElement(
+	                    'div',
+	                    null,
+	                    _react2.default.createElement(
+	                        'div',
+	                        null,
+	                        _react2.default.createElement(
+	                            'span',
+	                            { className: 'gs-cartview-normal-leftpane-row-product-name' },
+	                            item.name
+	                        ),
+	                        _react2.default.createElement(
+	                            'span',
+	                            { className: 'gs-cartview-normal-leftpane-row-product-by' },
+	                            ' by '
+	                        ),
+	                        _react2.default.createElement(
+	                            'span',
+	                            { className: 'gs-cartview-normal-leftpane-row-product-author' },
+	                            item.author
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'gs-cartview-normal-leftpane-row-product-size' },
+	                        item.size.width,
+	                        ' x ',
+	                        item.size.height
+	                    )
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'gs-cartview-normal-leftpane-row-total' },
+	                'Free'
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'gs-cartview-normal-leftpane-row-quantity' },
+	                _react2.default.createElement(
+	                    'select',
+	                    { name: 'checkout-items[' + item.id + '][quantity]',
+	                        value: this.state.quantity,
+	                        onChange: this.onQuantityChanged,
+	                        'data-item-id': item.id },
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: '1' },
+	                        '1'
+	                    ),
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: '2' },
+	                        '2'
+	                    ),
+	                    _react2.default.createElement(
+	                        'option',
+	                        { value: '3' },
+	                        '3'
+	                    )
+	                )
+	            ),
+	            _react2.default.createElement(_reactFa2.default, { name: 'close', className: 'gs-cartview-normal-leftpane-close', onClick: this.onItemRemoved }),
+	            _react2.default.createElement('input', { type: 'hidden', value: item.id, name: 'checkout-items[' + item.id + '][id]' })
+	        );
+	    }
+	});
+	
+	exports.default = _react2.default.createClass({
+	
+	    displayName: 'normal-cart-view',
+	
+	    propTypes: {
+	        items: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.object).isRequired,
+	        recommendations: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.object)
+	    },
+	
+	    render: function render() {
+	        var items = this.props.items;
+	        // TODO: items is an array of IDs, need to look up or convert to whole objects
+	        var itemRows = items.map(function (item) {
+	            return _react2.default.createElement(ItemRow, { item: item, key: item.id });
+	        });
+	
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'gs-cartview-normal' },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'gs-cartview-normal-header' },
+	                'You have ',
+	                _react2.default.createElement(
+	                    'span',
+	                    { className: 'gs-cartview-normal-header-count' },
+	                    items.length
+	                ),
+	                ' ',
+	                items.length === 1 ? 'item' : 'items',
+	                ' in your cart.'
+	            ),
+	            _react2.default.createElement(
+	                'form',
+	                { className: 'gs-cartview-normal-body', action: '/checkout', method: 'post' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'gs-cartview-normal-leftpane' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'gs-cartview-normal-leftpane-header' },
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'gs-cartview-normal-leftpane-header-products' },
+	                            'Products'
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'gs-cartview-normal-leftpane-header-total' },
+	                            'Total'
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'gs-cartview-normal-leftpane-header-quantity' },
+	                            'Quantity'
+	                        )
+	                    ),
+	                    itemRows,
+	                    _react2.default.createElement('input', { type: 'hidden', name: 'token', value: token })
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'gs-cartview-normal-rightpane' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'gs-cartview-normal-rightpane-label' },
+	                        'Name'
+	                    ),
+	                    _react2.default.createElement('input', { placeholder: 'required', className: 'gs-cartview-normal-rightpane-input', name: 'checkout-name', min: '1' }),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'gs-cartview-normal-rightpane-label' },
+	                        'Email Address'
+	                    ),
+	                    _react2.default.createElement('input', { placeholder: 'required', className: 'gs-cartview-normal-rightpane-input', name: 'checkout-email', type: 'email', min: '1' }),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'gs-cartview-normal-rightpane-submitcontainer' },
+	                        _react2.default.createElement(
+	                            'button',
+	                            { type: 'submit', className: 'gs-cartview-normal-rightpane-submit' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                null,
+	                                'Place order'
+	                            )
+	                        )
+	                    )
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'gs-cartview-normal-header' },
+	                'Recommended based on your selection:'
+	            ),
+	            _react2.default.createElement(_stickerListView2.default, { items: this.props.recommendations, createExpandItemAction: _browseActions.createExpandItemAction })
+	        );
+	    }
+	});
 
 /***/ },
 /* 268 */

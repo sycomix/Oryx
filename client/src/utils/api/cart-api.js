@@ -1,5 +1,6 @@
-import { createUpdateFailedAction, createItemsUpdatedAction } from '../../actions/cart-actions';
+import { createUpdateFailedAction, createItemsUpdatedAction, createRecommendationsUpdatedAction } from '../../actions/cart-actions';
 import { request } from '../api';
+import axios from 'axios';
 
 export function updateItems() {
     request({
@@ -11,6 +12,19 @@ export function updateItems() {
         }
         createItemsUpdatedAction(res.items);
     });
+}
+
+export function getRecommendations() {
+    axios.get(`https://recommender-test-4.azurewebsites.net/api/GetRecommendations?code=GHvuTHyv5jd5EsTK44lwQgwTQEwk2PbI6zkS7rugaVVjM7dInG4SQA==`)
+        .then(res => {
+            console.log("REsponse data: " + res.data);
+
+            // The API returns the complete list of items to force the system to get
+            // in sync, in case something bad happened to get it out of sync
+            createRecommendationsUpdatedAction(res.data);
+        }).catch((err, res) => {
+            console.log(err);
+        });
 }
 
 export function addItem(item) {

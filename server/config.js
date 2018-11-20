@@ -14,7 +14,7 @@ module.exports = {
         'cartCollectionName': 'carts',
         get url() {
             const mongodbUri = require('mongodb-uri');
-            const url = process.env.MONGODB_URL || `mongodb://${this.host}:${this.port}`;
+            const url = process.env.MONGO_URL || `mongodb://${this.host}:${this.port}`;
             const urlObject = mongodbUri.parse(url);
             urlObject.database = this.dbName;
             return mongodbUri.format(urlObject);

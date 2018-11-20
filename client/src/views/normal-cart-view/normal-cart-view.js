@@ -118,10 +118,10 @@ export default React.createClass({
                     </div>
                 </form>
 
-                <div className="gs-cartview-normal-header">
+                {/* <div className="gs-cartview-normal-header">
                     Recommended based on your selection:
                 </div>
-                <StickerListView items={this.props.recommendations} createExpandItemAction={createExpandItemAction} />
+                <StickerListView items={this.props.recommendations} createExpandItemAction={createExpandItemAction} /> */}
             </div>
         );
     }

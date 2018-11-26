@@ -1,8 +1,10 @@
 .gs-header-decorator {
-    background-color: #555;
-    padding: 4px 15px;
+    background-color: #ffffff;
+    padding: 12px;
     display: flex;
     align-items: center;
+    box-shadow: 0 2px 14px 0 rgba(59, 59, 59, 0.31);
+    margin-bottom: 2rem;
 }
 
 .gs-header-decorator a {
@@ -15,7 +17,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
+    background-color: #ffffff;
 }
 
 .gs-header-info-tagline {
@@ -23,12 +25,14 @@
     bottom: 6px;
     right: 10%;
     margin-right: 10px;
-    font-family: "Selawik Light";
+    font-family: "Brandon Light", sans-serif;
+    font-weight: 300;
+
 }
 
 .gs-header-info-tagline > a,
 .gs-header-info-tagline > a:hover {
-    color: #666;
+    color: #b2bac1;
 }
 
 .gs-header-navbar {
@@ -56,26 +60,26 @@
 
 .gs-header-navbar-link {
     /* This mixture of margin and padding is used to put the underline (border) in the right place */
-    margin: 0px 25px;
+    margin: 0 25px;
     padding-bottom: 3px;
     text-decoration: none;
-    color: #757575;
+    color: #b2bac1;
     font-size: 16px;
 }
 
 .gs-header-navbar-link:hover {
     text-decoration: none;
-    color: #999;
+    color: #b2bac1;
 }
 
 .gs-header-navbar-link-active {
     text-decoration: none;
-    color: #73be00;
-    border-bottom: 2px solid #73be00;
+    color: #b2bac1;
+    border-bottom: 2px solid #b2bac1;
 }
 
 .gs-header-navbar-link-active:hover {
-    color: #73be00;
+    color: #b2bac1;
     text-decoration: none;
 }
 
@@ -92,9 +96,9 @@
 }
 
 .gs-header-navbar-cart {
-    border: 1px solid #ff9311;
+    border: 1px solid #2f4b66;
     text-decoration: none;
-    color: #ff9311;
+    color: #2f4b66;
     background-color: white;
     width: 125px;
 }
@@ -104,9 +108,9 @@
 }
 
 .gs-header-navbar-cart:hover {
-    background-color: #ff9311;
+    background-color: #2f4b66;
     text-decoration: none;
-    color: #fff;
+    color: #ffffff;
 }
 
 .gs-header-navbar-cart-img {
@@ -123,15 +127,14 @@
 }
 
 .gs-header-navbar-cart-active {
-    background-color: #ff9311;
+    background-color: #2f4b66;
     text-decoration: none;
-    color: #fff;
+    color: #ffffff;
 }
 
 .gs-header-navbar-cart-active:hover {
-    background-color: #af6012;
     text-decoration: none;
-    color: #fff;
+    color: #ffffff;
 }
 
 .margin-left {

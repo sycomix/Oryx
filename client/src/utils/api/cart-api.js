@@ -1,6 +1,7 @@
 import { createUpdateFailedAction, createItemsUpdatedAction, createRecommendationsUpdatedAction } from '../../actions/cart-actions';
 import { request } from '../api';
 import axios from 'axios';
+import data from '../../../../server/db/initial-data';
 
 export function updateItems() {
     request({
@@ -21,7 +22,10 @@ export function getRecommendations() {
 
             // The API returns the complete list of items to force the system to get
             // in sync, in case something bad happened to get it out of sync
-            createRecommendationsUpdatedAction(res.data);
+
+            let dataResult = data.slice(0,4);
+
+            createRecommendationsUpdatedAction(dataResult);
         }).catch((err, res) => {
             console.log(err);
         });

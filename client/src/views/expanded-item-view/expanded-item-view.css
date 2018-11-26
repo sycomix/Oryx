@@ -29,11 +29,11 @@
 
 .gs-expandeditemview-header-close {
     cursor: pointer;
-    color: #fff;
+    color: #ffffff;
 }
 
 .gs-expandeditemview-header-title {
-    color: #fff;
+    color: #ffffff;
     font-size: 24px;
     white-space: nowrap;
     overflow: hidden;
@@ -42,7 +42,7 @@
 
 .gs-expandeditemview-imagecontainer {
     border-radius: 2px;
-    background-color: #fff;
+    background-color: #ffffff;
     padding: 5px;
     width: 500px;
     height: 500px;
@@ -57,7 +57,7 @@
 
 .gs-expandeditemview-checkout {
     margin-top: 30px;
-    background-color: #ff9311;
+    background-color: #673c4f;
     border-radius: 2px;
     color: white;
     padding: 15px 40px;
@@ -67,10 +67,10 @@
     cursor: pointer;
 }
 
-.gs-expandeditemview-checkout-icon {
-    margin-right: 5px;
+.gs-expandeditemview-checkout:hover {
+    background-color: #612c43;
 }
 
-.gs-expandeditemview-checkout:hover {
-    background-color: #af6012
+.gs-expandeditemview-checkout-icon {
+    margin-right: 5px;
 }

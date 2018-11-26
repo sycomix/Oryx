@@ -1,17 +1,24 @@
 @font-face {
-    font-family: "Selawik";
-    src: url("/fonts/selawk.woff2");
-    src: url("/fonts/selawk.woff");
+    font-family: 'Brandon Light';
+    src: url('/fonts/BrandonGrotesque-Light.woff2') format('woff2'),
+         url('/fonts/BrandonGrotesque-Light.woff') format('woff');
+    font-stretch: normal;
+    font-style: normal;
+    font-weight: 300;
 }
 
 @font-face {
-    font-family: "Selawik Light";
-    src: url("/fonts/selawkl.woff2");
-    src: url("/fonts/selawkl.woff");
+    font-family: 'Brandon Medium';
+    src: url('/fonts/BrandonGrotesque-Medium.woff2') format('woff2'),
+         url('/fonts/BrandonGrotesque-Medium.woff') format('woff');
+    font-stretch: normal;
+    font-style: normal;
+    font-weight: 500;
 }
 
 body {
     background-color: rgba(247, 247, 247, 0.4);
-    font-family: "Selawik";
+    font-family: 'Brandon Light';
+    font-weight: 300;
     margin: 0;
 }

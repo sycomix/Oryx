@@ -10,16 +10,16 @@
 }
 
 .gs-cartview-normal-header {
-    font-weight: 100;
     color: #666;
     font-size: 24px;
     margin-top: 35px;
-    font-family: "Selawik Light";
+    font-family: "Brandon Light", sans-serif;
+    font-weight: 300;
 }
 
 .gs-cartview-normal-header-count {
     font-weight: bold;
-    color: #95cc00
+    color: #2f4b66
 }
 
 .gs-cartview-normal-body {
@@ -37,7 +37,7 @@
     margin-bottom: 16px;
     font-size: 18px;
     font-weight: bolder;
-    color: #333;
+    color: #333333;
 }
 
 .gs-cartview-normal-rightpane-input {
@@ -48,8 +48,9 @@
 
 .gs-cartview-normal-rightpane-disclaimer {
     font-size: 11px;
-    font-family: "Selawik Light";
-    color: #333;
+    font-family: "Brandon Light", sans-serif;
+    font-weight: 300;
+    color: #333333;
     width: 285px;
     margin-bottom: 35px;
 }
@@ -60,10 +61,10 @@
     justify-content: center;
     height: 45px;
     width: 215px;
-    border: 1px solid #ff9311;
-    background-color: #fff;
+    border: 1px solid #2f4b66;
+    background-color: #ffffff;
     border-radius: 3px;
-    color: #ff9311;
+    color: #2f4b66;
     font-size: 18px;
 }
 
@@ -73,8 +74,8 @@
 }
 
 .gs-cartview-normal-rightpane-submit:hover {
-    background-color: #ff9311;
-    color: #fff;
+    background-color: #2f4b66;
+    color: #ffffff;
 }
 
 .gs-cartview-normal-rightpane-submit-icon {
@@ -89,7 +90,7 @@
 
 .gs-cartview-normal-leftpane-header {
     display: flex;
-    color: #333;
+    color: #333333;
     font-weight: bold;
     font-size: 18px;
     margin-bottom: 25px;
@@ -126,7 +127,7 @@
 .gs-cartview-normal-leftpane-row-total {
     width: 75px;
     font-size: 14px;
-    color: #666;
+    color: #666666;
 }
 
 .gs-cartview-normal-leftpane-row-quantity {
@@ -147,21 +148,21 @@
 .gs-cartview-normal-leftpane-row-product-name {
     font-size: 16px;
     font-weight: bold;
-    color: #333;
+    color: #333333;
 }
 
 .gs-cartview-normal-leftpane-row-product-by {
     font-size: 12px;
-    color: #333
+    color: #333333
 }
 
 .gs-cartview-normal-leftpane-row-product-author {
     font-size: 12px;
-    color: #82d9f7;
+    color: #2f4b66;
 }
 
 .gs-cartview-normal-leftpane-row-product-size {
     font-size: 12px;
-    color: #b3b3b3;
+    color: #2f4b66;
     margin-top: 5px;
 }

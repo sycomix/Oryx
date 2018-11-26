@@ -2,169 +2,146 @@ module.exports = [
 
     {
         id: '1',
-        tags: [ 'Deployment' ],
-        name: 'Docker',
-        description: 'The Docker container-based platform deployment system',
-        author: 'Docker',
+        tags: [ 'Garden' ],
+        name: 'Single red garden gnome',
+        description: 'Single red garden gnome',
+        author: 'Single red garden gnome',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/docker.png'
+        image: '/img/logo/6112251.jpg'
     }, {
         id: '2',
-        tags: [ 'Service' ],
-        name: 'Trello',
-        description: 'The Trello project management service',
-        author: 'Trello',
+        tags: [ 'Garden' ],
+        name: 'Two red garden gnomes',
+        description: 'Two red garden gnomes',
+        author: 'Two red garden gnomes',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/trello.png'
+        image: '/img/logo/10999322.jpg'
     }, {
         id: '3',
-        tags: [ 'Framework' ],
-        name: 'Ember',
-        description: 'The Ember JavaScript framework',
-        author: 'Ember',
+        tags: [ 'Garden' ],
+        name: 'One sat gnome',
+        description: 'One sat gnome',
+        author: 'One sat gnome',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/ember.png'
+        image: '/img/logo/24639790.jpg'
     }, {
         id: '4',
-        tags: [ 'Language' ],
-        name: 'Go',
-        description: 'The Go programming langauge',
-        author: 'Google',
+        tags: [ 'Garden' ],
+        name: 'One sat on shoe gnome',
+        description: 'One sat on shoe gnome',
+        author: 'One sat on shoe gnome',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/go.png'
+        image: '/img/logo/24639792.jpg'
     }, {
         id: '5',
-        tags: [ 'Language' ],
-        name: 'TypeScript',
-        description: 'The TypeScript programming langauge',
-        author: 'Microsoft',
+       tags: [ 'Garden' ],
+        name: 'One barrow gnome',
+        description: 'One barrow gnome',
+        author: 'One barrow gnome',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/typescript.png'
+        image: '/img/logo/34369812.jpg'
     }, {
         id: '6',
-        tags: [ 'Tooling' ],
-        name: 'Git',
-        description: 'The Git version control system',
-        author: 'Git',
+        tags: [ 'Garden' ],
+        name: 'One glasses gnome',
+        description: 'One glasses gnome',
+        author: 'One glasses gnome',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/git.png'
+        image: '/img/logo/34369851.jpg'
     }, {
         id: '7',
-        tags: [ 'Language' ],
-        name: 'Markdown',
-        description: 'The Markdown document language',
-        author: 'Markdown',
+        tags: [ 'Garden' ],
+        name: 'One smiling gnome',
+        description: 'One smiling gnome',
+        author: 'One smiling gnome',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/markdown.png'
+        image: '/img/logo/38786528.jpg'
     }, {
         id: '8',
-        tags: [ 'Deployment' ],
-        name: 'Travis CI',
-        description: 'The Travis CI integration service',
-        author: 'Travis CI',
+        tags: [ 'Garden' ],
+        name: 'Two singing gnomes',
+        description: 'Two singing gnomes',
+        author: 'Two singing gnomes',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/travisCi.png'
+        image: '/img/logo/44333595.jpg'
     }, {
         id: '9',
-        tags: [ 'Deployment' ],
-        name: 'Kubernetes',
-        description: 'The Kubernetes container deployment system',
-        author: 'Kubernetes',
+        tags: [ 'Garden' ],
+        name: 'Two sleeping gnomes',
+        description: 'Two sleeping gnomes',
+        author: 'Two sleeping gnomes',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/kubernetes.png'
+        image: '/img/logo/76911883.jpg'
     }, {
         id: '10',
-        tags: [ 'Protocol' ],
-        name: 'OAuth',
-        description: 'The OAuth authentication protocol',
-        author: 'OAuth',
+        tags: [ 'Garden' ],
+        name: 'Seven-pack gnomes',
+        description: 'Seven-pack gnomes',
+        author: 'Seven-pack gnomes',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/oauth.png'
+        image: '/img/logo/91797131.jpg'
     }, {
         id: '11',
-        tags: [ 'Service' ],
-        name: 'MailChimp',
-        description: 'MailChimp provides email marketing services',
-        author: 'MailChimp',
+        tags: [ 'Garden' ],
+        name: 'One afraid gnome',
+        description: 'One afraid gnome',
+        author: 'One afraid gnome',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/mailchimp.png'
+        image: '/img/logo/106662449.jpg'
     }, {
         id: '12',
-        tags: [ 'Framework' ],
-        name: 'Bootstrap',
-        description: 'The Bootstrap CSS client framework',
-        author: 'Twitter',
+        tags: [ 'Garden' ],
+        name: 'One welcome gnome',
+        description: 'One welcome gnome',
+        author: 'One welcome gnome',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/bootstrap.png'
+        image: '/img/logo/106906828.jpg'
     }, {
         id: '13',
-        tags: [ 'Language' ],
-        name: 'Rust',
-        description: 'The Rust programming langauge',
-        author: 'Mozilla',
+        tags: [ 'Garden' ],
+        name: 'Two smiling gnomes',
+        description: 'Two smiling gnomes',
+        author: 'Two smiling gnomes',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/rust.png'
-    }, {
-        id: '14',
-        tags: [ 'Service' ],
-        name: 'Open Source Initiative',
-        description: 'The Open Source Initiative non-profit foundation',
-        author: 'OSI',
-        size: {
-            width: '2in',
-            height: '2in'
-        },
-        image: '/img/logo/osi.png'
-    }, {
-        id: '15',
-        tags: [ 'Language' ],
-        name: 'Ruby',
-        description: 'The Ruby programming langauge',
-        author: 'Ruby Community',
-        size: {
-            width: '2in',
-            height: '2in'
-        },
-        image: '/img/logo/ruby.png'
+        image: '/img/logo/106906834.jpg'
     }
-
 ];

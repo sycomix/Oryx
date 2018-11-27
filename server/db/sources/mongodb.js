@@ -116,11 +116,6 @@ exports.getStickers = (tags) => {
     console.log('mongodb.js: getStickers');
     return connect().then((db) => {
         const query = {};
-        if (tags) {
-            query.tags = {
-                $elemMatch: { $in: tags }
-            };
-        }
         
         return findDocs(db, config.stickerCollectionName, query);
     });

@@ -23,9 +23,9 @@ export function getRecommendations() {
             // The API returns the complete list of items to force the system to get
             // in sync, in case something bad happened to get it out of sync
 
-            let dataResult = data.slice(0,4);
+            // let dataResult = data.slice(0,4);
 
-            createRecommendationsUpdatedAction(dataResult);
+            createRecommendationsUpdatedAction(res.data);
         }).catch((err, res) => {
             console.log(err);
         });

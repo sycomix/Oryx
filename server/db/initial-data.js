@@ -12,16 +12,16 @@ module.exports = [
         },
         image: '/img/logo/6112251.jpg'
     }, {
-        id: '2',
+        id: '13',
         tags: [ 'Garden' ],
-        name: 'Two red garden gnomes',
-        description: 'Two red garden gnomes',
-        author: 'Two red garden gnomes',
+        name: '50% Off! - Scott Gnome',
+        description: '50% Off! - Scott Gnome',
+        author: 'Gnome Sales!!',
         size: {
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/10999322.jpg'
+        image: '/img/logo/scottgnome.png'
     }, {
         id: '3',
         tags: [ 'Garden' ],
@@ -133,7 +133,7 @@ module.exports = [
         },
         image: '/img/logo/106906828.jpg'
     }, {
-        id: '13',
+        id: '2',
         tags: [ 'Garden' ],
         name: 'Two smiling gnomes',
         description: 'Two smiling gnomes',

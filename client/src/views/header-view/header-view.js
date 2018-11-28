@@ -24,7 +24,7 @@ export default React.createClass({
                             'gs-header-navbar-cart-active': this.props.pageName === 'cart'
                         })}>
                             <Icon name="shopping-cart" className="gs-header-navbar-cart-icon" />
-                            <div>View Cart !!({this.props.cartCount})</div>
+                            <div>View Cart({this.props.cartCount})</div>
                         </a>
                     </div>
                 </div>

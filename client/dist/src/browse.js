@@ -26774,7 +26774,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            null,
-	                            'View Cart(',
+	                            'View Cart  !!! (',
 	                            this.props.cartCount,
 	                            ')'
 	                        )

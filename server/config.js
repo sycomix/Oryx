@@ -7,8 +7,8 @@ module.exports = {
     'mongodb': {
         'port': 27017,
         'host': 'localhost', //docker.for.mac.localhost (for docker)
-        'dbName': 'stickersDB',
-        'stickerCollectionName': 'stickers',
+        'dbName': 'gnomesDB',
+        'stickerCollectionName': 'gnomes',
         'orderCollectionName': 'orders',
         'feedbackCollectionName': 'feedback',
         'cartCollectionName': 'carts',

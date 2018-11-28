@@ -22,6 +22,7 @@ router.get('/api/items', function stickerRouteApiBrowse(req, res) {
         if (tags) {
             console.log('Tags used in filter: ', tags);
         }
+        items.splice(1,1); // hack to remove gu gnome
         res.send({ items });
     }, () => {
         res.send({ items: [] });

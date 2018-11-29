@@ -1,7 +1,7 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 
-const router = new express.Router();
+const router = express.Router();
 router.use(bodyParser.json());
 
 router.get('/', function stickerRouteBrowse(req, res) {

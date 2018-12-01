@@ -18,5 +18,6 @@
   },
   "debug.internalConsoleOptions": "neverOpen",
   "appService.advancedCreation": true,
-  "appService.showBuildDuringDeployPrompt": true
+  "appService.showBuildDuringDeployPrompt": true,
+  "appService.defaultWebAppToDeploy": "/subscriptions/065849c9-c0c8-43d0-874c-01c7b295a1bc/resourceGroups/GnomeApp-rg/providers/Microsoft.Web/sites/GnomeApp-ec20835f-8d72-417b-bdd9-a26410d0fd65"
 }

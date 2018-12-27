@@ -7,6 +7,10 @@
     "clean": "gulp clean",
     "start": "node server/index.js"
   },
+  "engines": {
+    "node": ">=10.1",
+    "yarn": ">=1.12"
+  },
   "dependencies": {
     "axios": "^0.18.0",
     "body-parser": "1.15.0",

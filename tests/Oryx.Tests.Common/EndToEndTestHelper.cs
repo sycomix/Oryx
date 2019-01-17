@@ -32,6 +32,7 @@ namespace Oryx.Tests.Common
             return BuildRunAndAssertAppAsync(
                 output,
                 volume,
+                Settings.BuildImageName,
                 buildCmd,
                 buildArgs,
                 runtimeImageName,
@@ -53,6 +54,7 @@ namespace Oryx.Tests.Common
         public static async Task BuildRunAndAssertAppAsync(
             ITestOutputHelper output,
             DockerVolume volume,
+            string buildImageName,
             string buildCmd,
             string[] buildArgs,
             string runtimeImageName,
@@ -67,7 +69,7 @@ namespace Oryx.Tests.Common
 
             // Build
             var buildAppResult = dockerCli.Run(
-                Settings.BuildImageName,
+                buildImageName,
                 volume,
                 commandToExecuteOnRun: buildCmd,
                 commandArguments: buildArgs);

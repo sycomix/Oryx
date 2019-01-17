@@ -75,6 +75,7 @@ namespace Oryx.Integration.Tests.LocalDockerTests
             await EndToEndTestHelper.BuildRunAndAssertAppAsync(
                 OutputHelper,
                 volume,
+                Settings.BuildImageName,
                 "oryx",
                 new[] { "build", appDir, "-l", language, "--language-version", languageVersion },
                 runtimeImageName,

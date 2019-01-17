@@ -12,9 +12,9 @@ if (!fs.existsSync(sourcePath)) {
 const dataSource = require(sourcePath);
 
 module.exports = {
-    getStickers: dataSource.getStickers,
-    getSticker: dataSource.getSticker,
-    addStickers: dataSource.addStickers,
+    getGnomes: dataSource.getGnomes,
+    getGnome: dataSource.getGnome,
+    addGnomes: dataSource.addGnomes,
     addOrder: dataSource.addOrder,
     addFeedback: dataSource.addFeedback,
     getCart: dataSource.getCart,

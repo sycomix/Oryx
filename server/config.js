@@ -8,7 +8,7 @@ module.exports = {
         'port': 27017,
         'host': 'localhost', //docker.for.mac.localhost (for docker)
         'dbName': 'gnomesDB',
-        'stickerCollectionName': 'gnomes',
+        'gnomeCollectionName': 'gnomes',
         'orderCollectionName': 'orders',
         'feedbackCollectionName': 'feedback',
         'cartCollectionName': 'carts',

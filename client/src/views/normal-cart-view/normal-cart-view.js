@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from 'react-fa';
 import { v4 } from 'node-uuid'; // Yes this works in the browser too
 import { createRemoveFromCartAction } from '../../actions/cart-actions';
-import StickerListView from '../../views/sticker-list-view/sticker-list-view';
+import GnomeListView from '../../views/gnome-list-view/gnome-list-view';
 import { createExpandItemAction } from '../../actions/browse-actions';
 
 import './normal-cart-view.css';
@@ -121,7 +121,7 @@ export default React.createClass({
                 <div className="gs-cartview-normal-header">
                     Recommended based on your selection:
                 </div>
-                <StickerListView items={this.props.recommendations} createExpandItemAction={createExpandItemAction} />
+                <GnomeListView items={this.props.recommendations} createExpandItemAction={createExpandItemAction} />
             </div>
         );
     }

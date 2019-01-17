@@ -66,10 +66,10 @@ exports.addOrder = (doc) => {
     });
 };
 
-exports.addStickers = (items) => {
-    console.log('mongodb.js: addStickers');
+exports.addGnomes = (items) => {
+    console.log('mongodb.js: addGnomes');
     return connect().then((db) => {
-        return insertDocs(db, config.stickerCollectionName, items);
+        return insertDocs(db, config.gnomeCollectionName, items);
     });
 };
 
@@ -107,19 +107,19 @@ exports.getCart = (token) => {
     });
 };
 
-exports.getSticker = (id) => {
-    console.log('mongodb.js: getSticker');
+exports.getGnome = (id) => {
+    console.log('mongodb.js: getGnome');
     return connect().then((db) => {
-        return findDoc(db, config.stickerCollectionName, { id });
+        return findDoc(db, config.gnomeCollectionName, { id });
     });
 };
 
-exports.getStickers = (tags) => {
-    console.log('mongodb.js: getStickers');
+exports.getGnomes = (tags) => {
+    console.log('mongodb.js: getGnomes');
     return connect().then((db) => {
         const query = {};
         
-        return findDocs(db, config.stickerCollectionName, query);
+        return findDocs(db, config.gnomeCollectionName, query);
     });
 };
 
@@ -128,7 +128,7 @@ exports.initializeDatabase = () => {
     
     return connect()
         .then((db) => db.dropDatabase())
-        .then(() => exports.addStickers(initialData))
+        .then(() => exports.addGnomes(initialData))
         .then(disconnect);
 };
 

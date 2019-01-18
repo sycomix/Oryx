@@ -76,8 +76,10 @@ namespace Oryx.Integration.Tests.LocalDockerTests
         private void WriteTitleLine(string title)
         {
             _output.WriteLine(Environment.NewLine);
-            title = title + " ";
+            _output.WriteLine("-".PadRight(120, '-'));
+            title += " ";
             _output.WriteLine(title.PadRight(120, '-'));
+            _output.WriteLine("-".PadRight(120, '-'));
         }
 
         [Theory]
@@ -88,6 +90,7 @@ namespace Oryx.Integration.Tests.LocalDockerTests
             var hostDir = Path.Combine(_hostSamplesDir, platform, sampleApp);
 
             // Build & measure on Buildpacks
+            DockerVolume appVolume = DockerVolume.Create(hostDir); // Created just for the convenience of having the folder copied to a temporary location
             var pack = new BuildpackStateMachine();
             var buildStopwatch = new Stopwatch();
 
@@ -98,7 +101,7 @@ namespace Oryx.Integration.Tests.LocalDockerTests
             int packExitCode = ProcessHelper.RunProcess(
                 @"C:\Users\dorfire\Src\buildpacks\pack.exe",
                 packArgs,
-                hostDir,
+                appVolume.MountedHostDir,
                 (sender, args) =>
                 {
                     _output.WriteLine("pack> {0}", args.Data);
@@ -122,14 +125,15 @@ namespace Oryx.Integration.Tests.LocalDockerTests
                 TimeSpan.FromMinutes(3));
 
             Assert.Equal(0, packExitCode);
+            Assert.False(buildStopwatch.IsRunning);
             double packSecs = buildStopwatch.Elapsed.TotalSeconds;
             buildStopwatch.Reset();
 
             // Build & measure on Oryx
-            var appVolume = DockerVolume.Create(hostDir);
+            appVolume = DockerVolume.Create(hostDir); // Re-copy the original app to a new temporary location
 
             buildStopwatch.Start();
-            string[] oryxArgs = new[] { "build", appVolume.ContainerDir, "-o", "/tmp/app" /* "-l", "nodejs", "--language-version", nodeVersion */ };
+            string[] oryxArgs = new[] { "build", appVolume.ContainerDir, "-o", appVolume.ContainerDir + "/out" /* "-l", "nodejs", "--language-version", nodeVersion */ };
             var buildAppResult = _dockerCli.Run(Settings.OryxBuildImageName, appVolume, commandToExecuteOnRun: "oryx", commandArguments: oryxArgs);
             
             await EndToEndTestHelper.RunAssertsAsync(
@@ -150,9 +154,9 @@ namespace Oryx.Integration.Tests.LocalDockerTests
                 _output.WriteLine("oryx> {0}", line.Trim());
             }
             
-            WriteTitleLine("Summary");
-            _output.WriteLine("Build time on Buildpacks: {0} s", packSecs);
-            _output.WriteLine("Build time on Oryx: {0} s", oryxSecs);
+            WriteTitleLine("Build times");
+            _output.WriteLine("Buildpacks: {0} s", packSecs);
+            _output.WriteLine("Oryx:       {0} s", oryxSecs);
         }
     }
 }

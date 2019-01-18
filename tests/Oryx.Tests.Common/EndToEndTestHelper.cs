@@ -75,12 +75,13 @@ namespace Oryx.Tests.Common
                 commandArguments: buildArgs);
 
             await RunAssertsAsync(
-               () =>
-               {
-                   Assert.True(buildAppResult.IsSuccess);
-                   return Task.CompletedTask;
-               },
-               buildAppResult.GetDebugInfo());
+                output,
+                () =>
+                {
+                    Assert.True(buildAppResult.IsSuccess);
+                    return Task.CompletedTask;
+                },
+                buildAppResult.GetDebugInfo());
 
             // Run
             DockerRunCommandProcessResult runResult = null;
@@ -98,6 +99,7 @@ namespace Oryx.Tests.Common
                     runArgs);
 
                 await RunAssertsAsync(
+                    output,
                     () =>
                     {
                         // An exception could have occurred when a docker process failed to start.
@@ -115,6 +117,7 @@ namespace Oryx.Tests.Common
                     {
                         // Make sure the process is still alive and fail fast if not alive.
                         await RunAssertsAsync(
+                            output,
                             async () =>
                             {
                                 Assert.False(runResult.Process.HasExited);
@@ -142,18 +145,18 @@ namespace Oryx.Tests.Common
                     dockerCli.StopContainer(runResult.ContainerName);
                 }
             }
+        }
 
-            async Task RunAssertsAsync(Func<Task> action, string message)
+        static async Task RunAssertsAsync(ITestOutputHelper output, Func<Task> action, string message)
+        {
+            try
             {
-                try
-                {
-                    await action();
-                }
-                catch (Exception)
-                {
-                    output.WriteLine(message);
-                    throw;
-                }
+                await action();
+            }
+            catch (Exception)
+            {
+                output.WriteLine(message);
+                throw;
             }
         }
     }

@@ -58,15 +58,26 @@ namespace Oryx.Integration.Tests.LocalDockerTests
     {
         private readonly ITestOutputHelper _output;
         private readonly string _hostSamplesDir;
-        private readonly DockerCli _dockerCli;
-        private readonly HttpClient _httpClient;
+        private readonly DockerCli _dockerCli = new DockerCli();
+        private readonly Random _rand = new Random();
+        //private readonly HttpClient _httpClient = new HttpClient();
 
         public Benchmarks(ITestOutputHelper output)
         {
             _output = output;
             _hostSamplesDir = Path.Combine(Directory.GetCurrentDirectory(), "SampleApps");
-            _dockerCli = new DockerCli();
-            _httpClient = new HttpClient();
+        }
+
+        private string GetRandomAppName()
+        {
+            return "testapp" + _rand.Next(99999).ToString();
+        }
+
+        private void WriteTitleLine(string title)
+        {
+            _output.WriteLine(Environment.NewLine);
+            title = title + " ";
+            _output.WriteLine(title.PadRight(120, '-'));
         }
 
         [Theory]
@@ -79,10 +90,14 @@ namespace Oryx.Integration.Tests.LocalDockerTests
             // Build & measure on Buildpacks
             var pack = new BuildpackStateMachine();
             var buildStopwatch = new Stopwatch();
-            
+
+            string[] packArgs = new[] { "build", "--no-color", "--path", ".", GetRandomAppName() }; // App name has to be random to avoid re-use of a previously built image
+
+            WriteTitleLine(string.Format("pack {0}", string.Join(' ', packArgs)));
+
             int packExitCode = ProcessHelper.RunProcess(
                 @"C:\Users\dorfire\Src\buildpacks\pack.exe",
-                new string[] { "build", "--no-color", "--path", ".", "testapp" },
+                packArgs,
                 hostDir,
                 (sender, args) =>
                 {
@@ -107,20 +122,16 @@ namespace Oryx.Integration.Tests.LocalDockerTests
                 TimeSpan.FromMinutes(3));
 
             Assert.Equal(0, packExitCode);
-            Console.WriteLine("Build time on Buildpacks: {0} s", buildStopwatch.Elapsed.TotalSeconds);
-
+            double packSecs = buildStopwatch.Elapsed.TotalSeconds;
             buildStopwatch.Reset();
 
             // Build & measure on Oryx
             var appVolume = DockerVolume.Create(hostDir);
 
             buildStopwatch.Start();
-            var buildAppResult = _dockerCli.Run(
-                Settings.OryxBuildImageName,
-                appVolume,
-                commandToExecuteOnRun: "oryx",
-                commandArguments: new[] { "build", appVolume.ContainerDir /* "-l", "nodejs", "--language-version", nodeVersion */ });
-
+            string[] oryxArgs = new[] { "build", appVolume.ContainerDir, "-o", "/tmp/app" /* "-l", "nodejs", "--language-version", nodeVersion */ };
+            var buildAppResult = _dockerCli.Run(Settings.OryxBuildImageName, appVolume, commandToExecuteOnRun: "oryx", commandArguments: oryxArgs);
+            
             await EndToEndTestHelper.RunAssertsAsync(
                 _output,
                 () =>
@@ -131,7 +142,17 @@ namespace Oryx.Integration.Tests.LocalDockerTests
                 buildAppResult.GetDebugInfo());
 
             buildStopwatch.Stop();
-            Console.WriteLine("Build time on Oryx: {0} s", buildStopwatch.Elapsed.TotalSeconds);
+            double oryxSecs = buildStopwatch.Elapsed.TotalSeconds;
+            
+            WriteTitleLine(string.Format("oryx {0}", string.Join(' ', oryxArgs)));
+            foreach (string line in buildAppResult.Output.Split('\n'))
+            {
+                _output.WriteLine("oryx> {0}", line.Trim());
+            }
+            
+            WriteTitleLine("Summary");
+            _output.WriteLine("Build time on Buildpacks: {0} s", packSecs);
+            _output.WriteLine("Build time on Oryx: {0} s", oryxSecs);
         }
     }
 }

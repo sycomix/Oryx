@@ -29,7 +29,7 @@ namespace Oryx.Integration.Tests.LocalDockerTests
         /// <returns>true if the state changed, false otherwise</returns>
         public bool UpdatePhaseFromPackOutputLine(string line)
         {
-            if (line.StartsWith(PhaseHeaderPrefix)) // State has changed!
+            if (!string.IsNullOrWhiteSpace(line) && line.StartsWith(PhaseHeaderPrefix)) // State has changed!
             {
                 string phaseTitle = line.Substring(PhaseHeaderPrefix.Length);
                 switch (phaseTitle)
@@ -46,6 +46,8 @@ namespace Oryx.Integration.Tests.LocalDockerTests
                     case "EXPORTING":
                         _currentPhase = BuildpackPhase.EXPORTING;
                         return true;
+                    default:
+                        throw new Exception("Unexpected phase title");
                 }
             }
             return false;
@@ -77,20 +79,22 @@ namespace Oryx.Integration.Tests.LocalDockerTests
             // Build & measure on Buildpacks
             var pack = new BuildpackStateMachine();
             var buildStopwatch = new Stopwatch();
-
-            var errorBuilder = new StringBuilder();
+            
             int packExitCode = ProcessHelper.RunProcess(
-                "pack", new string[] { "run", "--no-color", "--path", "." }, // Assumes pack is in the PATH
+                @"C:\Users\dorfire\Src\buildpacks\pack.exe",
+                new string[] { "build", "--no-color", "--path", ".", "testapp" },
                 hostDir,
                 (sender, args) =>
                 {
+                    _output.WriteLine("pack> {0}", args.Data);
+
                     if (pack.UpdatePhaseFromPackOutputLine(args.Data))
                     {
-                        if (pack.Phase == BuildpackPhase.BUILDING) // If the state just changed to BUILDING, start the clock
+                        if (pack.Phase == BuildpackPhase.DETECTING) // If the state just changed to DETECTING, start the clock
                         {
                             buildStopwatch.Start();
                         }
-                        else if (buildStopwatch.IsRunning) // If the state changed after if was BUILDING...
+                        else if (buildStopwatch.IsRunning && pack.Phase == BuildpackPhase.EXPORTING)
                         {
                             buildStopwatch.Stop();
                         }
@@ -98,7 +102,7 @@ namespace Oryx.Integration.Tests.LocalDockerTests
                 },
                 (sender, args) =>
                 {
-                    errorBuilder.AppendLine(args.Data);
+                    _output.WriteLine("pack> {0}", args.Data);
                 },
                 TimeSpan.FromMinutes(3));
 

@@ -82,8 +82,8 @@ namespace Oryx.Tests.Common
                 dirInfo.Name);
             CopyDirectories(hostDir, writableHostDir, copySubDirs: true);
 
-            // Grant permissions to the folder we just copied on the host machine. The permisions here allow the
-            // user(a non-root user) in the container to read/write/execute files.
+            // Grant permissions to the folder we just copied on the host machine.
+            // The permisions here allow a non-root user in the container to read/write/execute files.
             var linuxOS = OSPlatform.Create("LINUX");
             if (RuntimeInformation.IsOSPlatform(linuxOS))
             {

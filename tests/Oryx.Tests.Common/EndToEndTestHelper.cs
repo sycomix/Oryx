@@ -32,7 +32,7 @@ namespace Oryx.Tests.Common
             return BuildRunAndAssertAppAsync(
                 output,
                 volume,
-                Settings.BuildImageName,
+                Settings.OryxBuildImageName,
                 buildCmd,
                 buildArgs,
                 runtimeImageName,
@@ -147,7 +147,7 @@ namespace Oryx.Tests.Common
             }
         }
 
-        static async Task RunAssertsAsync(ITestOutputHelper output, Func<Task> action, string message)
+        public static async Task RunAssertsAsync(ITestOutputHelper output, Func<Task> action, string message)
         {
             try
             {

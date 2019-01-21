@@ -6,6 +6,7 @@ module.exports = [
         name: 'Garden Gnome Holding a Squirrel',
         description: 'Garden Gnome Holding a Squirrel',
         author: 'Gnomes, Inc.',
+        price: '$2.99',
         size: {
             width: '2in',
             height: '2in'
@@ -17,6 +18,7 @@ module.exports = [
         name: '50% Off! - Scott Gnome',
         description: '50% Off! - Scott Gnome',
         author: 'Gnomes, Inc.',
+        price: '$2.99',
         size: {
             width: '2in',
             height: '2in'
@@ -28,6 +30,7 @@ module.exports = [
         name: 'Garden Gnome Sleeping',
         description: 'Garden Gnome Sleeping',
         author: 'Gnomes, Inc.',
+        price: '$2.99',
         size: {
             width: '2in',
             height: '2in'
@@ -39,6 +42,7 @@ module.exports = [
         name: 'Garden Gnome on a Shoe',
         description: 'Garden Gnome on a Shoe',
         author: 'Gnomes, Inc.',
+        price: '$2.99',
         size: {
             width: '2in',
             height: '2in'
@@ -50,6 +54,7 @@ module.exports = [
         name: 'Garden Gnome with Wheelbarrow',
         description: 'Garden Gnome with Wheelbarrow',
         author: 'Gnomes, Inc.',
+        price: '$2.99',
         size: {
             width: '2in',
             height: '2in'
@@ -61,6 +66,7 @@ module.exports = [
         name: 'Garden Gnome with an Attitude',
         description: 'Garden Gnome with an Attitude',
         author: 'Gnomes, Inc.',
+        price: '$2.99',
         size: {
             width: '2in',
             height: '2in'
@@ -72,6 +78,7 @@ module.exports = [
         name: 'Garden Gnome Smiling',
         description: 'Garden Gnome Smiling',
         author: 'Gnomes, Inc.',
+        price: '$2.99',
         size: {
             width: '2in',
             height: '2in'
@@ -83,6 +90,7 @@ module.exports = [
         name: 'Garden Gnomes Singing',
         description: 'Garden Gnomes Singing',
         author: 'Gnomes, Inc.',
+        price: '$2.99',
         size: {
             width: '2in',
             height: '2in'
@@ -94,6 +102,7 @@ module.exports = [
         name: 'Garden Gnomes Sleeping',
         description: 'Garden Gnomes Sleeping',
         author: 'Gnomes, Inc.',
+        price: '$2.99',
         size: {
             width: '2in',
             height: '2in'
@@ -105,6 +114,7 @@ module.exports = [
         name: 'Garden Gnomes 7-Pack',
         description: 'Garden Gnomes 7-Pack',
         author: 'Gnomes, Inc.',
+        price: '$2.99',
         size: {
             width: '2in',
             height: '2in'
@@ -116,6 +126,7 @@ module.exports = [
         name: 'Garden Gnome Timid',
         description: 'Garden Gnome Timid',
         author: 'Gnomes, Inc.',
+        price: '$2.99',
         size: {
             width: '2in',
             height: '2in'
@@ -127,6 +138,7 @@ module.exports = [
         name: 'Garden Gnome - Welcome',
         description: 'Garden Gnome - Welcome',
         author: 'Gnomes, Inc.',
+        price: '$2.99',
         size: {
             width: '2in',
             height: '2in'
@@ -138,6 +150,7 @@ module.exports = [
         name: 'Garden Gnomes with Shovels',
         description: 'Garden Gnomes with Shovels',
         author: 'Gnomes, Inc.',
+        price: '$2.99',
         size: {
             width: '2in',
             height: '2in'

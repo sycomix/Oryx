@@ -29,6 +29,7 @@ export default React.createClass({
                     onClick={this.onCoverartClicked} ></div>
                 <div className="gs-gnome-metadata">
                     <div className="gs-gnome-metadata-title">{this.props.item.name}</div>
+                    <div className="gs-gnome-metadata-price">{this.props.item.price}</div>
                     <div className="gs-gnome-metadata-author">
                         <Icon name="camera" className="gs-gnome-metadata-author-icon" />
                         <div>{this.props.item.author}</div>

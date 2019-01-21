@@ -35,11 +35,22 @@
 }
 
 .gs-gnome-metadata-title {
-    font-family: 'Brandon Medium', sans-serif;
+    font-family: 'Lato Medium', sans-serif;
     font-weight: 500;
     color: #2f4b66;
     font-size: 18px;
     margin: 9px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.gs-gnome-metadata-price {
+    font-family: 'Lato Medium', sans-serif;
+    font-weight: 500;
+    color: #2f4b66;
+    font-size: 16px;
+    margin-bottom: 10px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

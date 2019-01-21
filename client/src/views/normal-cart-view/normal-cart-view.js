@@ -44,13 +44,15 @@ const ItemRow = React.createClass({
                     <div>
                         <div>
                             <span className="gs-cartview-normal-leftpane-row-product-name">{item.name}</span>
+                        </div>
+                        <div>
                             <span className="gs-cartview-normal-leftpane-row-product-by"> by </span>
                             <span className="gs-cartview-normal-leftpane-row-product-author">{item.author}</span>
                         </div>
                         <div className="gs-cartview-normal-leftpane-row-product-size">{item.size.width} x {item.size.height}</div>
                     </div>
                 </div>
-                <div className="gs-cartview-normal-leftpane-row-total">Free</div>
+                <div className="gs-cartview-normal-leftpane-row-total">$2.99</div>
                 <div className="gs-cartview-normal-leftpane-row-quantity">
                     <select name={`checkout-items[${item.id}][quantity]`}
                             value={this.state.quantity}

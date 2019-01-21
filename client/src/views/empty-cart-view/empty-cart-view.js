@@ -11,8 +11,8 @@ export default React.createClass({
     render() {
         return (
             <div className="gs-cartview-empty">
-                <div className="gs-cartview-empty-tagline">Hello</div>
-                <img src="/img/Computer-with-gnomes.png" />
+                <div className="gs-cartview-empty-tagline">Your Shopping Cart is Empty :(</div>
+                {/* <img src="/img/empty-shopping-cart-icon.png" /> */}
                 <a className="gs-cartview-empty-browse" href="/browse">Browse Gnomes</a>
             </div>
         );

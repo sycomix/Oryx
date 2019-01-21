@@ -1,7 +1,7 @@
 {
-  "name": "stickerapp",
+  "name": "gnomeapp",
   "version": "0.19.0",
-  "description": "Sticker e-commerce site demo app",
+  "description": "Gnome e-commerce site demo app",
   "scripts": {
     "build": "gulp",
     "clean": "gulp clean",

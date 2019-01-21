@@ -19,7 +19,7 @@ function filterItems(tags, items) {
     return filteredItems;
 }
 
-function getStickers(tags) {
+function getGnomes(tags) {
     let items = initialData;
     if (tags) {
         items = filterItems(tags, items);
@@ -27,11 +27,11 @@ function getStickers(tags) {
     return Promise.resolve(items);
 }
 
-function getSticker(id) {
+function getGnome(id) {
     return Promise.resolve(initialData.filter((item) => item.id === id)[0]);
 }
 
-function addStickers(items) {
+function addGnomes(items) {
     for (const item of items) {
         for (let i = 0; i < initialData.length; i++) {
             if (initialData[i].id === item.id) {
@@ -99,9 +99,9 @@ function initializeDatabase() {
 }
 
 module.exports = {
-    getStickers,
-    getSticker,
-    addStickers,
+    getGnomes,
+    getGnome,
+    addGnomes,
     getCart,
     addToCart,
     removeFromCart,

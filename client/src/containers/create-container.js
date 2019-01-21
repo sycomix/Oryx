@@ -3,7 +3,7 @@ import { Container } from 'flux/utils';
 
 import HeaderView from '../views/header-view/header-view';
 import SearchBoxView from '../views/search-box-view/search-box-view';
-import StickerListView from '../views/sticker-list-view/sticker-list-view';
+import GnomeListView from '../views/gnome-list-view/gnome-list-view';
 import ExpandedItemView from '../views/expanded-item-view/expanded-item-view';
 
 import createStore from '../stores/create-store';
@@ -23,7 +23,7 @@ class CreateContainer extends React.Component {
             <div>
                 <HeaderView pageName="create" cartCount={this.state.cart.items.length}/>
                 <SearchBoxView placeholder={this.state.create.defaultKeyword} />
-                <StickerListView items={this.state.create.items} createExpandItemAction={createExpandItemAction} />
+                <GnomeListView items={this.state.create.items} createExpandItemAction={createExpandItemAction} />
                 {expandedItem}
             </div>
         );

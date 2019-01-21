@@ -1,4 +1,4 @@
-.gs-sticker {
+.gs-gnome {
     margin: 20px;
     border-radius: 3px;
     overflow: hidden;
@@ -8,13 +8,13 @@
     box-shadow: 10px 10px 52px 0 rgba(0, 0, 0, 0.2);
 }
 
-.gs-sticker:hover {
+.gs-gnome:hover {
     border-color: #dddddd;
     border-width: 1px;
     border-style: solid;
 }
 
-.gs-sticker-image {
+.gs-gnome-image {
     width: 227px;
     height: 227px;
     cursor: pointer;
@@ -25,7 +25,7 @@
     margin-right: auto;
 }
 
-.gs-sticker-metadata {
+.gs-gnome-metadata {
     display: flex;
     flex-direction: column;
     width: 215px;
@@ -34,7 +34,7 @@
     padding: 0 8px 8px 12px;
 }
 
-.gs-sticker-metadata-title {
+.gs-gnome-metadata-title {
     font-family: 'Brandon Medium', sans-serif;
     font-weight: 500;
     color: #2f4b66;
@@ -45,7 +45,7 @@
     text-overflow: ellipsis;
 }
 
-.gs-sticker-metadata-author {
+.gs-gnome-metadata-author {
     display: flex;
     align-items: center;
     font-size: 11px;
@@ -56,29 +56,29 @@
     margin-bottom: 5px;
 }
 
-.gs-sticker-metadata-tags div,
-.gs-sticker-metadata-author-icon,
-.gs-sticker-metadata-tags-icon {
+.gs-gnome-metadata-tags div,
+.gs-gnome-metadata-author-icon,
+.gs-gnome-metadata-tags-icon {
     margin-right: 5px;
     color: #2f4b66;
 }
 
-.gs-sticker-metadata-tags div {
+.gs-gnome-metadata-tags div {
     font-size: 11px;
 }
 
-.gs-sticker-metadata-tags-icon {
+.gs-gnome-metadata-tags-icon {
     padding-top: 4px;
     font-size: 11px;
 }
 
-.gs-sticker-metadata-tags {
+.gs-gnome-metadata-tags {
     display: flex;
     margin-bottom: 14px;
     color: #2f4b66;
 }
 
-.gs-sticker-metadata-bottomrow {
+.gs-gnome-metadata-bottomrow {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
@@ -86,7 +86,7 @@
     color: #ffffff;
 }
 
-.gs-sticker-metadata-cart {
+.gs-gnome-metadata-cart {
     display: flex;
     align-items: center;
     color: #ffffff;
@@ -98,10 +98,10 @@
     cursor: pointer;
 }
 
-.gs-sticker-metadata-cart:hover {
+.gs-gnome-metadata-cart:hover {
     background-color: #612c43;
 }
 
-.gs-sticker-metadata-cart-icon {
+.gs-gnome-metadata-cart-icon {
     margin-right: 5px;
 }

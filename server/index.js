@@ -22,7 +22,7 @@ app.set('view engine', 'pug');
 
 app.use(express.static(path.join(PROJECT_ROOT, 'client', 'dist')));
 
-app.use(function stickerCacheSetup(req, res, next) {
+app.use(function gnomeCacheSetup(req, res, next) {
     res.setHeader('Cache-Control', 'no-cache');
     next();
 });
@@ -32,7 +32,7 @@ app.use('/cart', cart);
 app.use('/checkout', checkout);
 app.use('/feedback', feedback);
 
-app.get('/', function stickerRootRedirection(req, res) {
+app.get('/', function gnomeRootRedirection(req, res) {
     console.log('index.js: redirecting to browse');
     res.redirect('/browse');
 });
@@ -43,10 +43,10 @@ if (config.server.https) {
         cert: fs.readFileSync(config.server.cert),
         passphrase: config.server.keyPassphrase
     }, app).listen(config.server.port, () => {
-        console.log(`Sticker server running on port ${server.address().port} using HTTPS`);
+        console.log(`Gnome server running on port ${server.address().port} using HTTPS`);
     });
 } else {
     const server = app.listen(config.server.port, () => {
-        console.log(`Sticker server running on port ${server.address().port}`);
+        console.log(`Gnome server running on port ${server.address().port}`);
     });
 }

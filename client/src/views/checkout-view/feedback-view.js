@@ -13,7 +13,7 @@ class FeedbackView extends React.Component {
                         <div>Thanks for your feedback!</div>
                     </div>
                     <a href="/browse" className="gs-feedback-browse-button">
-                        <div>Browse More Stickers</div>
+                        <div>Browse More Gnomes</div>
                     </a>
                 </div>
             </div>

@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 router.use(bodyParser.json());
 
-router.get('/', function stickerRouteCart(req, res) {
+router.get('/', function gnomeRouteCart(req, res) {
     res.render('index', { pageTitle: 'Cart', entry: 'cart' });
 });
 
@@ -15,8 +15,8 @@ function sendItems(token, res) {
             return res.send({ items: [] });
         }
 
-        db.getStickers().then((stickers) => {
-            res.send({ items: cart.items.map((id) => stickers.filter((sticker) => sticker.id.toString() === id)[0]) });
+        db.getGnomes().then((gnomes) => {
+            res.send({ items: cart.items.map((id) => gnomes.filter((gnome) => gnome.id.toString() === id)[0]) });
         });
     }, () => {
         res.send({ items: [] });
@@ -40,10 +40,10 @@ router.put('/api/items/:item_id', (req, res) => {
     console.log('Item targetted %s', req.params.item_id);
 
     db.addToCart(req.body.token, req.params.item_id).then(() => {
-        return db.getSticker(req.params.item_id);
-    }).then((sticker) => {
-        if (!sticker) {
-            db.addStickers([ req.body.item ]).then(() => {
+        return db.getGnome(req.params.item_id);
+    }).then((gnome) => {
+        if (!gnome) {
+            db.addGnomes([ req.body.item ]).then(() => {
                 sendItems(req.body.token, res);
             });
         } else {

@@ -3,7 +3,7 @@ import { Container } from 'flux/utils';
 import React from 'react';
 
 import HeaderView from '../views/header-view/header-view';
-import StickerListView from '../views/sticker-list-view/sticker-list-view';
+import GnomeListView from '../views/gnome-list-view/gnome-list-view';
 import ExpandedItemView from '../views/expanded-item-view/expanded-item-view';
 
 import browseStore from '../stores/browse-store';
@@ -24,7 +24,7 @@ class BrowseContainer extends React.Component {
             <div>
 
                 <HeaderView pageName="browse" cartCount={this.state.cart.items.length} />
-                <StickerListView items={this.state.browse.items} createExpandItemAction={createExpandItemAction} />
+                <GnomeListView items={this.state.browse.items} createExpandItemAction={createExpandItemAction} />
                 {expandedItem}
             </div>
         );

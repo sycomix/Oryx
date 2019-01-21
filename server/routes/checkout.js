@@ -5,7 +5,7 @@ const router = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 
 const db = require('../db');
-router.post('/', function stickerRouteCheckout(req, res) {
+router.post('/', function gnomeRouteCheckout(req, res) {
     if (!req.body.token) {
         res.status(401).send('Unauthorized');
         return;

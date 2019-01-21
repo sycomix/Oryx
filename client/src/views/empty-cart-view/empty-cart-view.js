@@ -12,7 +12,7 @@ export default React.createClass({
         return (
             <div className="gs-cartview-empty">
                 <div className="gs-cartview-empty-tagline">Hello</div>
-                <img src="/img/Computer-with-stickers.png" />
+                <img src="/img/Computer-with-gnomes.png" />
                 <a className="gs-cartview-empty-browse" href="/browse">Browse Gnomes</a>
             </div>
         );

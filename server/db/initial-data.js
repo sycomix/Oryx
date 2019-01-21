@@ -3,9 +3,9 @@ module.exports = [
     {
         id: '1',
         tags: [ 'Garden' ],
-        name: 'Single red garden gnome',
-        description: 'Single red garden gnome',
-        author: 'Single red garden gnome',
+        name: 'Garden Gnome Holding a Squirrel',
+        description: 'Garden Gnome Holding a Squirrel',
+        author: 'Gnomes, Inc.',
         size: {
             width: '2in',
             height: '2in'
@@ -16,7 +16,7 @@ module.exports = [
         tags: [ 'Garden' ],
         name: '50% Off! - Scott Gnome',
         description: '50% Off! - Scott Gnome',
-        author: 'Gnome Sales!!',
+        author: 'Gnomes, Inc.',
         size: {
             width: '2in',
             height: '2in'
@@ -25,9 +25,9 @@ module.exports = [
     }, {
         id: '3',
         tags: [ 'Garden' ],
-        name: 'One sat gnome',
-        description: 'One sat gnome',
-        author: 'One sat gnome',
+        name: 'Garden Gnome Sleeping',
+        description: 'Garden Gnome Sleeping',
+        author: 'Gnomes, Inc.',
         size: {
             width: '2in',
             height: '2in'
@@ -36,9 +36,9 @@ module.exports = [
     }, {
         id: '4',
         tags: [ 'Garden' ],
-        name: 'One sat on shoe gnome',
-        description: 'One sat on shoe gnome',
-        author: 'One sat on shoe gnome',
+        name: 'Garden Gnome on a Shoe',
+        description: 'Garden Gnome on a Shoe',
+        author: 'Gnomes, Inc.',
         size: {
             width: '2in',
             height: '2in'
@@ -47,9 +47,9 @@ module.exports = [
     }, {
         id: '5',
        tags: [ 'Garden' ],
-        name: 'One barrow gnome',
-        description: 'One barrow gnome',
-        author: 'One barrow gnome',
+        name: 'Garden Gnome with Wheelbarrow',
+        description: 'Garden Gnome with Wheelbarrow',
+        author: 'Gnomes, Inc.',
         size: {
             width: '2in',
             height: '2in'
@@ -58,9 +58,9 @@ module.exports = [
     }, {
         id: '6',
         tags: [ 'Garden' ],
-        name: 'One glasses gnome',
-        description: 'One glasses gnome',
-        author: 'One glasses gnome',
+        name: 'Garden Gnome with an Attitude',
+        description: 'Garden Gnome with an Attitude',
+        author: 'Gnomes, Inc.',
         size: {
             width: '2in',
             height: '2in'
@@ -69,9 +69,9 @@ module.exports = [
     }, {
         id: '7',
         tags: [ 'Garden' ],
-        name: 'One smiling gnome',
-        description: 'One smiling gnome',
-        author: 'One smiling gnome',
+        name: 'Garden Gnome Smiling',
+        description: 'Garden Gnome Smiling',
+        author: 'Gnomes, Inc.',
         size: {
             width: '2in',
             height: '2in'
@@ -80,9 +80,9 @@ module.exports = [
     }, {
         id: '8',
         tags: [ 'Garden' ],
-        name: 'Two singing gnomes',
-        description: 'Two singing gnomes',
-        author: 'Two singing gnomes',
+        name: 'Garden Gnomes Singing',
+        description: 'Garden Gnomes Singing',
+        author: 'Gnomes, Inc.',
         size: {
             width: '2in',
             height: '2in'
@@ -91,9 +91,9 @@ module.exports = [
     }, {
         id: '9',
         tags: [ 'Garden' ],
-        name: 'Two sleeping gnomes',
-        description: 'Two sleeping gnomes',
-        author: 'Two sleeping gnomes',
+        name: 'Garden Gnomes Sleeping',
+        description: 'Garden Gnomes Sleeping',
+        author: 'Gnomes, Inc.',
         size: {
             width: '2in',
             height: '2in'
@@ -102,9 +102,9 @@ module.exports = [
     }, {
         id: '10',
         tags: [ 'Garden' ],
-        name: 'Seven-pack gnomes',
-        description: 'Seven-pack gnomes',
-        author: 'Seven-pack gnomes',
+        name: 'Garden Gnomes 7-Pack',
+        description: 'Garden Gnomes 7-Pack',
+        author: 'Gnomes, Inc.',
         size: {
             width: '2in',
             height: '2in'
@@ -113,9 +113,9 @@ module.exports = [
     }, {
         id: '11',
         tags: [ 'Garden' ],
-        name: 'One afraid gnome',
-        description: 'One afraid gnome',
-        author: 'One afraid gnome',
+        name: 'Garden Gnome Timid',
+        description: 'Garden Gnome Timid',
+        author: 'Gnomes, Inc.',
         size: {
             width: '2in',
             height: '2in'
@@ -124,9 +124,9 @@ module.exports = [
     }, {
         id: '12',
         tags: [ 'Garden' ],
-        name: 'One welcome gnome',
-        description: 'One welcome gnome',
-        author: 'One welcome gnome',
+        name: 'Garden Gnome - Welcome',
+        description: 'Garden Gnome - Welcome',
+        author: 'Gnomes, Inc.',
         size: {
             width: '2in',
             height: '2in'
@@ -135,9 +135,9 @@ module.exports = [
     }, {
         id: '2',
         tags: [ 'Garden' ],
-        name: 'Two smiling gnomes',
-        description: 'Two smiling gnomes',
-        author: 'Two smiling gnomes',
+        name: 'Garden Gnomes with Shovels',
+        description: 'Garden Gnomes with Shovels',
+        author: 'Gnomes, Inc.',
         size: {
             width: '2in',
             height: '2in'

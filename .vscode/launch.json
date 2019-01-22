@@ -14,6 +14,13 @@
     ],
     "configurations": [
         {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
             "type": "node",
             "request": "attach",
             "name": "container",
@@ -21,13 +28,6 @@
             "port": 5858,
             "localRoot": "${workspaceRoot}",
             "remoteRoot": "/usr/src/app"
-        },
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Launch Chrome",
-            "url": "http://localhost:3000",
-            "webRoot": "${workspaceRoot}"
         },
         {
             "type": "node",

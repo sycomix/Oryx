@@ -151,3 +151,7 @@ gulp.task('lint', ['lint-client', 'lint-server', 'lint-gateway']);
 gulp.task('default', ['build-client-dev', 'build-client-img', 'build-client-font', 'build-client-html']);
 
 gulp.task('ci', ['build']);
+
+gulp.task('watch', function () {
+    gulp.watch(['./client/src/**/*', './client/img/**/*', './client/html/**/*'], ['build']);
+});

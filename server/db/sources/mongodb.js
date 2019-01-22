@@ -132,6 +132,15 @@ exports.initializeDatabase = () => {
         .then(disconnect);
 };
 
+exports.initializeDatabaseCloud = () => {
+    const initialData = require('../initial-data-cloud');
+    
+    return connect()
+        .then((db) => db.dropDatabase())
+        .then(() => exports.addGnomes(initialData))
+        .then(disconnect);
+};
+
 exports.removeFromCart = (token, itemId) => {
     console.log('mongodb.js: removeFromCart');
     return connect().then((db) => {

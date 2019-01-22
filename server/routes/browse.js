@@ -18,11 +18,21 @@ router.get('/api/items', function gnomeRouteApiBrowse(req, res) {
     }
 
     db.getGnomes(tags).then((items) => {
+
         console.info('%d gnomes found', items.length);
         if (tags) {
             console.log('Tags used in filter: ', tags);
         }
-        items.splice(1,1); // hack to remove gu gnome
+
+        // remove scott gnome from list
+        let scottItem = items.findIndex((item) => {
+            return item.name.indexOf('Scott Gnome') >= 0;
+        })
+
+        if (scottItem >=0) {
+            items.splice(scottItem, 1);
+        }
+
         res.send({ items });
     }, () => {
         res.send({ items: [] });

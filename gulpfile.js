@@ -13,6 +13,11 @@ gulp.task('populate-mongodb', function populateMongoDb() {
     return mongo.initializeDatabase();
 });
 
+gulp.task('populate-mongodb-cloud', function populateMongoDb() {
+    const mongo = require('./server/db/sources/mongodb');
+    return mongo.initializeDatabaseCloud();
+});
+
 gulp.task('build', ['build-client-img', 'build-client-font', 'build-client-dev']);
 
 gulp.task('build-client-img', ['clean-client'], function buildClientImg() {

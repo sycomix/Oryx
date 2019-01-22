@@ -43,6 +43,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding-bottom: 7px;
 }
 
 .gs-gnome-metadata-price {
@@ -54,6 +55,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding-bottom: 5px;
 }
 
 .gs-gnome-metadata-author {

@@ -5,8 +5,8 @@ module.exports = {
     },
     'dataSource': 'mongodb',
     'mongodb': {
-        'port': 27017,
-        'host': 'localhost', //docker.for.mac.localhost (for docker)
+        'port': '27017', //'10255/?ssl=true', 
+        'host': 'localhost', //'gnomedba:RL8G74xPjhrGbV9YoCIkoucqLOxP2ywZFVBkkRrwRRVywSu9QXdZCIVHTosSB7oLQL2TX2rYgXbujhysnT9Ztg==@gnomedba.documents.azure.com',
         'dbName': 'gnomesDB',
         'gnomeCollectionName': 'gnomes',
         'orderCollectionName': 'orders',

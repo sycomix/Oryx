@@ -10,6 +10,7 @@ const browse = require('./routes/browse.js');
 const cart = require('./routes/cart.js');
 const checkout = require('./routes/checkout.js');
 const feedback = require('./routes/feedback.js');
+const recommender = require('./routes/recommender');
 
 const config = require('./config.js');
 
@@ -31,6 +32,7 @@ app.use('/browse', browse);
 app.use('/cart', cart);
 app.use('/checkout', checkout);
 app.use('/feedback', feedback);
+app.use('/recommender', recommender);
 
 app.get('/', function gnomeRootRedirection(req, res) {
     console.log('index.js: redirecting to browse');

@@ -16,21 +16,30 @@ export function updateItems() {
 }
 
 export function getRecommendations() {
-    const recommenderApi = process.env.RECOMMENDER || 'https://tailwind-recommender.azurewebsites.net/api/getrecommendations';
+    var recommenderApi = 'https://tailwind-recommender.azurewebsites.net/api/getrecommendations';
 
-    axios.get(recommenderApi)
-        .then(res => {
-            console.log("REsponse data: " + res.data);
+    request({
+        url: 'recommender/api/recommender'
+    }, (err, res) => {
+        if (err) {
+            return;
+        }
+        recommenderApi = res;
+        axios.get(recommenderApi)
+            .then(res => {
+                console.log("Response data: " + res.data);
+    
+                // The API returns the complete list of items to force the system to get
+                // in sync, in case something bad happened to get it out of sync
+    
+                // let dataResult = data.slice(0,4);
+    
+                createRecommendationsUpdatedAction(res.data);
+            }).catch((err, res) => {
+                console.log(err);
+            });
+    })
 
-            // The API returns the complete list of items to force the system to get
-            // in sync, in case something bad happened to get it out of sync
-
-            // let dataResult = data.slice(0,4);
-
-            createRecommendationsUpdatedAction(res.data);
-        }).catch((err, res) => {
-            console.log(err);
-        });
 }
 
 export function addItem(item) {

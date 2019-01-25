@@ -16,7 +16,9 @@ export function updateItems() {
 }
 
 export function getRecommendations() {
-    axios.get(`https://recommender-test-4.azurewebsites.net/api/GetRecommendations?code=GHvuTHyv5jd5EsTK44lwQgwTQEwk2PbI6zkS7rugaVVjM7dInG4SQA==`)
+    const recommenderApi = process.env.RECOMMENDER || 'https://tailwind-recommender.azurewebsites.net/api/getrecommendations';
+
+    axios.get(recommenderApi)
         .then(res => {
             console.log("REsponse data: " + res.data);
 

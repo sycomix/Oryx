@@ -132,8 +132,7 @@ module.exports = [
             height: '2in'
         },
         image: '/img/logo/106662449.jpg'
-    }, 
-    {
+    }, {
         id: '12',
         tags: ['Garden'],
         name: 'Garden Gnome - Welcome',
@@ -192,7 +191,7 @@ module.exports = [
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/scottgnome.png'
+        image: '/img/logo/scotthat.png'
     }, {
         id: '19',
         tags: ['Garden'],
@@ -229,5 +228,17 @@ module.exports = [
             height: '2in'
         },
         image: '/img/logo/lantern_gnome.jpg'
+    }, {
+        id: '19',
+        tags: ['Garden'],
+        name: '50% Off! - Scott Gnome',
+        description: '50% Off! - Scott Gnome',
+        author: 'Gnomes, Inc.',
+        price: '$1.49',
+        size: {
+            width: '2in',
+            height: '2in'
+        },
+        image: '/img/logo/scottface.jpg'
     }
 ];

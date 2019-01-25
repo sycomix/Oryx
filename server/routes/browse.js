@@ -23,14 +23,17 @@ router.get('/api/items', function gnomeRouteApiBrowse(req, res) {
         if (tags) {
             console.log('Tags used in filter: ', tags);
         }
-
-        // remove scott gnome from list
-        let scottItem = items.findIndex((item) => {
-            return item.name.indexOf('Scott Gnome') >= 0;
-        })
-
-        if (scottItem >=0) {
-            items.splice(scottItem, 1);
+        
+        // remove the 2 scott gnomes from list
+        
+        for (i =0; i < 2; i++) {
+            let scottItem = items.findIndex((item) => {
+                return item.name.indexOf('Scott Gnome') >= 0;
+            })
+            
+            if (scottItem >=0) {
+                items.splice(scottItem, 1);
+            }
         }
 
         res.send({ items });

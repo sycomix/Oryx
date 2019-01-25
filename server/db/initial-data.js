@@ -155,6 +155,18 @@ module.exports = [
             width: '2in',
             height: '2in'
         },
-        image: '/img/logo/scottgnome.png'
+        image: '/img/logo/scotthat.png'
+    }, {
+        id: '14',
+        tags: ['Garden'],
+        name: '50% Off! - Scott Gnome',
+        description: '50% Off! - Scott Gnome',
+        author: 'Gnomes, Inc.',
+        price: '$1.49',
+        size: {
+            width: '2in',
+            height: '2in'
+        },
+        image: '/img/logo/scottface.jpg'
     }
 ];

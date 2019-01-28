@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "compounds": [
         {
-            "name": "client server",
+            "name": "Client and Server",
             "configurations": [
-                "Launch Chrome",
-                "Launch Program"
+                "Chrome Debugger",
+                "Node Debugger"
             ]
         }
     ],
@@ -16,32 +16,14 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome",
+            "name": "Chrome Debugger",
             "url": "http://localhost:3000",
             "webRoot": "${workspaceFolder}"
         },
         {
             "type": "node",
-            "request": "attach",
-            "name": "container",
-            "address": "localhost",
-            "port": 5858,
-            "localRoot": "${workspaceRoot}",
-            "remoteRoot": "/usr/src/app"
-        },
-        {
-            "type": "node",
             "request": "launch",
-            "name": "Gulp populate-mongodb",
-            "program": "${workspaceRoot}/node_modules/gulp/bin/gulp.js",
-            "args": [
-                "populate-mongodb"
-            ]
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
+            "name": "Node Debugger",
             "envFile": "${workspaceFolder}/.env",
             "program": "${workspaceRoot}/server/index.js"
         }

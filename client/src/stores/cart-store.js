@@ -12,7 +12,8 @@ class CartStore extends ReduceStore {
     getInitialState() {
         return {
             items: [],
-            recommendations: []
+            recommendations: [],
+            expandedItem: null
         };
     }
 
@@ -30,6 +31,22 @@ class CartStore extends ReduceStore {
                     items: state.items,
                     recommendations: action.items
                 }
+            }
+
+            case CART_ACTIONS.EXPAND_ITEM_ACTION: {
+                const expandedItem = state.recommendations.filter((item) => item.id === action.id)[0];
+                if (!expandedItem) {
+                    throw new Error(`Internal error: id ${action.id} does not exist`);
+                }
+                return Object.assign({}, state, {
+                    expandedItem
+                });
+            }
+
+            case CART_ACTIONS.CLOSE_EXPANDED_ITEM_ACTION: {
+                return Object.assign({}, state, {
+                    expandedItem: null
+                });
             }
 
             

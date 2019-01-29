@@ -67,6 +67,7 @@ class BrowseStore extends ReduceStore {
 
             case BROWSE_ACTIONS.EXPAND_ITEM_ACTION: {
                 const expandedItem = state.items.filter((item) => item.id === action.id)[0];
+                console.log("expand item action store");
                 if (!expandedItem) {
                     throw new Error(`Internal error: id ${action.id} does not exist`);
                 }

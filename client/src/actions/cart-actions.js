@@ -22,6 +22,19 @@ export function createUpdateFailedAction() {
     });
 }
 
+export function createExpandItemAction(id) {
+    dispatcher.dispatch({
+        actionType: CART_ACTIONS.EXPAND_ITEM_ACTION,
+        id
+    });
+}
+
+export function createCloseExpandedItemAction() {
+    dispatcher.dispatch({
+        actionType: CART_ACTIONS.CLOSE_EXPANDED_ITEM_ACTION
+    });
+}
+
 export function createAddToCartAction(item) {
     addItem(item);
 }

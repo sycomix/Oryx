@@ -3,7 +3,7 @@ import Icon from 'react-fa';
 import { v4 } from 'node-uuid'; // Yes this works in the browser too
 import { createRemoveFromCartAction } from '../../actions/cart-actions';
 import GnomeListView from '../../views/gnome-list-view/gnome-list-view';
-import { createExpandItemAction } from '../../actions/browse-actions';
+import { createExpandItemAction } from '../../actions/cart-actions';
 
 import './normal-cart-view.css';
 

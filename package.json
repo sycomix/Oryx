@@ -6,7 +6,8 @@
     "build": "gulp",
     "clean": "gulp clean",
     "start": "node server/index.js",
-    "populatemongodb": "gulp populate-mongodb"
+    "populatemongodb": "gulp populate-mongodb",
+    "postinstall": "gulp"
   },
   "engines": {
     "node": ">=10.1",

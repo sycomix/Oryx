@@ -6,12 +6,12 @@
     "obj": true,
     "bin": true
   },
-  "appService.defaultWebAppToDeploy": "/subscriptions/065849c9-c0c8-43d0-874c-01c7b295a1bc/resourceGroups/tailwindtraders-rg/providers/Microsoft.Web/sites/tailwindtraders-gnomes",
-  "appService.deploySubpath": "",
-  "appService.advancedCreation": true,
+  "appService.advancedCreation": false,
   "appService.showBuildDuringDeployPrompt": true,
 
   "appService.zipIgnorePattern": [
     "node_modules{,/**}"
-  ]
+  ],
+  "appService.defaultWebAppToDeploy": "/subscriptions/065849c9-c0c8-43d0-874c-01c7b295a1bc/resourceGroups/tailwindtraders-rg/providers/Microsoft.Web/sites/tailwindtraders-gnomes/slots/dev",
+  "appService.deploySubpath": ""
 }

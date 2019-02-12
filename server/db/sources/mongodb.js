@@ -1,7 +1,6 @@
 const { MongoClient } = require('mongodb');
 const config = require('../../config').mongodb;
 
-console.log('mongo config: ' + config);
 
 let connection;
 function connect() {

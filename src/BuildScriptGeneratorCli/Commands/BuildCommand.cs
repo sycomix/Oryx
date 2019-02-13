@@ -122,7 +122,10 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli
             File.WriteAllText(buildScriptPath, scriptContent);
             logger.LogTrace("Build script written to file");
 
-            IEnumerable envVarNames = serviceProvider.GetRequiredService<IEnvironment>().GetEnvironmentVariables().Keys;
+            var envVarKeyCollection = serviceProvider.GetRequiredService<IEnvironment>().GetEnvironmentVariables().Keys;
+            string[] envVarNames = new string[envVarKeyCollection.Count];
+            envVarKeyCollection.CopyTo(envVarNames, 0);
+
             var buildEventProps = new Dictionary<string, string>()
             {
                 { "oryxVersion", Program.GetVersion() },
@@ -130,7 +133,7 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli
                 { "oryxCommandLine", string.Join(' ', serviceProvider.GetRequiredService<IEnvironment>().GetCommandLineArgs()) },
                 { nameof(commitId), commitId },
                 { "scriptPath", buildScriptPath },
-                { "envVars", string.Join(",", (IEnumerable<string>)envVarNames) },
+                { "envVars", string.Join(",", envVarNames) },
             };
 
             // Run the generated script

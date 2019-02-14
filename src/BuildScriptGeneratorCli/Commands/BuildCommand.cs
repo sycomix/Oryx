@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Oryx.BuildScriptGenerator;
 using Microsoft.Oryx.Common.Utilities;
+using Newtonsoft.Json.Linq;
 
 namespace Microsoft.Oryx.BuildScriptGeneratorCli
 {
@@ -123,6 +124,7 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli
             File.WriteAllText(buildScriptPath, scriptContent);
             logger.LogTrace("Build script written to file");
 
+            string[] envVarNames = GetEnvVarNames(serviceProvider.GetRequiredService<IEnvironment>());
             var buildEventProps = new Dictionary<string, string>()
             {
                 { "oryxVersion", Program.GetVersion() },
@@ -130,7 +132,7 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli
                 { "oryxCommandLine", string.Join(' ', serviceProvider.GetRequiredService<IEnvironment>().GetCommandLineArgs()) },
                 { nameof(commitId), commitId },
                 { "scriptPath", buildScriptPath },
-                { "envVars", string.Join(",", GetEnvVarNames(serviceProvider.GetRequiredService<IEnvironment>())) },
+                { "envVars", new JObject(envVarNames).ToString() }
             };
 
             // Run the generated script
@@ -262,6 +264,7 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli
             return commitId;
         }
 
+        [NotNull]
         private string[] GetEnvVarNames([CanBeNull] IEnvironment env)
         {
             var envVarKeyCollection = env?.GetEnvironmentVariables()?.Keys;

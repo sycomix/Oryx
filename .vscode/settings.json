@@ -10,20 +10,14 @@
   "appService.showBuildDuringDeployPrompt": true,
 
   "appService.zipIgnorePattern": [
-    "node_modules{,/**}",
     ".vscode{,/**}",
     "util{,/**}",
-    "client/html{,/**}",
-    "client/img{,/**}",
-    "client/src{,/**}",
-    "client/jsconfig.json",
     "docker**",
     ".dockerignore",
     ".git*",
     ".babelrc",
-    ".eslintrc.json",
     ".env",
-    "gulpfile.js"
+    "node_modules{,/**}"
   ],
   "appService.deploySubpath": ""
 }

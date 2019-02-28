@@ -15,7 +15,6 @@
     "docker**",
     ".dockerignore",
     ".git*",
-    ".babelrc",
     ".env",
     "node_modules{,/**}"
   ],

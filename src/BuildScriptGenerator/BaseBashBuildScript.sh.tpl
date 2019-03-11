@@ -57,16 +57,19 @@ echo "{{ PreBuildScriptEpilogue }}"
 {{~ Snippet }}
 {{ end }}
 
-if [ "$SOURCE_DIR" != "$DESTINATION_DIR" ]
+if [ "$CopyFilesToDestination" != false ]
 then
-	appTempDir=`mktemp -d`
-	cd "$SOURCE_DIR"
-	# Use temporary directory in case the destination directory is a subfolder of $SOURCE
-	cp -rf `ls -A | grep -v ".git" || echo .` "$appTempDir"
-	mkdir -p "$DESTINATION_DIR"
-	cd "$appTempDir"
-	echo "Copying files to destination, '$DESTINATION_DIR'"
-	cp -rf . "$DESTINATION_DIR"
+	if [ "$SOURCE_DIR" != "$DESTINATION_DIR" ]
+	then
+		appTempDir=`mktemp -d`
+		cd "$SOURCE_DIR"
+		# Use temporary directory in case the destination directory is a subfolder of $SOURCE
+		cp -rf `ls -A | grep -v ".git" || echo .` "$appTempDir"
+		mkdir -p "$DESTINATION_DIR"
+		cd "$appTempDir"
+		echo "Copying files to destination, '$DESTINATION_DIR'"
+		cp -rf . "$DESTINATION_DIR"
+	fi
 fi
 
 {{ if PostBuildScriptPath | IsNotBlank }}

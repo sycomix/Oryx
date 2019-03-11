@@ -13,11 +13,17 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Node
         public NodeBashBuildSnippetProperties(
             string packageInstallCommand,
             string runBuildCommand,
-            string runBuildAzureCommand)
+            string runBuildAzureCommand,
+            bool installProductionOnlyDependencies,
+            bool copyNodeModulesFolderFromSource,
+            string productionOnlyPackageInstallCommand)
         {
             PackageInstallCommand = packageInstallCommand;
             NpmRunBuildCommand = runBuildCommand;
             NpmRunBuildAzureCommand = runBuildAzureCommand;
+            InstallProductionOnlyDependencies = installProductionOnlyDependencies;
+            CopyNodeModulesFolderFromSource = copyNodeModulesFolderFromSource;
+            ProductionOnlyPackageInstallCommand = productionOnlyPackageInstallCommand;
         }
 
         public string PackageInstallCommand { get; set; }
@@ -25,5 +31,11 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Node
         public string NpmRunBuildCommand { get; set; }
 
         public string NpmRunBuildAzureCommand { get; set; }
+
+        public bool InstallProductionOnlyDependencies { get; set; }
+
+        public bool CopyNodeModulesFolderFromSource { get; set; }
+
+        public string ProductionOnlyPackageInstallCommand { get; set; }
     }
 }

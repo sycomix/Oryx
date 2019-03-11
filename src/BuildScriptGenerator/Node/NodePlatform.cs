@@ -50,7 +50,22 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Node
             string packageManagerCmd = context.SourceRepo.FileExists(NodeConstants.YarnLockFileName) ? NodeConstants.YarnCommand : NodeConstants.NpmCommand;
             _logger.LogInformation("Using {packageManager}", packageManagerCmd);
 
+            var installProductionOnlyDependencies = false;
+            var copyNodeModulesFolderFromSource = true;
+            if (packageJson?.devDependencies == null)
+            {
+
+            }
+            else
+            {
+                // If development time dependencies are present we want to avoid copying them to improve performance
+                installProductionOnlyDependencies = true;
+                copyNodeModulesFolderFromSource = false;
+            }
+
             var packageInstallCommand = string.Format(NodeConstants.PackageInstallCommandTemplate, packageManagerCmd);
+            var productionOnlyPackageInstallCommand = string.Format(
+                NodeConstants.ProductionOnlyPackageInstallCommandTemplate, packageManagerCmd);
 
             var scriptsNode = packageJson?.scripts;
             if (scriptsNode != null)
@@ -76,7 +91,10 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Node
             var scriptProps = new NodeBashBuildSnippetProperties(
                 packageInstallCommand: packageInstallCommand,
                 runBuildCommand: runBuildCommand,
-                runBuildAzureCommand: runBuildAzureCommand);
+                runBuildAzureCommand: runBuildAzureCommand,
+                installProductionOnlyDependencies: installProductionOnlyDependencies,
+                copyNodeModulesFolderFromSource: copyNodeModulesFolderFromSource,
+                productionOnlyPackageInstallCommand: productionOnlyPackageInstallCommand);
             string script = TemplateHelpers.Render(TemplateHelpers.TemplateResource.NodeBuildSnippet, scriptProps, _logger);
 
             return new BuildScriptSnippet { BashBuildScriptSnippet = script };

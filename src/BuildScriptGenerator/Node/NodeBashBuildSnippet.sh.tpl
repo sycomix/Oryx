@@ -1,3 +1,14 @@
+# Yarn config is per user, and since the build might run with a non-root account,
+# we make sure the yarn cache is set on every build.
+YARN_CACHE_DIR=/usr/local/share/yarn-cache
+if [ -d $YARN_CACHE_DIR ]
+then
+    echo "Configuring Yarn cache folder"
+    yarn config set cache-folder $YARN_CACHE_DIR
+fi
+
+# Since we do not know if the source or destination folder is a shared volume,
+# create a folder within the container to restore the packages for better perf.
 pkgsDir="/tmp/pkgs"
 mkdir -p "$pkgsDir"
 
@@ -18,9 +29,9 @@ echo Installing production-only packages ...
 echo
 echo "Running '{{ ProductionOnlyPackageInstallCommand }}' ..."
 echo
-cd "$pkgsDir"
 {{ ProductionOnlyPackageInstallCommand }}
-cp -rf node_modules "$SOURCE_DIR"
+
+cp -rf "$pkgsDir/node_modules" "$SOURCE_DIR"
 {{ end }}
 
 echo Installing packages ...
@@ -28,14 +39,6 @@ echo
 echo "Running '{{ PackageInstallCommand }}' ..."
 echo
 cd "$SOURCE_DIR"
-# Yarn config is per user, and since the build might run with a non-root account, we make sure
-# the yarn cache is set on every build.
-YARN_CACHE_DIR=/usr/local/share/yarn-cache
-if [ -d $YARN_CACHE_DIR ]
-then
-    echo "Configuring Yarn cache folder"
-    yarn config set cache-folder $YARN_CACHE_DIR
-fi
 
 {{ PackageInstallCommand }}
 
@@ -43,7 +46,6 @@ fi
 echo
 echo "Running '{{ NpmRunBuildCommand }}' ..."
 echo
-cd "$SOURCE_DIR"
 {{ NpmRunBuildCommand }}
 {{ end }}
 
@@ -64,7 +66,6 @@ cp -rf $pkgsDir/node_modules "$DESTINATION_DIR"
 echo Copying source files ...
 cd "$SOURCE_DIR"
 cp -rf `ls -A | grep -v "node_modules"` "$DESTINATION_DIR"
-
 {{ else }}
 cd "$SOURCE_DIR"
 cp -rf . "$DESTINATION_DIR"

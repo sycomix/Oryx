@@ -13,8 +13,13 @@ using Newtonsoft.Json;
 
 namespace Microsoft.Oryx.BuildScriptGenerator.Node
 {
+    [BuildProperty(
+        ZipNodeModulesDirPropertyKey,
+        "Flag to indicate if 'node_modules' folder need to be in zipped form in the output folder. Default is 'false'.")]
     internal class NodePlatform : IProgrammingPlatform
     {
+        internal const string ZipNodeModulesDirPropertyKey = "zip_nodemodules_dir";
+
         private readonly NodeScriptGeneratorOptions _nodeScriptGeneratorOptions;
         private readonly INodeVersionProvider _nodeVersionProvider;
         private readonly ILogger<NodePlatform> _logger;
@@ -43,6 +48,17 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Node
 
         public BuildScriptSnippet GenerateBashBuildScriptSnippet(BuildScriptGeneratorContext context)
         {
+            bool zipNodeModulesDir = false;
+            string zipNodeModulesDirProperty = null;
+            if (context.Properties != null &&
+                context.Properties.TryGetValue(ZipNodeModulesDirPropertyKey, out zipNodeModulesDirProperty))
+            {
+                if (!bool.TryParse(zipNodeModulesDirProperty, out zipNodeModulesDir))
+                {
+                    zipNodeModulesDir = false;
+                }
+            }
+
             var packageJson = GetPackageJsonObject(context.SourceRepo, _logger);
             string runBuildCommand = null;
             string runBuildAzureCommand = null;
@@ -94,7 +110,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Node
                 runBuildAzureCommand: runBuildAzureCommand,
                 installProductionOnlyDependencies: installProductionOnlyDependencies,
                 copyNodeModulesFolderFromSource: copyNodeModulesFolderFromSource,
-                productionOnlyPackageInstallCommand: productionOnlyPackageInstallCommand);
+                productionOnlyPackageInstallCommand: productionOnlyPackageInstallCommand,
+                zipNodeModulesDir: zipNodeModulesDir);
             string script = TemplateHelpers.Render(TemplateHelpers.TemplateResource.NodeBuildSnippet, scriptProps, _logger);
 
             return new BuildScriptSnippet { BashBuildScriptSnippet = script };

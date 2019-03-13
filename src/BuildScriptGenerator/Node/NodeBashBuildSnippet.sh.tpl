@@ -71,7 +71,14 @@ then
 	echo Copying production only packages ...
 	echo
 	mkdir -p "$DESTINATION_DIR"
-	cp -rf $pkgsDir/node_modules "$DESTINATION_DIR"
+	cd "$pkgsDir"
+	{{ if ZipNodeModulesDir }}
+		rm -f "node_modules.tar"
+		tar -cf node_modules.tar node_modules
+		cp -f node_modules.tar "$DESTINATION_DIR"
+	{{ else }}
+		cp -rf node_modules "$DESTINATION_DIR"
+	{{ end }}
 
 	echo Copying source files ...
 	cd "$SOURCE_DIR"

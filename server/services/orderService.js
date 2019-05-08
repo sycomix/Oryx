@@ -5,8 +5,8 @@ class OrderService {
 
     constructor() { }
 
-    async addOrder(order) {
-        return await  mongoDBService.insertDocs(config.orderCollectionName, order);
+    addOrder(order) {
+        return mongoDBService.insertDocs(config.orderCollectionName, order);
     }
 
 }

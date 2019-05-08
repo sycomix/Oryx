@@ -5,8 +5,8 @@ class CartService {
     
     constructor() { }
 
-    async addToCart(token, itemId) {
-        return await mongoDBService.findDoc(config.cartCollectionName, { _id: token }).then((cart) => {
+    addToCart(token, itemId) {
+        return mongoDBService.findDoc(config.cartCollectionName, { _id: token }).then((cart) => {
             if (!cart) {
                 return mongoDBService.insertDocs(config.cartCollectionName, {
                     _id: token,
@@ -20,18 +20,18 @@ class CartService {
         })
     }
 
-    async clearCart(token) {
-        return await mongoDBService.removeDoc(config.cartCollectionName, { _id: token });
+    clearCart(token) {
+        return mongoDBService.removeDoc(config.cartCollectionName, { _id: token });
     }
 
-    async getCart(token) {
-        return await mongoDBService.findDoc(config.cartCollectionName, { _id: token }).then((cart) => {
+    getCart(token) {
+        return mongoDBService.findDoc(config.cartCollectionName, { _id: token }).then((cart) => {
             return cart;
         });
     }
 
-    async removeFromCart(token, itemId) {
-        return await mongoDBService.findDoc(config.cartCollectionName, { _id: token }).then((cart) => {
+    removeFromCart(token, itemId) {
+        return mongoDBService.findDoc(config.cartCollectionName, { _id: token }).then((cart) => {
             if (!cart) {
                 return;
             } 

@@ -4,18 +4,18 @@ const mongoDBService = require('../data/mongoDBService');
 class GnomesService {
     constructor() { }
 
-    async addGnomes(items) {
-        return await mongoDBService.insertDocs(config.gnomeCollectionName, items);
+    addGnomes(items) {
+        return mongoDBService.insertDocs(config.gnomeCollectionName, items);
     }
 
-    async getGnome(id) {
-        return await mongoDBService.findDoc(config.gnomeCollectionName, { id }).then((gnome) => {
+    getGnome(id) {
+        return mongoDBService.findDoc(config.gnomeCollectionName, { id }).then((gnome) => {
             return gnome;
         });
     }
 
-    async getGnomes() {
-        return await mongoDBService.findDocs(config.gnomeCollectionName, {}).then((gnomes) => {
+    getGnomes() {
+        return mongoDBService.findDocs(config.gnomeCollectionName, {}).then((gnomes) => {
             return gnomes;
         });
     }

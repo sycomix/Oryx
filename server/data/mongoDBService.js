@@ -3,15 +3,13 @@ const config = require('../config').mongodb;
 
 class MongoDBService {
     constructor() {
-        this.getConnection = this.getConnection.bind(this);        
+        // this.getConnection = this.getConnection.bind(this);        
         this.connection = null;
     }
 
     async getConnection() {
         if (!this.connection) {
-            await MongoClient.connect(config.url).then((db) => {
-                this.connection = db;                
-            });
+            this.connection = await MongoClient.connect(config.url);
         }
 
         return this.connection;
@@ -25,40 +23,35 @@ class MongoDBService {
         }
     }
 
-    async findDoc(collectionName, criteria) {        
-        return await this.getConnection().then((db) => {
-            return db.collection(collectionName).findOne(criteria);
-        });
+    async findDoc(collectionName, criteria) {
+        const connection = await this.getConnection();
+        return await connection.collection(collectionName).findOne(criteria);
     }
 
     async findDocs(collectionName, criteria) {        
-        return await this.getConnection().then((db) => {
-            return db.collection(collectionName).find(criteria).toArray();
-        });
+        const connection = await this.getConnection();
+        return await connection.collection(collectionName).find(criteria).toArray();
     }
 
     async insertDocs(collectionName, docs) {
-        return await this.getConnection().then((db) => {
-            return db.collection(collectionName).insert(docs);
-        });            
+        const connection = await this.getConnection();
+        return await connection.collection(collectionName).insert(docs);  
     }
 
     async removeDoc(collectionName, criteria) {
-        return await this.getConnection().then((db) => {
-            return db.collection(collectionName).remove(criteria, {
-                single: true,
-                w: 1
-            });    
+        const connection = await this.getConnection();
+        return await connection.collection(collectionName).remove(criteria, {
+            single: true,
+            w: 1
         });
     }
 
     async updateDocs(collectionName, criteria, docs) {
-        return await  this.getConnection().then((db) => {
-            return db.collection(collectionName).update(criteria, docs, {
-                multi: true,
-                upsert: false,
-                w: 1
-            });
+        const connection = await this.getConnection();
+        return await connection.collection(collectionName).update(criteria, docs, {
+            multi: true,
+            upsert: false,
+            w: 1
         });             
     }
 

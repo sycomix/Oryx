@@ -5,8 +5,8 @@ class FeedbackService {
 
     constructor() { }
 
-    async addFeedback(feedbackCollectionName) {
-        return await mongoDBService.insertDocs(config.feedbackCollectionName, feedbackCollectionName);
+    addFeedback(feedbackCollectionName) {
+        return mongoDBService.insertDocs(config.feedbackCollectionName, feedbackCollectionName);
     }
 }
 

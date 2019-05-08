@@ -3,7 +3,8 @@ const config = require('../config').mongodb;
 
 class MongoDBService {
     constructor() {
-        // this.getConnection = this.getConnection.bind(this);        
+        this.getConnection = this.getConnection.bind(this);
+        this.disconnect = this.disconnect.bind(this);
         this.connection = null;
     }
 
@@ -17,9 +18,8 @@ class MongoDBService {
 
     async disconnect() {
         if (this.connection) {
-            await this.connection.close().then(() => {
-                this.connection = null;
-            });
+            await this.connection.close();
+            this.connection = null;
         }
     }
 

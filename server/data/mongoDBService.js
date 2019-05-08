@@ -3,11 +3,7 @@ const config = require('../config').mongodb;
 
 class MongoDBService {
     constructor() {
-        this.getConnection = this.getConnection.bind(this);
-        this.disconnect = this.disconnect.bind(this);
-
-        this.findDoc = this.findDoc.bind(this);
-        
+        this.getConnection = this.getConnection.bind(this);        
         this.connection = null;
     }
 

@@ -1,12 +1,13 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 
+const feedbackService = require('../services/feedbackService');
+
 const router = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 
-const db = require('../db');
 router.post('/', function gnomeRouteFeedback(req, res) {
-    db.addFeedback(req.body, () => {
+    feedbackService.addFeedback(req.body, () => {
         console.log('Feedback added');
         res.render('index', { pageTitle: 'Feedback', entry: 'feedback' });
     });

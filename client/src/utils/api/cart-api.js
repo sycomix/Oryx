@@ -1,7 +1,7 @@
 import { createUpdateFailedAction, createItemsUpdatedAction, createRecommendationsUpdatedAction } from '../../actions/cart-actions';
 import { request } from '../api';
 import axios from 'axios';
-import data from '../../../../server/db/initial-data';
+import data from '../../../../server/data/sources/initial-data';
 
 export function updateItems() {
     request({

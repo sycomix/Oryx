@@ -1,6 +1,7 @@
 version: '2.1'
 
 services:
+
   tailwind:
     image: tailwind
     build: .
@@ -8,3 +9,28 @@ services:
       NODE_ENV: production
     ports:
       - 3000:3000
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    networks:
+      - my_net
+    environment:
+      MONGO_URL: mongodb://mongodb:27017
+    command: sh -c "npm run populatemongodb && npm start"
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always      
+    volumes:
+      - ./data:/data/db
+    ports:
+      - 27017:27017
+    networks: 
+      - my_net
+    command: mongod --noauth --smallfiles --bind_ip_all
+
+networks:
+  my_net:
+      driver: bridge

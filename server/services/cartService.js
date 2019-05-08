@@ -1,5 +1,5 @@
 const config = require('../config').mongodb;
-const mongoDBService = require('../db/mongoDBService');
+const mongoDBService = require('../data/mongoDBService');
 
 class CartService {
     

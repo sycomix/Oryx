@@ -9,12 +9,12 @@ var eslint = require('gulp-eslint');
 var eslintConfig = require('./.eslintrc.json');
 
 gulp.task('populate-mongodb', function populateMongoDb() {
-    const mongo = require('./server/db/sources/mongodb');
+    const mongo = require('./server/db/sources/seeder');
     return mongo.initializeDatabase();
 });
 
 gulp.task('populate-mongodb-cloud', function populateMongoDb() {
-    const mongo = require('./server/db/sources/mongodb');
+    const mongo = require('./server/db/sources/seeder');
     return mongo.initializeDatabaseCloud();
 });
 

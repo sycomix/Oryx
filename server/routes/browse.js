@@ -1,6 +1,8 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 
+const gnomesService = require('../services/gnomesService');
+
 const router = express.Router();
 router.use(bodyParser.json());
 
@@ -10,14 +12,13 @@ router.get('/', function gnomeRouteBrowse(req, res) {
     res.render('index', renderData);
 });
 
-const db = require('../db');
 router.get('/api/items', function gnomeRouteApiBrowse(req, res) {
     let tags;
     if (req.query.tags) {
         tags = req.query.tags.split(',');
     }
 
-    db.getGnomes(tags).then((items) => {
+    gnomesService.getGnomes(tags).then((items) => {
 
         console.info('%d gnomes found', items.length);
         if (tags) {

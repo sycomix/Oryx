@@ -6,6 +6,7 @@
     "build": "gulp",
     "clean": "gulp clean",
     "start": "node server/index.js",
+    "start-dev": "nodemon --exec npm start",
     "populatemongodb": "gulp populate-mongodb"
   },
   "engines": {
@@ -43,6 +44,7 @@
     "gulp": "3.9.1",
     "gulp-eslint": "2.0.0",
     "lodash": "4.15.0",
+    "nodemon": "^1.19.0",
     "style-loader": "0.13.1",
     "url-loader": "0.5.7",
     "webpack": "1.12.14"

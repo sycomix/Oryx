@@ -5,10 +5,8 @@ module.exports = {
     },
     'dataSource': 'mongodb',
     'mongodb': {
-        // 'port': '10255/?ssl=true', 
-        // 'host': 'tailwindtraders:z9b9AB3hViNJNajy3Z3RgV10Umgv5XbZNEQLX9yQntiU0eTS2pwxxRKQas8aF1h8oPu2MStU9BFdiDYEcyzVQA==@tailwindtraders.documents.azure.com',
         'port': '27017',
-        'host': 'mongodb',
+        'host': 'localhost',
         'dbName': 'gnomesDB',
         'gnomeCollectionName': 'gnomes',
         'orderCollectionName': 'orders',

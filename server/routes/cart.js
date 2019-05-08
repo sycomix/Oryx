@@ -1,6 +1,9 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 
+const gnomesService = require('../services/gnomesService');
+const cartService = require('../services/cartService');
+
 const router = express.Router();
 router.use(bodyParser.json());
 
@@ -8,14 +11,13 @@ router.get('/', function gnomeRouteCart(req, res) {
     res.render('index', { pageTitle: 'Cart', entry: 'cart' });
 });
 
-const db = require('../db');
 function sendItems(token, res) {
-    db.getCart(token).then((cart) => {
+    cartService.getCart(token).then((cart) => {
         if (!cart || !cart.items || cart.items.length === 0) {
             return res.send({ items: [] });
         }
 
-        db.getGnomes().then((gnomes) => {
+        gnomesService.getGnomes().then((gnomes) => {
             res.send({ items: cart.items.map((id) => gnomes.filter((gnome) => gnome.id.toString() === id)[0]) });
         });
     }, () => {
@@ -39,11 +41,11 @@ router.put('/api/items/:item_id', (req, res) => {
 
     console.log('Item targetted %s', req.params.item_id);
 
-    db.addToCart(req.body.token, req.params.item_id).then(() => {
-        return db.getGnome(req.params.item_id);
+    cartService.addToCart(req.body.token, req.params.item_id).then(() => {
+        return gnomesService.getGnome(req.params.item_id);
     }).then((gnome) => {
         if (!gnome) {
-            db.addGnomes([ req.body.item ]).then(() => {
+            gnomesService.addGnomes([ req.body.item ]).then(() => {
                 sendItems(req.body.token, res);
             });
         } else {
@@ -60,7 +62,7 @@ router.delete('/api/items/:item_id', (req, res) => {
 
     console.log('Item targetted', req.params.item_id);
 
-    db.removeFromCart(req.body.token, req.params.item_id).then(() => {
+    cartService.removeFromCart(req.body.token, req.params.item_id).then(() => {
         sendItems(req.body.token, res);
     });
 });

@@ -1,9 +1,9 @@
 const middlewares = {
-    rejectIfNoToken: (req, res, next) => {
+    rejectIfNoToken: (req, res, next) => {        
         if (req.method === 'GET' && !req.query.token) {
             res.status(401).send('Unauthorized');
         }
-        else if (!req.body.token) {
+        else if (req.method !== 'GET' && !req.body.token) {
             res.status(401).send('Unauthorized');
         }
         else {

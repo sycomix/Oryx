@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb');
-const config = require('../config').mongodb;
+const getFormattedMongoURL = require('../helpers/mongoDBConfigHelper').getFormattedMongoURL;
 
 class MongoDBService {
     constructor() {
@@ -10,7 +10,7 @@ class MongoDBService {
 
     async getConnection() {
         if (!this.connection) {
-            this.connection = await MongoClient.connect(config.url);
+            this.connection = await MongoClient.connect(getFormattedMongoURL());
         }
 
         return this.connection;

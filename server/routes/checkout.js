@@ -1,18 +1,15 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 
+const rejectIfNoToken = require('../middlewares').rejectIfNoToken;
+
 const orderService = require('../services/orderService');
 const cartService = require('../services/cartService');
 
 const router = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.post('/', async (req, res) => {
-    if (!req.body.token) {
-        res.status(401).send('Unauthorized');
-        return;
-    }
-
+router.post('/', rejectIfNoToken, async (req, res) => {
     try {
         await orderService.addOrder({
             items: req.body['checkout-items'],

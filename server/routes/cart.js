@@ -1,6 +1,8 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 
+const rejectIfNoToken = require('../middlewares').rejectIfNoToken;
+
 const gnomesService = require('../services/gnomesService');
 const cartService = require('../services/cartService');
 
@@ -29,11 +31,7 @@ const sendGnomeItems = async (token, res) => {
     return res.send({ items: gnomesFromCart });
 }
 
-router.get('/api/items', (req, res) => {
-    if (!req.query.token) {
-        res.status(401).send('Unauthorized');
-        return;
-    }
+router.get('/api/items', rejectIfNoToken, (req, res) => {
     try {
         sendGnomeItems(req.query.token, res);    
     } catch (error) {
@@ -43,12 +41,7 @@ router.get('/api/items', (req, res) => {
     
 });
 
-router.put('/api/items/:item_id', async (req, res) => {
-    if (!req.body.token) {
-        res.status(401).send('Unauthorized');
-        return;
-    }
-
+router.put('/api/items/:item_id', rejectIfNoToken, async (req, res) => {    
     console.log('Item targetted %s', req.params.item_id);
 
     try {
@@ -66,12 +59,7 @@ router.put('/api/items/:item_id', async (req, res) => {
     }
 });
 
-router.delete('/api/items/:item_id', async (req, res) => {
-    if (!req.body.token) {
-        res.status(401).send('Unauthorized');
-        return;
-    }
-
+router.delete('/api/items/:item_id', rejectIfNoToken, async (req, res) => {
     console.log('Item targetted', req.params.item_id);
     
     try {

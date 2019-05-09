@@ -7,22 +7,28 @@ const cartService = require('../services/cartService');
 const router = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.post('/', function gnomeRouteCheckout(req, res) {
+router.post('/', async (req, res) => {
     if (!req.body.token) {
         res.status(401).send('Unauthorized');
         return;
     }
-    orderService.addOrder({
-        items: req.body['checkout-items'],
-        name: req.body['checkout-name'],
-        email: req.body['checkout-email'],
-        token: req.body.token
-    }).then(() => {
+
+    try {
+        await orderService.addOrder({
+            items: req.body['checkout-items'],
+            name: req.body['checkout-name'],
+            email: req.body['checkout-email'],
+            token: req.body.token
+        });
+        
         console.log('Order added');
-        return cartService.clearCart(req.body.token);
-    }).then(() => {
-        res.render('index', { pageTitle: 'Checkout', entry: 'checkout' });
-    });
+        await cartService.clearCart(req.body.token);
+    
+        res.render('index', { pageTitle: 'Checkout', entry: 'checkout' });    
+    } catch (error) {
+        res.status(500);
+        res.send({ error })
+    }
 });
 
 module.exports = router;

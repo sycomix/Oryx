@@ -1,15 +1,16 @@
 const { MongoClient } = require('mongodb');
-const config = require('../config').mongodb;
+const getFormattedMongoURL = require('../helpers/mongoDBConfigHelper').getFormattedMongoURL;
 
 class MongoDBService {
     constructor() {
-        // this.getConnection = this.getConnection.bind(this);        
+        this.getConnection = this.getConnection.bind(this);
+        this.disconnect = this.disconnect.bind(this);
         this.connection = null;
     }
 
     async getConnection() {
         if (!this.connection) {
-            this.connection = await MongoClient.connect(config.url);
+            this.connection = await MongoClient.connect(getFormattedMongoURL());
         }
 
         return this.connection;
@@ -17,9 +18,8 @@ class MongoDBService {
 
     async disconnect() {
         if (this.connection) {
-            await this.connection.close().then(() => {
-                this.connection = null;
-            });
+            await this.connection.close();
+            this.connection = null;
         }
     }
 

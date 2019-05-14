@@ -16,9 +16,10 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
         internal const string PythonLtsVersion = Common.PythonVersions.Python37Version;
         internal const string InstalledPythonVersionsDir = "/opt/python/";
         internal const string ZipFileExtension = "tar.gz";
-        internal const string ZipVirtualEnvFileNameFormat = "{0}.zip";
-        internal const string TarGzVirtualEnvFileNameFormat = "{0}.tar.gz";
+        internal const string ZipFileNameFormat = "{0}.zip";
+        internal const string TarGzFileNameFormat = "{0}.tar.gz";
         internal const string CompressedVirtualEnvFileBuildProperty = "compressedVirtualEnvFile";
+        internal const string CompressedPackageDirFileBuildProperty = "compressedPakcageDirFile";
         internal const string VirtualEnvNameBuildProperty = "virtualEnvName";
     }
 }

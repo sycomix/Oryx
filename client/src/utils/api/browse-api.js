@@ -1,19 +1,17 @@
 import { createUpdateFailedAction, createItemsUpdatedAction } from '../../actions/browse-actions';
-import { request } from '../api';
 import { createCookie } from '../cookies';
+import HttpService from '../../services/HttpService';
 
-export function updateItems(tags = []) {
+export async function updateItems(tags = []) {
     // Update cookie here
     createCookie('searchTags', JSON.stringify(tags), 30);
 
-    request({
-        url: 'browse/api/items',
-        payload: { tags }
-    }, (err, res) => {
-        if (err) {
-            createUpdateFailedAction();
-            return;
-        }
-        createItemsUpdatedAction(res.items);
-    });
+    try {
+        const result = await HttpService.get('browse/api/items', {tags: tags.join(',') });
+        createItemsUpdatedAction(result.data.items);
+    } catch (error) {
+        console.error(error);
+        createUpdateFailedAction();
+    }
+    
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Icon from 'react-fa';
 import { createAddToCartAction } from '../../actions/cart-actions';
 
@@ -9,11 +10,11 @@ export default class ExpandedItemView extends React.Component {
         super(props, context);
     }
 
-    onCloseClicked() {
+    onCloseClicked = () => {
         this.props.createCloseExpandedItemAction();
     }
 
-    async onAddToCartClicked() {
+    onAddToCartClicked = async () => {
         await createAddToCartAction(this.props.item);
         this.props.createCloseExpandedItemAction();
     }
@@ -41,6 +42,6 @@ export default class ExpandedItemView extends React.Component {
 };
 
 ExpandedItemView.propTypes = {
-    createCloseExpandedItemAction: React.PropTypes.func.isRequired,
-    item: React.PropTypes.object.isRequired
+    createCloseExpandedItemAction: PropTypes.func.isRequired,
+    item: PropTypes.object.isRequired
 }

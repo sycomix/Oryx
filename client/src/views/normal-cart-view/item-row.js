@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from 'react-fa';
+import PropTypes from 'prop-types';
 import { createRemoveFromCartAction } from '../../actions/cart-actions';
 
 import './normal-cart-view.css';
@@ -56,5 +57,5 @@ export default class ItemRow extends React.Component {
 };
 
 ItemRow.propTypes = {
-    item: React.PropTypes.object
+    item: PropTypes.object
 }

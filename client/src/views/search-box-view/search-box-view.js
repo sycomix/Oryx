@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { searchImage } from '../../utils/api/create-api';
 
 import './search-box-view.css';
@@ -32,5 +33,5 @@ export default class SearchBoxView extends React.Component {
 }
 
 SearchBoxView.propTypes = {
-    placeholder: React.PropTypes.string
+    placeholder: PropTypes.string
 }

@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import GnomeListView from '../../views/gnome-list-view/gnome-list-view';
 import { createExpandItemAction } from '../../actions/cart-actions';
 import AuthService from '../../services/auth-service';
@@ -63,7 +65,7 @@ export default class NormalCartView extends React.Component {
 }
 
 NormalCartView.propTypes = {
-    items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-    recommendations: React.PropTypes.arrayOf(React.PropTypes.object)
+    items: PropTypes.arrayOf(PropTypes.object).isRequired,
+    recommendations: PropTypes.arrayOf(PropTypes.object)
 }
 

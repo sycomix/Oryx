@@ -18,6 +18,13 @@ const middlewares = {
             res.status(401).send('Unauthorized');
         }
     },
+    rejectIfNoTokenInBody: (req, res, next) => {
+        console.log('token en mid', req.body.token);
+        if(!req.body.token) {
+            res.status(401).send('Unauthorized');    
+        }
+        next();
+    }
 }
 
 module.exports = middlewares;

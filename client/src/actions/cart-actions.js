@@ -1,6 +1,8 @@
 import dispatcher from '../dispatcher';
 import { CART_ACTIONS } from './actions.js';
-import { addItem, removeItem, getRecommendations } from '../utils/api/cart-api';
+// import { addItem, removeItem, getRecommendations } from '../utils/api/cart-api';
+import cartService from '../services/cart-service';
+import recommenderService from '../services/recommender-service';
 
 export function createItemsUpdatedAction(items) {
     dispatcher.dispatch({
@@ -36,14 +38,14 @@ export function createCloseExpandedItemAction() {
 }
 
 export function createAddToCartAction(item) {
-    addItem(item);
+    cartService.addItem(item);
 }
 
 export function createRemoveFromCartAction(item) {
-    removeItem(item);
+    cartService.removeItem(item);
 }
 
 export function createRecommendationsAddedAction() {
-    getRecommendations();
+    recommenderService.getRecommendations();
 }
 

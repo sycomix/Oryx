@@ -25,7 +25,6 @@ class CartService {
     }
 
     getCart(token) {
-        console.log('token', token)
         return mongoDBService.findDoc(config.cartCollectionName, { _id: token }).then((cart) => {
             return cart;
         });

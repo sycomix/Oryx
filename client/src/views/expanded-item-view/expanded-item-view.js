@@ -18,8 +18,8 @@ export default React.createClass({
         this.props.createCloseExpandedItemAction();
     },
 
-    onAddToCartClicked() {
-        createAddToCartAction(this.props.item);
+    async onAddToCartClicked() {
+        await createAddToCartAction(this.props.item);
         this.props.createCloseExpandedItemAction();
     },
 

@@ -2,7 +2,7 @@
 import { ReduceStore } from 'flux/utils';
 import dispatcher from '../dispatcher';
 import { BROWSE_ACTIONS } from '../actions/actions';
-import { updateItems } from '../utils/api/browse-api';
+import browseService from '../services/browse-service';
 import { readCookie } from '../utils/cookies';
 
 let selectedTags = readCookie('searchTags');
@@ -13,7 +13,7 @@ if (selectedTags) {
 }
 
 // Kickstart the initial fetch of items
-updateItems(selectedTags);
+browseService.updateItems(selectedTags);
 
 class BrowseStore extends ReduceStore {
 

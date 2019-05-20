@@ -1,15 +1,16 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 
-const rejectIfNoToken = require('../middlewares').rejectIfNoToken;
+const rejectIfNoTokenInBody = require('../middlewares').rejectIfNoTokenInBody;
 
 const orderService = require('../services/orderService');
 const cartService = require('../services/cartService');
 
 const router = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
+// router.use(bodyParser.json());
 
-router.post('/', rejectIfNoToken, async (req, res) => {
+router.post('/', rejectIfNoTokenInBody, async (req, res) => {
     try {
         await orderService.addOrder({
             items: req.body['checkout-items'],
@@ -21,7 +22,7 @@ router.post('/', rejectIfNoToken, async (req, res) => {
         console.log('Order added');
         await cartService.clearCart(req.body.token);
     
-        res.render('index', { pageTitle: 'Checkout', entry: 'checkout' });    
+        res.render('index', { pageTitle: 'Checkout', entry: 'checkout' }); 
     } catch (error) {
         res.status(500);
         res.send({ error })

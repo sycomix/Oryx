@@ -4,14 +4,15 @@ import { v4 } from 'node-uuid'; // Yes this works in the browser too
 import { createRemoveFromCartAction } from '../../actions/cart-actions';
 import GnomeListView from '../../views/gnome-list-view/gnome-list-view';
 import { createExpandItemAction } from '../../actions/cart-actions';
+import AuthService from '../../services/auth-service';
 
 import './normal-cart-view.css';
 
 // Temporary until we implement actual auth
-if (!localStorage.token) {
-    localStorage.token = v4();
-}
-const token = localStorage.token;
+// if (!localStorage.token) {
+//     localStorage.token = v4();
+// }
+// const token = AuthService.getToken();
 
 const ItemRow = React.createClass({
 
@@ -31,8 +32,8 @@ const ItemRow = React.createClass({
         this.setState({ quantity: e.target.value });
     },
 
-    onItemRemoved() {
-        createRemoveFromCartAction(this.props.item);
+    async onItemRemoved() {
+        await createRemoveFromCartAction(this.props.item);
     },
 
     render() {
@@ -71,15 +72,11 @@ const ItemRow = React.createClass({
 });
 
 
-
-export default React.createClass({
-
-    displayName: 'normal-cart-view',
-    
-    propTypes: {
-        items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-        recommendations: React.PropTypes.arrayOf(React.PropTypes.object)
-    },
+export default class NormalCartView extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.token = AuthService.getToken();
+    }
 
     render() {
         let items = this.props.items;
@@ -104,7 +101,7 @@ export default React.createClass({
                             <div className="gs-cartview-normal-leftpane-header-quantity">Quantity</div>
                         </div>
                         {itemRows}
-                        <input type="hidden" name="token" value={token} />
+                        <input type="hidden" name="token" value={this.token} />
                     </div>
 
                     <div className="gs-cartview-normal-rightpane">
@@ -127,4 +124,10 @@ export default React.createClass({
             </div>
         );
     }
-});
+}
+
+NormalCartView.propTypes = {
+    items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
+    recommendations: React.PropTypes.arrayOf(React.PropTypes.object)
+}
+

@@ -1,15 +1,11 @@
 import { createSearchFailedAction, createSearchSucceededAction } from '../../actions/create-actions';
-import { request } from '../api';
+import HttpService from '../../services/http-service';
 
-export function searchImage(keyword) {
-    request({
-        url: 'create/api/search',
-        payload: { keyword }
-    }, (err, res) => {
-        if (err) {
-            createSearchFailedAction();
-            return;
-        }
-        createSearchSucceededAction(res.items);
-    });
+export async function searchImage(keyword) {
+    try {
+        const result = await HttpService.get('create/api/search', { keyword });
+        createSearchSucceededAction(result.data.items);
+    } catch (error) {
+        createSearchFailedAction();
+    }
 }

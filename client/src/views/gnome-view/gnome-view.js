@@ -13,8 +13,8 @@ export default React.createClass({
         item: React.PropTypes.object.isRequired
     },
 
-    onAddToCartClicked() {
-        createAddToCartAction(this.props.item);
+    async onAddToCartClicked() {
+        await createAddToCartAction(this.props.item);
     },
 
     onCoverartClicked() {

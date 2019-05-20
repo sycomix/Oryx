@@ -1,6 +1,5 @@
 import React from 'react';
 import Icon from 'react-fa';
-import { createAddToCartAction } from '../../actions/cart-actions';
 
 import './loading-spinner.css';
 

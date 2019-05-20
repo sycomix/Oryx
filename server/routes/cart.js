@@ -67,8 +67,9 @@ router.delete('/api/items/:item_id', rejectIfNoToken, async (req, res) => {
     console.log('Item targetted', req.params.item_id);
     
     try {
-        await cartService.removeFromCart(req.body.token, req.params.item_id);
-        sendGnomeItems(req.body.token, res);    
+        const token = extractTokenFromAuthHeader(req.header('Authorization'));
+        await cartService.removeFromCart(token, req.params.item_id);
+        sendGnomeItems(token, res);    
     } catch (error) {
         res.status(500);
         res.send({ items: [] });

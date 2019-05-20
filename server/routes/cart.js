@@ -23,7 +23,6 @@ const getGnomesFromCart = async (cart) => {
 
 const sendGnomeItems = async (token, res) => {
     const cart = await cartService.getCart(token);
-    console.log('cart', cart) ;
     if (!cart || !cart.items || cart.items.length === 0) {
         return res.send({ items: [] });
     }
@@ -35,7 +34,6 @@ const sendGnomeItems = async (token, res) => {
 router.get('/api/items', rejectIfNoToken, (req, res) => {
     try {
         const token = extractTokenFromAuthHeader(req.header('Authorization'));
-        console.log('token en api/items', token);
         sendGnomeItems(token, res);
     } catch (error) {
         res.status(500);

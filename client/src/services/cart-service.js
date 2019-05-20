@@ -1,10 +1,11 @@
 import { createUpdateFailedAction, createItemsUpdatedAction } from '../actions/cart-actions';
 import HttpService from './http-service';
+import { config } from '../config';
 
 class CartService {
     async updateItems() {
         try {
-            const result = await HttpService.get('cart/api/items');
+            const result = await HttpService.get(config.apiEndpoints.CART);
             createItemsUpdatedAction(result.data.items);
         }
         catch(error) {
@@ -16,7 +17,7 @@ class CartService {
     
     async addItem(item) {
         try {
-            const result = await HttpService.put(`cart/api/items/${item.id}`, { item });
+            const result = await HttpService.put(`${config.apiEndpoints.CART}/${item.id}`, { item });
             createItemsUpdatedAction(result.data.items);
         } catch (error) {
             console.error(error);
@@ -27,7 +28,7 @@ class CartService {
     
     async removeItem(item) {    
         try {
-            const result = await HttpService.delete(`cart/api/items/${item.id}`);
+            const result = await HttpService.delete(`${config.apiEndpoints.CART}/${item.id}`);
             createItemsUpdatedAction(result.data.items);
         } catch (error) {
             console.error(error);

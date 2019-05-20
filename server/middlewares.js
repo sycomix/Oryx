@@ -3,7 +3,6 @@ const extractTokenFromAuthHeader = require('../server/helpers/tokenHelper').extr
 const middlewares = {
     rejectIfNoToken: (req, res, next) => {
         const authorizationHeader = req.header('Authorization');
-        console.log('auth', authorizationHeader);
 
         if(authorizationHeader) {
             const token = extractTokenFromAuthHeader(req.header('Authorization'));
@@ -19,7 +18,6 @@ const middlewares = {
         }
     },
     rejectIfNoTokenInBody: (req, res, next) => {
-        console.log('token en mid', req.body.token);
         if(!req.body.token) {
             res.status(401).send('Unauthorized');    
         }

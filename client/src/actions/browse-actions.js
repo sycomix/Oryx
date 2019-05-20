@@ -1,6 +1,5 @@
 import dispatcher from '../dispatcher';
 import { BROWSE_ACTIONS } from './actions.js';
-// import { updateItems } from '../utils/api/browse-api';
 import browseService from '../services/browse-service';
 
 const tags = [];

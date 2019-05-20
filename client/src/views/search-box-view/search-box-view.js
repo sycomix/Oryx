@@ -5,18 +5,16 @@ import './search-box-view.css';
 
 const SEARCH_BOX_SIZE = 40;
 
-export default React.createClass({
-    displayName: 'search-box-view',
-
-    propTypes: {
-        placeholder: React.PropTypes.string
-    },
+export default class SearchBoxView extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+    }
 
     onKeyPressed(event) {
         if (event.key === 'Enter') {
             searchImage(event.target.value);
         }
-    },
+    }
 
     render() {
         return (
@@ -31,4 +29,8 @@ export default React.createClass({
             </div>
         );
     }
-});
+}
+
+SearchBoxView.propTypes = {
+    placeholder: React.PropTypes.string
+}

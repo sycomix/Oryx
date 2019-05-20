@@ -6,13 +6,10 @@ import PropTypes from 'prop-types';
 
 import './header-view.css';
 
-export default React.createClass({
-    displayName: 'header-view',
-
-    propTypes: {
-        pageName: PropTypes.string.isRequired,
-        cartCount:PropTypes.number.isRequired
-    },
+export default class HeaderView extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+    }
 
     render() {
         return (
@@ -32,4 +29,9 @@ export default React.createClass({
             </div>
         );
     }
-});
+};
+
+HeaderView.propTypes = {
+    pageName: PropTypes.string.isRequired,
+    cartCount: PropTypes.number.isRequired
+}

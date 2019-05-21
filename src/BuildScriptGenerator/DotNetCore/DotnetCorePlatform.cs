@@ -148,6 +148,14 @@ namespace Microsoft.Oryx.BuildScriptGenerator.DotNetCore
             return dirs;
         }
 
+        private static bool ShouldZipAllOutput(BuildScriptGeneratorContext context)
+        {
+            return BuildPropertiesHelper.IsTrue(
+                Constants.ZipAllOutputBuildPropertyKey,
+                context,
+                valueIsRequired: false);
+        }
+
         private string GetBuildConfiguration()
         {
             var configuration = _options.MSBuildConfiguration;
@@ -157,14 +165,6 @@ namespace Microsoft.Oryx.BuildScriptGenerator.DotNetCore
             }
 
             return configuration;
-        }
-
-        private static bool ShouldZipAllOutput(BuildScriptGeneratorContext context)
-        {
-            return BuildPropertiesHelper.IsTrue(
-                Constants.ZipAllOutputBuildPropertyKey,
-                context,
-                valueIsRequired: false);
         }
 
         private (string projFile, string publishDir) GetProjectFileAndPublishDir(ISourceRepo repo)

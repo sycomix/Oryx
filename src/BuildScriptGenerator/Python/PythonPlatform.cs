@@ -166,70 +166,6 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
             };
         }
 
-        private static string GetDefaultVirtualEnvName(BuildScriptGeneratorContext context)
-        {
-            string pythonVersion = context.PythonVersion;
-            if (!string.IsNullOrWhiteSpace(pythonVersion))
-            {
-                var versionSplit = pythonVersion.Split('.');
-                if (versionSplit.Length > 1)
-                {
-                    pythonVersion = $"{versionSplit[0]}.{versionSplit[1]}";
-                }
-            }
-
-            return $"pythonenv{pythonVersion}";
-        }
-
-        private static string GetPackageDirectory(BuildScriptGeneratorContext context)
-        {
-            string packageDir = null;
-            if (context.Properties != null)
-            {
-                context.Properties.TryGetValue(TargetPackageDirectoryPropertyKey, out packageDir);
-            }
-
-            return packageDir;
-        }
-
-        private bool IsCollectStaticEnabled()
-        {
-            // Collect static is enabled by default, but users can opt-out of it
-            var enableCollectStatic = true;
-            var disableCollectStaticEnvValue = _environment.GetEnvironmentVariable(
-                EnvironmentSettingsKeys.DisableCollectStatic);
-            if (string.Equals(disableCollectStaticEnvValue, "true", StringComparison.OrdinalIgnoreCase))
-            {
-                enableCollectStatic = false;
-            }
-
-            return enableCollectStatic;
-        }
-
-        private (string virtualEnvModule, string virtualEnvCopyParam) GetVirtualEnvModules(string pythonVersion)
-        {
-            string virtualEnvModule;
-            string virtualEnvCopyParam = string.Empty;
-            switch (pythonVersion.Split('.')[0])
-            {
-                case "2":
-                    virtualEnvModule = "virtualenv";
-                    break;
-
-                case "3":
-                    virtualEnvModule = "venv";
-                    virtualEnvCopyParam = "--copies";
-                    break;
-
-                default:
-                    string errorMessage = "Python version '" + pythonVersion + "' is not supported";
-                    _logger.LogError(errorMessage);
-                    throw new NotSupportedException(errorMessage);
-            }
-
-            return (virtualEnvModule, virtualEnvCopyParam);
-        }
-
         public bool IsCleanRepo(ISourceRepo repo)
         {
             // TODO: support venvs
@@ -319,6 +255,70 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
             }
 
             return excludeDirs;
+        }
+
+        private static string GetDefaultVirtualEnvName(BuildScriptGeneratorContext context)
+        {
+            string pythonVersion = context.PythonVersion;
+            if (!string.IsNullOrWhiteSpace(pythonVersion))
+            {
+                var versionSplit = pythonVersion.Split('.');
+                if (versionSplit.Length > 1)
+                {
+                    pythonVersion = $"{versionSplit[0]}.{versionSplit[1]}";
+                }
+            }
+
+            return $"pythonenv{pythonVersion}";
+        }
+
+        private static string GetPackageDirectory(BuildScriptGeneratorContext context)
+        {
+            string packageDir = null;
+            if (context.Properties != null)
+            {
+                context.Properties.TryGetValue(TargetPackageDirectoryPropertyKey, out packageDir);
+            }
+
+            return packageDir;
+        }
+
+        private bool IsCollectStaticEnabled()
+        {
+            // Collect static is enabled by default, but users can opt-out of it
+            var enableCollectStatic = true;
+            var disableCollectStaticEnvValue = _environment.GetEnvironmentVariable(
+                EnvironmentSettingsKeys.DisableCollectStatic);
+            if (string.Equals(disableCollectStaticEnvValue, "true", StringComparison.OrdinalIgnoreCase))
+            {
+                enableCollectStatic = false;
+            }
+
+            return enableCollectStatic;
+        }
+
+        private (string virtualEnvModule, string virtualEnvCopyParam) GetVirtualEnvModules(string pythonVersion)
+        {
+            string virtualEnvModule;
+            string virtualEnvCopyParam = string.Empty;
+            switch (pythonVersion.Split('.')[0])
+            {
+                case "2":
+                    virtualEnvModule = "virtualenv";
+                    break;
+
+                case "3":
+                    virtualEnvModule = "venv";
+                    virtualEnvCopyParam = "--copies";
+                    break;
+
+                default:
+                    string errorMessage = "Python version '" + pythonVersion + "' is not supported";
+                    _logger.LogError(errorMessage);
+                    throw new NotSupportedException(errorMessage);
+            }
+
+            return (virtualEnvModule, virtualEnvCopyParam);
         }
 
         private static bool GetPackOptions(

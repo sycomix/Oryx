@@ -8,7 +8,6 @@ const cartService = require('../services/cartService');
 
 const router = express.Router();
 router.use(bodyParser.urlencoded({ extended: true }));
-// router.use(bodyParser.json());
 
 router.post('/', rejectIfNoTokenInBody, async (req, res) => {
     try {

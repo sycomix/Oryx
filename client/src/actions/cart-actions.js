@@ -1,6 +1,5 @@
 import dispatcher from '../dispatcher';
 import { CART_ACTIONS } from './actions.js';
-// import { addItem, removeItem, getRecommendations } from '../utils/api/cart-api';
 import cartService from '../services/cart-service';
 import recommenderService from '../services/recommender-service';
 

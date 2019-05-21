@@ -89,7 +89,7 @@ if [ "$disableCollectStatic" == "false" ] && [ -e "$SOURCE_DIR/manage.py" ]; the
 fi
 
 if [ "$SOURCE_DIR" != "$DESTINATION_DIR" ] && [ ! -z "$compressCommand" ]; then
-	if [ -z $virtualEnvName ]; then
+	if [ ! -z "$virtualEnvName" ]; then
 		folderToCompress="$virtualEnvName"
 	else
 		folderToCompress="$packagesDir"

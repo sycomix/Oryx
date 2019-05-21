@@ -101,7 +101,7 @@ if [ "$SOURCE_DIR" != "$DESTINATION_DIR" ] && [ ! -z "$compressCommand" ]; then
 		START_TIME=$SECONDS
 		# Make the contents of the folder appear in the zip file, not the folder itself
 		cd "$folderToCompress"
-		"$compressCommand" ../$compressedFileName .
+		$compressCommand ../$compressedFileName .
 		ELAPSED_TIME=$(($SECONDS - $START_TIME))
 		echo "Done in $ELAPSED_TIME sec(s)."
 	fi

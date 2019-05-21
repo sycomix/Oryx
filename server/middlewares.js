@@ -1,15 +1,28 @@
+const extractTokenFromAuthHeader = require('../server/helpers/tokenHelper').extractTokenFromAuthHeader;
+
 const middlewares = {
-    rejectIfNoToken: (req, res, next) => {        
-        if (req.method === 'GET' && !req.query.token) {
-            res.status(401).send('Unauthorized');
-        }
-        else if (req.method !== 'GET' && !req.body.token) {
-            res.status(401).send('Unauthorized');
+    rejectIfNoToken: (req, res, next) => {
+        const authorizationHeader = req.header('Authorization');
+
+        if(authorizationHeader) {
+            const token = extractTokenFromAuthHeader(req.header('Authorization'));
+            if(token) {
+                next();
+            }
+            else {
+                res.status(401).send('Unauthorized');    
+            }
         }
         else {
-            next();
+            res.status(401).send('Unauthorized');
         }
     },
+    rejectIfNoTokenInBody: (req, res, next) => {
+        if(!req.body.token) {
+            res.status(401).send('Unauthorized');    
+        }
+        next();
+    }
 }
 
 module.exports = middlewares;

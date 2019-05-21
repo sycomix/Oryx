@@ -1,24 +1,30 @@
+const getExpirationString = (expirationDays) => {
+    const date = new Date();
+    date.setTime(date.getTime() + (expirationDays*24*60*60*1000));
+    return `expires=${date.toUTCString()}`;
+}
+
 export function createCookie(name, value, days) {
-    var expires = '';
+    let cookieString =  `${name}=${value}; path=/;`;
+    
     if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = '; expires=' + date.toUTCString();
+        cookieString += getExpirationString(days);
     }
-    document.cookie = name + '=' + value + expires + '; path=/';
+    
+    document.cookie = cookieString;
 }
 
 export function readCookie(name) {
-    var nameEQ = name + '=';
-    var ca = document.cookie.split(';');
-    for(var i=0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') {
-            c = c.substring(1, c.length);
-        }
-        if (c.indexOf(nameEQ) == 0) {
-            return c.substring(nameEQ.length, c.length);
-        }
+    const cookieString = document.cookie;
+    const cookieStringSplitted = cookieString.split(`;`);
+
+    if(cookieStringSplitted[0] !== '') {
+        const foundCookie = cookieStringSplitted
+                                .find(cookie => cookie.trim().startsWith(name, 0));
+        
+        return (foundCookie) ? foundCookie.split('=')[1] : null;
+        
     }
+    
     return null;
 }

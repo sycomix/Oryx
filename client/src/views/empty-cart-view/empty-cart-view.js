@@ -1,12 +1,11 @@
-//@ts-nocheck
-
 import React from 'react';
 
 import './empty-cart-view.css';
 
-export default React.createClass({
-
-    displayName: 'empty-cart-view',
+export default class EmptyCartView extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+    }
 
     render() {
         return (
@@ -17,4 +16,4 @@ export default React.createClass({
             </div>
         );
     }
-});
+};

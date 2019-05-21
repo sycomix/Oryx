@@ -19,7 +19,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
         internal const string ZipFileNameFormat = "{0}.zip";
         internal const string TarGzFileNameFormat = "{0}.tar.gz";
         internal const string CompressedVirtualEnvFileBuildProperty = "compressedVirtualEnvFile";
-        internal const string CompressedPackageDirFileBuildProperty = "compressedPakcageDirFile";
+        internal const string CompressedPackageDirFileBuildProperty = "compressedPackageDirFile";
         internal const string VirtualEnvNameBuildProperty = "virtualEnvName";
     }
 }

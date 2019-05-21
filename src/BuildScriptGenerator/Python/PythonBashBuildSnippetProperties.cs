@@ -16,16 +16,16 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
             string virtualEnvironmentParameters,
             string packagesDirectory,
             bool disableCollectStatic,
-            string compressVirtualEnvCommand,
-            string compressedVirtualEnvFileName)
+            string compressCommand,
+            string compressedFileName)
         {
             VirtualEnvironmentName = virtualEnvironmentName;
             VirtualEnvironmentModule = virtualEnvironmentModule;
             VirtualEnvironmentParameters = virtualEnvironmentParameters;
             PackagesDirectory = packagesDirectory;
             DisableCollectStatic = disableCollectStatic;
-            CompressVirtualEnvCommand = compressVirtualEnvCommand;
-            CompressedVirtualEnvFileName = compressedVirtualEnvFileName;
+            CompressCommand = compressCommand;
+            CompressedFileName = compressedFileName;
         }
 
         public string VirtualEnvironmentName { get; set; }
@@ -41,8 +41,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
 
         public bool DisableCollectStatic { get; set; }
 
-        public string CompressVirtualEnvCommand { get; set; }
+        public string CompressCommand { get; set; }
 
-        public string CompressedVirtualEnvFileName { get; set; }
+        public string CompressedFileName { get; set; }
     }
 }

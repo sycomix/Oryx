@@ -18,14 +18,14 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
         VirtualEnvironmentNamePropertyKey,
         "Name of the virtual environment to be created. Defaults to 'pythonenv<Python version>'.")]
     [BuildProperty(
+        TargetPackageDirectoryPropertyKey,
+        "If provided, packages will be downloaded to the given directory instead of to a virtual environment.")]
+    [BuildProperty(
         CompressVirtualEnvPropertyKey,
         "Indicates how and if virtual environment folder should be compressed into a single file in the output " +
         "folder. Options are '" + ZipOption + "', and '" + TarGzOption + "'. Default is to not compress. " +
         "If this option is used, when running the app the virtual environment folder must be extracted from " +
         "this file.")]
-    [BuildProperty(
-        TargetPackageDirectoryPropertyKey,
-        "If provided, packages will be downloaded to the given directory instead of to a virtual environment.")]
     [BuildProperty(
         CompressPackageDirPropertyKey,
         "Indicates how and if the packages directory folder should be compressed into a single file in the output " +
@@ -152,8 +152,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
                 virtualEnvironmentParameters: virtualEnvCopyParam,
                 packagesDirectory: packageDir,
                 disableCollectStatic: !enableCollectStatic,
-                compressVirtualEnvCommand: compressCommand,
-                compressedVirtualEnvFileName: compressedFileName);
+                compressCommand: compressCommand,
+                compressedFileName: compressedFileName);
             string script = TemplateHelpers.Render(
                 TemplateHelpers.TemplateResource.PythonSnippet,
                 scriptProps,
@@ -272,13 +272,28 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
         {
             var dirs = new List<string>();
             var virtualEnvName = GetVirtualEnvironmentName(context);
-            if (GetPackOptions(
-                context,
-                virtualEnvName,
-                out string compressCommand,
-                out string compressedFileName))
+
+            string folderToCompress;
+            string propertyKey;
+            if (string.IsNullOrEmpty(virtualEnvName))
             {
-                dirs.Add(virtualEnvName);
+                propertyKey = CompressPackageDirPropertyKey;
+                folderToCompress = DefaultTargetPackageDirectory;
+            }
+            else
+            {
+                propertyKey = CompressVirtualEnvPropertyKey;
+                folderToCompress = virtualEnvName;
+            }
+
+            if (GetPackOptions(
+                    propertyKey,
+                    context,
+                    folderToCompress,
+                    out string compressCommand,
+                    out string compressedFileName))
+            {
+                dirs.Add(folderToCompress);
             }
             else if (!string.IsNullOrWhiteSpace(compressedFileName))
             {

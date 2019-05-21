@@ -20,34 +20,14 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Tests.Python
                 virtualEnvironmentParameters: null,
                 packagesDirectory: "packages_dir",
                 disableCollectStatic: false,
-                compressVirtualEnvCommand: null,
-                compressedVirtualEnvFileName: null);
+                compressCommand: null,
+                compressedFileName: null);
 
             // Act
             var text = TemplateHelpers.Render(TemplateHelpers.TemplateResource.PythonSnippet, snippetProps);
 
             // Assert
             Assert.Contains("manage.py collectstatic", text);
-        }
-
-        [Fact]
-        public void GeneratedSnippet_DoesNotContainCollectStatic_IfDisableCollectStatic_IsTrue()
-        {
-            // Arrange
-            var snippetProps = new PythonBashBuildSnippetProperties(
-                virtualEnvironmentName: null,
-                virtualEnvironmentModule: null,
-                virtualEnvironmentParameters: null,
-                packagesDirectory: "packages_dir",
-                disableCollectStatic: true,
-                compressVirtualEnvCommand: null,
-                compressedVirtualEnvFileName: null);
-
-            // Act
-            var text = TemplateHelpers.Render(TemplateHelpers.TemplateResource.PythonSnippet, snippetProps);
-
-            // Assert
-            Assert.DoesNotContain("manage.py collectstatic", text);
         }
     }
 }

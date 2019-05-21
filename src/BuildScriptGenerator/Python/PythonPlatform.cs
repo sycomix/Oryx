@@ -42,8 +42,6 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
         internal const string ZipOption = "zip";
         internal const string TarGzOption = "tar-gz";
 
-        private const string DefaultTargetPackageDirectory = "__oryx_packages__";
-
         private readonly PythonScriptGeneratorOptions _pythonScriptGeneratorOptions;
         private readonly IPythonVersionProvider _pythonVersionProvider;
         private readonly IEnvironment _environment;
@@ -76,9 +74,24 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
         public BuildScriptSnippet GenerateBashBuildScriptSnippet(BuildScriptGeneratorContext context)
         {
             var buildProperties = new Dictionary<string, string>();
-            var packageDir = GetPackageDirectory(context);
+            var packageDirName = GetPackageDirectory(context);
             var virtualEnvName = GetVirtualEnvironmentName(context);
-            if (string.IsNullOrEmpty(packageDir))
+
+            if (!string.IsNullOrEmpty(virtualEnvName) && !string.IsNullOrEmpty(packageDirName))
+            {
+                throw new InvalidUsageException($"Options '{TargetPackageDirectoryPropertyKey}' and " +
+                    $"'{VirtualEnvironmentNamePropertyKey}' are mutually exclusive. Please provide " +
+                    $"only the target package directory or virtual environment name.");
+            }
+
+            var pythonVersion = context.PythonVersion;
+            _logger.LogDebug("Selected Python version: {pyVer}", pythonVersion);
+
+            string folderToCompress;
+            string compressPropertyKey;
+            var virtualEnvModule = string.Empty;
+            var virtualEnvCopyParam = string.Empty;
+            if (string.IsNullOrEmpty(packageDirName))
             {
                 // If the package directory was not provided, we default to virtual envs
                 if (string.IsNullOrWhiteSpace(virtualEnvName))
@@ -87,44 +100,23 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
                 }
 
                 buildProperties[PythonConstants.VirtualEnvNameBuildProperty] = virtualEnvName;
-            }
-            else if (!string.IsNullOrWhiteSpace(virtualEnvName))
-            {
-                throw new InvalidUsageException($"Options '{TargetPackageDirectoryPropertyKey}' and " +
-                    $"'{VirtualEnvironmentNamePropertyKey}' are mutually exclusive. Please provide " +
-                    $"only the target package directory or virtual environment name.");
-            }
+                folderToCompress = virtualEnvName;
+                compressPropertyKey = CompressVirtualEnvPropertyKey;
 
-            var virtualEnvModule = string.Empty;
-            var virtualEnvCopyParam = string.Empty;
-
-            var pythonVersion = context.PythonVersion;
-            _logger.LogDebug("Selected Python version: {pyVer}", pythonVersion);
-
-            if (!string.IsNullOrEmpty(pythonVersion) && !string.IsNullOrWhiteSpace(virtualEnvName))
-            {
                 (virtualEnvModule, virtualEnvCopyParam) = GetVirtualEnvModules(pythonVersion);
-
                 _logger.LogDebug(
                     "Using virtual environment {venv}, module {venvModule}",
                     virtualEnvName,
                     virtualEnvModule);
             }
-
-            bool enableCollectStatic = IsCollectStaticEnabled();
-
-            string folderToCompress;
-            string compressPropertyKey;
-            if (!string.IsNullOrEmpty(packageDir))
-            {
-                folderToCompress = packageDir;
-                compressPropertyKey = CompressPackageDirPropertyKey;
-            }
             else
             {
-                folderToCompress = virtualEnvName;
-                compressPropertyKey = CompressVirtualEnvPropertyKey;
+                buildProperties[PythonConstants.PackageDirNameBuildProperty] = packageDirName;
+                folderToCompress = packageDirName;
+                compressPropertyKey = CompressPackageDirPropertyKey;
             }
+
+            bool enableCollectStatic = IsCollectStaticEnabled();
 
             string compressCommand = null;
             string compressedFileName = null;
@@ -150,7 +142,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
                 virtualEnvironmentName: virtualEnvName,
                 virtualEnvironmentModule: virtualEnvModule,
                 virtualEnvironmentParameters: virtualEnvCopyParam,
-                packagesDirectory: packageDir,
+                packagesDirectory: packageDirName,
                 disableCollectStatic: !enableCollectStatic,
                 compressCommand: compressCommand,
                 compressedFileName: compressedFileName);
@@ -169,7 +161,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
         public bool IsCleanRepo(ISourceRepo repo)
         {
             // TODO: support venvs
-            return !repo.DirExists(DefaultTargetPackageDirectory);
+            return true;
         }
 
         public string GenerateBashRunScript(RunScriptGeneratorOptions runScriptGeneratorOptions)
@@ -208,13 +200,14 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
         {
             var dirs = new List<string>();
             var virtualEnvName = GetVirtualEnvironmentName(context);
+            var packageDir = GetPackageDirectory(context);
 
             string folderToCompress;
             string propertyKey;
             if (string.IsNullOrEmpty(virtualEnvName))
             {
                 propertyKey = CompressPackageDirPropertyKey;
-                folderToCompress = DefaultTargetPackageDirectory;
+                folderToCompress = packageDir;
             }
             else
             {
@@ -243,10 +236,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
             BuildScriptGeneratorContext context)
         {
             var excludeDirs = new List<string>();
-
-            excludeDirs.Add(DefaultTargetPackageDirectory);
-
             var virtualEnvName = GetVirtualEnvironmentName(context);
+
             if (!string.IsNullOrEmpty(virtualEnvName))
             {
                 excludeDirs.Add(virtualEnvName);
@@ -281,6 +272,38 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
             }
 
             return packageDir;
+        }
+
+        private static bool GetPackOptions(
+            string compressPropertyKey,
+            BuildScriptGeneratorContext context,
+            string folderNameToCompress,
+            out string compressFolderCommand,
+            out string compressedFileName)
+        {
+            var isFolderPackaged = false;
+            compressFolderCommand = null;
+            compressedFileName = null;
+            if (context.Properties != null &&
+                context.Properties.TryGetValue(compressPropertyKey, out string compressOption))
+            {
+                // default to tar.gz if the property was provided with no value.
+                if (string.IsNullOrEmpty(compressOption) ||
+                    string.Equals(compressOption, TarGzOption, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    compressedFileName = string.Format(PythonConstants.TarGzFileNameFormat, folderNameToCompress);
+                    compressFolderCommand = $"tar -zcf";
+                    isFolderPackaged = true;
+                }
+                else if (string.Equals(compressOption, ZipOption, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    compressedFileName = string.Format(PythonConstants.ZipFileNameFormat, folderNameToCompress);
+                    compressFolderCommand = $"zip -y -q -r";
+                    isFolderPackaged = true;
+                }
+            }
+
+            return isFolderPackaged;
         }
 
         private bool IsCollectStaticEnabled()
@@ -319,38 +342,6 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
             }
 
             return (virtualEnvModule, virtualEnvCopyParam);
-        }
-
-        private static bool GetPackOptions(
-            string compressPropertyKey,
-            BuildScriptGeneratorContext context,
-            string folderNameToCompress,
-            out string compressFolderCommand,
-            out string compressedFileName)
-        {
-            var isFolderPackaged = false;
-            compressFolderCommand = null;
-            compressedFileName = null;
-            if (context.Properties != null &&
-                context.Properties.TryGetValue(compressPropertyKey, out string compressOption))
-            {
-                // default to tar.gz if the property was provided with no value.
-                if (string.IsNullOrEmpty(compressOption) ||
-                    string.Equals(compressOption, TarGzOption, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    compressedFileName = string.Format(PythonConstants.TarGzFileNameFormat, folderNameToCompress);
-                    compressFolderCommand = $"tar -zcf";
-                    isFolderPackaged = true;
-                }
-                else if (string.Equals(compressOption, ZipOption, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    compressedFileName = string.Format(PythonConstants.ZipFileNameFormat, folderNameToCompress);
-                    compressFolderCommand = $"zip -y -q -r";
-                    isFolderPackaged = true;
-                }
-            }
-
-            return isFolderPackaged;
         }
 
         private void TryLogDependencies(string pythonVersion, ISourceRepo repo)

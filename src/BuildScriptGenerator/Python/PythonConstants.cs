@@ -21,5 +21,6 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
         internal const string CompressedVirtualEnvFileBuildProperty = "compressedVirtualEnvFile";
         internal const string CompressedPackageDirFileBuildProperty = "compressedPackageDirFile";
         internal const string VirtualEnvNameBuildProperty = "virtualEnvName";
+        internal const string PackageDirNameBuildProperty = "packageDirName";
     }
 }

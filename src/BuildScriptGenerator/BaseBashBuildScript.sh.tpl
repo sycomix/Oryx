@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 TOTAL_EXECUTION_START_TIME=$SECONDS
 SOURCE_DIR=$1

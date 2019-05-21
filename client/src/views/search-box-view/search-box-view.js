@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { searchImage } from '../../utils/api/create-api';
+import imageService from '../../services/image-service';
 
 import './search-box-view.css';
 
@@ -13,7 +13,7 @@ export default class SearchBoxView extends React.Component {
 
     onKeyPressed(event) {
         if (event.key === 'Enter') {
-            searchImage(event.target.value);
+            imageService.searchImage(event.target.value);
         }
     }
 

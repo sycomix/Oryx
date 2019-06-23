@@ -261,6 +261,10 @@ src/startupscriptgenerator/bin/
 src/startupscriptgenerator/src/github.com/
 src/startupscriptgenerator/pkg/
 src/startupscriptgenerator/**/vendor/
+dotnetcore/dotnetcore.exe
+node/node.exe
+python/python.exe
+php/php.exe
 
 # Go debugging related generated files
 src/startupscriptgenerator/src/**/__debug_bin

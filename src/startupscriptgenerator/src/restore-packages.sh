@@ -7,10 +7,13 @@
 declare -r WORKSPACE_DIR=$( cd $( dirname "$0" ) && cd .. && pwd )
 
 echo "Restoring packages..."
-echo "Installing dep..."
-go get -u github.com/golang/dep/cmd/dep
-# Delete the dep sources so that we do not use it when running tests etc.
-rm -rf $WORKSPACE_DIR/src/github.com/golang/dep
+
+if [ ! -f "$WORKSPACE_DIR/bin/dep" ] || [ ! -f "$WORKSPACE_DIR/bin/dep.exe" ]; then
+    echo "Installing dep..."
+    go get -u github.com/golang/dep/cmd/dep
+    # Delete the dep sources so that we do not use it when running tests etc.
+    rm -rf $WORKSPACE_DIR/src/github.com
+fi
 
 tomlFileName="Gopkg.toml"
 for pkgDir in $WORKSPACE_DIR/src/* ; do

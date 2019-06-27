@@ -3,41 +3,34 @@
 // Licensed under the MIT license.
 // --------------------------------------------------------------------------------------------
 
-using System;
 using System.IO;
-using Microsoft.Oryx.BuildScriptGenerator;
 using Microsoft.Oryx.BuildScriptGenerator.Exceptions;
 using Microsoft.Oryx.Tests.Common;
 using Xunit;
 
 namespace Microsoft.Oryx.BuildScriptGeneratorCli.Tests
 {
-    public class BuildScriptGeneratorOptionsHelperTest : IClassFixture<TestTempDirTestFixture>
+    public class BuildScriptGeneratorOptionsBuilderTest : IClassFixture<TestTempDirTestFixture>
     {
-        private static string _testDirPath;
+        private readonly TestTempDirTestFixture _testRootDir;
 
-        public BuildScriptGeneratorOptionsHelperTest(TestTempDirTestFixture testFixture)
+        public BuildScriptGeneratorOptionsBuilderTest(TestTempDirTestFixture testFixture)
         {
-            _testDirPath = testFixture.RootDirPath;
+            _testRootDir = testFixture;
         }
 
         [Fact]
         public void ResolvesToCurrentDirectoryAbsolutePath_WhenDotNotationIsUsed()
         {
             // Arrange
-            var options = new BuildScriptGeneratorOptions();
             var currentDir = Directory.GetCurrentDirectory();
 
             // Act
-            BuildScriptGeneratorOptionsHelper.ConfigureBuildScriptGeneratorOptions(
-                options,
-                sourceDir: ".",
-                destinationDir: ".",
-                intermediateDir: ".",
-                language: null,
-                languageVersion: null,
-                scriptOnly: false,
-                properties: null);
+            var options = new BuildScriptGeneratorOptionsBuilder()
+                .WithSourceDir(".")
+                .WithDestinationDir(".")
+                .WithIntermediateDir(".")
+                .Build();
 
             // Assert
             Assert.Equal(currentDir, options.SourceDir);
@@ -51,20 +44,15 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli.Tests
         public void ResolvesToAbsolutePath_WhenRelativePathIsGiven(params string[] paths)
         {
             // Arrange
-            var options = new BuildScriptGeneratorOptions();
             var providedPath = Path.Combine(paths);
             var absolutePath = Path.Combine(Directory.GetCurrentDirectory(), providedPath);
 
             // Act
-            BuildScriptGeneratorOptionsHelper.ConfigureBuildScriptGeneratorOptions(
-                options,
-                sourceDir: providedPath,
-                destinationDir: providedPath,
-                intermediateDir: providedPath,
-                language: null,
-                languageVersion: null,
-                scriptOnly: false,
-                properties: null);
+            var options = new BuildScriptGeneratorOptionsBuilder()
+                .WithSourceDir(providedPath)
+                .WithDestinationDir(providedPath)
+                .WithIntermediateDir(providedPath)
+                .Build();
 
             // Assert
             Assert.Equal(absolutePath, options.SourceDir);
@@ -76,19 +64,14 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli.Tests
         public void ResolvesToAbsolutePath_WhenAbsolutePathIsGiven()
         {
             // Arrange
-            var options = new BuildScriptGeneratorOptions();
             var absolutePath = Path.GetTempPath();
 
             // Act
-            BuildScriptGeneratorOptionsHelper.ConfigureBuildScriptGeneratorOptions(
-                options,
-                sourceDir: absolutePath,
-                destinationDir: absolutePath,
-                intermediateDir: absolutePath,
-                language: null,
-                languageVersion: null,
-                scriptOnly: false,
-                properties: null);
+            var options = new BuildScriptGeneratorOptionsBuilder()
+                .WithSourceDir(absolutePath)
+                .WithDestinationDir(absolutePath)
+                .WithIntermediateDir(absolutePath)
+                .Build();
 
             // Assert
             Assert.Equal(absolutePath, options.SourceDir);
@@ -100,20 +83,15 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli.Tests
         public void ResolvesToAbsolutePath_WhenDoubleDotNotationIsUsed_RelativeToCurrentDir()
         {
             // Arrange
-            var options = new BuildScriptGeneratorOptions();
             var currentDir = Directory.GetCurrentDirectory();
             var expected = new DirectoryInfo(currentDir).Parent.FullName;
 
             // Act
-            BuildScriptGeneratorOptionsHelper.ConfigureBuildScriptGeneratorOptions(
-                options,
-                sourceDir: "..",
-                destinationDir: "..",
-                intermediateDir: "..",
-                language: null,
-                languageVersion: null,
-                scriptOnly: false,
-                properties: null);
+            var options = new BuildScriptGeneratorOptionsBuilder()
+                .WithSourceDir("..")
+                .WithDestinationDir("..")
+                .WithIntermediateDir("..")
+                .Build();
 
             // Assert
             Assert.Equal(expected, options.SourceDir);
@@ -125,21 +103,17 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli.Tests
         public void ResolvesToAbsolutePath_WhenDoubleDotNotationIsUsed()
         {
             // Arrange
-            var options = new BuildScriptGeneratorOptions();
-            var dir1 = CreateNewDir();
+            var dir1 = _testRootDir.CreateChildDir();
             var dir2 = Directory.CreateDirectory(Path.Combine(dir1, "subDir1")).FullName;
             var expected = Directory.CreateDirectory(Path.Combine(dir1, "subDir2")).FullName;
+            var relativePath = Path.Combine(dir2, "..", "subDir2");
 
             // Act
-            BuildScriptGeneratorOptionsHelper.ConfigureBuildScriptGeneratorOptions(
-                options,
-                sourceDir: Path.Combine(dir2, "..", "subDir2"),
-                destinationDir: Path.Combine(dir2, "..", "subDir2"),
-                intermediateDir: Path.Combine(dir2, "..", "subDir2"),
-                language: null,
-                languageVersion: null,
-                scriptOnly: false,
-                properties: null);
+            var options = new BuildScriptGeneratorOptionsBuilder()
+                .WithSourceDir(relativePath)
+                .WithDestinationDir(relativePath)
+                .WithIntermediateDir(relativePath)
+                .Build();
 
             // Assert
             Assert.Equal(expected, options.SourceDir);
@@ -158,7 +132,7 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli.Tests
 
             // Act & Assert
             var exception = Assert.Throws<InvalidUsageException>(
-                () => BuildScriptGeneratorOptionsHelper.ProcessProperties(properties));
+                () => BuildScriptGeneratorOptionsBuilder.ProcessProperties(properties));
 
             Assert.Equal($"Property key cannot start with '=' for property '{property}'.", exception.Message);
         }
@@ -180,22 +154,12 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli.Tests
             var properties = new[] { property };
 
             // Act
-            var actual = BuildScriptGeneratorOptionsHelper.ProcessProperties(properties);
+            var actual = BuildScriptGeneratorOptionsBuilder.ProcessProperties(properties);
 
             // Assert
             Assert.Collection(
                 actual,
                 (kvp) => { Assert.Equal(key, kvp.Key); Assert.Equal(value, kvp.Value); });
-        }
-
-        private string CreateNewDir()
-        {
-            return Directory.CreateDirectory(CreatePathForNewDir()).FullName;
-        }
-
-        private string CreatePathForNewDir()
-        {
-            return Path.Combine(_testDirPath, Guid.NewGuid().ToString());
         }
     }
 }

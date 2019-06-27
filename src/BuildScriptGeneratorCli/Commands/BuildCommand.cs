@@ -290,15 +290,14 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli
 
         internal override void ConfigureBuildScriptGeneratorOptions(BuildScriptGeneratorOptions options)
         {
-            BuildScriptGeneratorOptionsHelper.ConfigureBuildScriptGeneratorOptions(
-                options,
-                SourceDir,
-                DestinationDir,
-                IntermediateDir,
-                PlatformName,
-                PlatformVersion,
-                scriptOnly: false,
-                Properties);
+            var optionsBuilder = new BuildScriptGeneratorOptionsBuilder(options)
+                .WithSourceDir(SourceDir)
+                .WithDestinationDir(DestinationDir)
+                .WithIntermediateDir(IntermediateDir)
+                .WithLanguageAndVersion(PlatformName, PlatformVersion)
+                .WithProperties(Properties)
+                .WithScriptOnly(false)
+                .Build();
         }
 
         /// <summary>

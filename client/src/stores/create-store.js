@@ -1,11 +1,11 @@
 import { ReduceStore } from 'flux/utils';
 import dispatcher from '../dispatcher';
 import { CREATE_ACTIONS } from '../actions/actions';
-import { searchImage } from '../utils/api/create-api';
+import imageService from '../services/image-service';
 
 const DEFAULT_KEYWORD = '36daysoftype';
 
-searchImage(DEFAULT_KEYWORD);
+imageService.searchImage(DEFAULT_KEYWORD);
 
 class CreateStore extends ReduceStore {
 

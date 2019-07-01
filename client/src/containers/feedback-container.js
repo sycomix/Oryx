@@ -9,7 +9,7 @@ class FeedbackContainer extends React.Component {
     render() {
         return (
             <div>
-                <HeaderView pageName="cart" cartCount="0"/>
+                <HeaderView pageName="cart" cartCount={0}/>
                 <FeedbackView />
             </div>
         );

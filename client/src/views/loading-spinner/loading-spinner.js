@@ -1,12 +1,11 @@
 import React from 'react';
-import Icon from 'react-fa';
-import { createAddToCartAction } from '../../actions/cart-actions';
 
 import './loading-spinner.css';
 
-export default React.createClass({
-
-    displayName: 'loading-spinner',
+export default class LoadingSpinner extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+    }
 
     render() {
         return (
@@ -20,4 +19,4 @@ export default React.createClass({
             </div>
         );
     }
-});
+};

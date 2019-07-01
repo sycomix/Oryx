@@ -1,11 +1,12 @@
 import { ReduceStore } from 'flux/utils';
 import dispatcher from '../dispatcher';
 import { CART_ACTIONS } from '../actions/actions';
-import { updateItems, getRecommendations } from '../utils/api/cart-api';
+import cartService from '../services/cart-service';
+import recommenderService from '../services/recommender-service';
 
 // Kickstart the initial fetch of items
-updateItems();
-getRecommendations();
+cartService.updateItems();
+recommenderService.getRecommendations();
 
 class CartStore extends ReduceStore {
 

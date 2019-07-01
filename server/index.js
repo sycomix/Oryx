@@ -24,7 +24,7 @@ app.set('view engine', 'pug');
 
 app.use(express.static(path.join(PROJECT_ROOT, 'client', 'dist')));
 
-app.use(function gnomeCacheSetup(req, res, next) {
+app.use((req, res, next) => {
     res.setHeader('Cache-Control', 'no-cache');
     next();
 });
@@ -35,7 +35,7 @@ app.use('/checkout', checkout);
 app.use('/feedback', feedback);
 app.use('/recommender', recommender);
 
-app.get('/', function gnomeRootRedirection(req, res) {
+app.get('/', (req, res) => {
     console.log('index.js: redirecting to browse');
     res.redirect('/browse');
 });

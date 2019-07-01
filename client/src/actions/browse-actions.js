@@ -1,12 +1,12 @@
 import dispatcher from '../dispatcher';
 import { BROWSE_ACTIONS } from './actions.js';
-import { updateItems } from '../utils/api/browse-api';
+import browseService from '../services/browse-service';
 
 const tags = [];
 
 export function createAddTagFilterAction(tag) {
     tags.push(tag);
-    updateItems(tags);
+    browseService.updateItems(tags);
     dispatcher.dispatch({
         actionType: BROWSE_ACTIONS.ADD_TAG_FILTER_ACTION,
         tag
@@ -17,7 +17,7 @@ export function createRemoveTagFilterAction(tag) {
     const tagIndex = tags.indexOf(tag);
     if (tagIndex !== -1) {
         tags.splice(tagIndex, 1);
-        updateItems(tags);
+        browseService.updateItems(tags);
     }
     dispatcher.dispatch({
         actionType: BROWSE_ACTIONS.REMOVE_TAG_FILTER_ACTION,

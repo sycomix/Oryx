@@ -1,16 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import GnomeView from '../gnome-view/gnome-view';
 import LoadingSpinner from '../loading-spinner/loading-spinner';
 import './gnome-list-view.css';
 
-export default React.createClass({
-
-    displayName: 'gnome-list-view',
-
-    propTypes: {
-        createExpandItemAction: React.PropTypes.func,
-        items: React.PropTypes.arrayOf(React.PropTypes.object).isRequired
-    },
+export default class GnomeListView extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+    }
 
     render() {
         const items = this.props.items.map((item, key) => <GnomeView key={key} item={item} createExpandItemAction={this.props.createExpandItemAction} />);
@@ -21,4 +18,9 @@ export default React.createClass({
             </div>
         );
     }
-});
+};
+
+GnomeListView.propTypes = {
+    createExpandItemAction: PropTypes.func,
+    items: PropTypes.arrayOf(PropTypes.object).isRequired
+}

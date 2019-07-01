@@ -1,25 +1,22 @@
 import React from 'react';
 import Icon from 'react-fa';
+import PropTypes from 'prop-types';
 import { createAddToCartAction } from '../../actions/cart-actions';
 
 import './gnome-view.css';
 
-export default React.createClass({
+export default class GnomeView extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+    }
 
-    displayName: 'gnome-view',
+    onAddToCartClicked = async () => {
+        await createAddToCartAction(this.props.item);
+    }
 
-    propTypes: {
-        createExpandItemAction: React.PropTypes.func.isRequired,
-        item: React.PropTypes.object.isRequired
-    },
-
-    onAddToCartClicked() {
-        createAddToCartAction(this.props.item);
-    },
-
-    onCoverartClicked() {
+    onCoverartClicked = () => {
         this.props.createExpandItemAction(this.props.item.id);
-    },
+    }
 
     render() {
         return (
@@ -49,4 +46,9 @@ export default React.createClass({
             </div>
         );
     }
-});
+};
+
+GnomeView.propTypes = {
+    createExpandItemAction: PropTypes.func.isRequired,
+    item: PropTypes.object.isRequired
+}

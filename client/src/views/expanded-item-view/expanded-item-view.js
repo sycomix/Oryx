@@ -1,27 +1,23 @@
-// @ts-nocheck
 import React from 'react';
+import PropTypes from 'prop-types';
 import Icon from 'react-fa';
 import { createAddToCartAction } from '../../actions/cart-actions';
 
 import './expanded-item-view.css';
 
-export default React.createClass({
+export default class ExpandedItemView extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+    }
 
-    displayName: 'expanded-item-view',
-
-    propTypes: {
-        createCloseExpandedItemAction: React.PropTypes.func.isRequired,
-        item: React.PropTypes.object.isRequired
-    },
-
-    onCloseClicked() {
+    onCloseClicked = () => {
         this.props.createCloseExpandedItemAction();
-    },
+    }
 
-    onAddToCartClicked() {
-        createAddToCartAction(this.props.item);
+    onAddToCartClicked = async () => {
+        await createAddToCartAction(this.props.item);
         this.props.createCloseExpandedItemAction();
-    },
+    }
 
     render() {
         // TODO: replace the shopping cart with higher res version
@@ -43,4 +39,9 @@ export default React.createClass({
             </div>
         );
     }
-});
+};
+
+ExpandedItemView.propTypes = {
+    createCloseExpandedItemAction: PropTypes.func.isRequired,
+    item: PropTypes.object.isRequired
+}

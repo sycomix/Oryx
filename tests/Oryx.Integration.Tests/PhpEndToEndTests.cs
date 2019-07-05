@@ -31,6 +31,9 @@ namespace Microsoft.Oryx.Integration.Tests
             _hostSamplesDir = Path.Combine(Directory.GetCurrentDirectory(), "SampleApps");
             _hostTempDir = fixture.RootDirPath;
         }
+
+        protected DockerVolume CreateAppVolume(string appName) =>
+            DockerVolume.CreateMirror(Path.Combine(_hostSamplesDir, "php", appName));
     }
 
     [Trait("category", "php")]
@@ -46,12 +49,11 @@ namespace Microsoft.Oryx.Integration.Tests
         [InlineData("7.2")]
         [InlineData("7.0")]
         // Twig does not support PHP < 7
-        public async Task TwigExample(string phpVersion)
+        public async Task CanBuildAndRunTwigExample(string phpVersion)
         {
             // Arrange
             var appName = "twig-example";
-            var hostDir = Path.Combine(_hostSamplesDir, "php", appName);
-            var volume = DockerVolume.CreateMirror(hostDir);
+            var volume = CreateAppVolume(appName);
             var appDir = volume.ContainerDir;
             var buildScript = new ShellScriptBuilder()
                .AddCommand($"oryx build {appDir} --platform php --language-version {phpVersion}")
@@ -89,7 +91,7 @@ namespace Microsoft.Oryx.Integration.Tests
         [InlineData("7.2")]
         [InlineData("7.0")]
         [InlineData("5.6")]
-        public async Task WordPress51(string phpVersion)
+        public async Task CanBuildAndRunWordPress51(string phpVersion)
         {
             // Arrange
             string hostDir = Path.Combine(_hostTempDir, "wordpress");
@@ -143,12 +145,11 @@ namespace Microsoft.Oryx.Integration.Tests
         [InlineData("7.2")]
         [InlineData("7.0")]
         [InlineData("5.6")]
-        public async Task ImagickExample(string phpVersion)
+        public async Task CanBuildAndRunImagickExample(string phpVersion)
         {
             // Arrange
             var appName = "imagick-example";
-            var hostDir = Path.Combine(_hostSamplesDir, "php", appName);
-            var volume = DockerVolume.CreateMirror(hostDir);
+            var volume = CreateAppVolume(appName);
             var appDir = volume.ContainerDir;
             var buildScript = new ShellScriptBuilder()
                .AddCommand($"oryx build {appDir} --platform php --language-version {phpVersion}")
@@ -185,11 +186,11 @@ namespace Microsoft.Oryx.Integration.Tests
         // [InlineData(Constants.OryxBuildpackBuilderImageName)] // AB#896178
         [InlineData(Constants.HerokuBuildpackBuilderImageName)]
         // Twig does not support PHP < 7
-        public async Task TwigExample_WithBuildpack(string builder)
+        public async Task CanBuildAndRunTwigExample_WithBuildpack(string builder)
         {
             // Arrange
             var appName = "twig-example";
-            var appVolume = DockerVolume.CreateMirror(Path.Combine(_hostSamplesDir, "php", appName));
+            var appVolume = CreateAppVolume(appName);
 
             // Act & Assert
             await EndToEndTestHelper.RunPackAndAssertAppAsync(

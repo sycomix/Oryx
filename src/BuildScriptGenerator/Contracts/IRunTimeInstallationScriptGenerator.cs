@@ -8,12 +8,6 @@ namespace Microsoft.Oryx.BuildScriptGenerator
     public interface IRunTimeInstallationScriptGenerator
     {
         /// <summary>
-        /// Checks if this implementation is compatible with the current operating system.
-        /// </summary>
-        /// <returns>true if compatible, false otherwise</returns>
-        bool IsCompatibleWithCurrentOs();
-
-        /// <summary>
         /// Generates a bash script to install the platform's runtime components.
         /// </summary>
         /// <param name="targetPlatform">Name of the platform to install runtime for.</param>

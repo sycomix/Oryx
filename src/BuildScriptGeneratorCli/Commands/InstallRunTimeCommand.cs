@@ -33,11 +33,6 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli
             var scriptGenerator = serviceProvider.GetRequiredService<IRunTimeInstallationScriptGenerator>();
             var options = new RunTimeInstallationScriptGeneratorOptions { PlatformVersion = PlatformVersion };
 
-            if (!scriptGenerator.IsCompatibleWithCurrentOs())
-            {
-                console.WriteErrorLine("Incompatible operating system.");
-            }
-
             var script = scriptGenerator.GenerateBashScript(Platform, options);
             if (string.IsNullOrEmpty(script))
             {

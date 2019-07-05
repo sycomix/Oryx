@@ -87,6 +87,12 @@ namespace Microsoft.Oryx.BuildScriptGenerator
                 get => new TemplateResource("Microsoft.Oryx.BuildScriptGenerator.Php.PhpBashBuildSnippet.sh.tpl");
             }
 
+            public static TemplateResource PhpBashRunTimeInstallationScript
+            {
+                get => new TemplateResource(
+                    "Microsoft.Oryx.BuildScriptGenerator.Php.PhpBashRunTimeInstallationScript.sh.tpl");
+            }
+
             public static TemplateResource PythonSnippet
             {
                 get => new TemplateResource(

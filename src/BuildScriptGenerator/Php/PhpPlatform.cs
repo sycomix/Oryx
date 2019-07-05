@@ -10,9 +10,11 @@ using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Oryx.BuildScriptGenerator.Exceptions;
 using Microsoft.Oryx.BuildScriptGenerator.Helpers;
 using Microsoft.Oryx.BuildScriptGenerator.SourceRepo;
 using Microsoft.Oryx.Common;
+using Scriban;
 
 namespace Microsoft.Oryx.BuildScriptGenerator.Php
 {
@@ -91,12 +93,16 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Php
             return true;
         }
 
-        public string GenerateBashRunTimeInstallationScript(RunTimeInstallationScriptGeneratorOptions options)
+        public string GenerateBashRunTimeInstallationScript(RunTimeInstallationScriptGeneratorOptions opts)
         {
             if (!OsHelper.IsDebianStretch())
             {
                 throw new UnsupportedOsException("The PHP run-time is installable on Debian 9 only.");
             }
+
+            var versionMm = opts.PlatformVersion.Substring(0, 3);
+            var props = new PhpBashRunTimeInstallationScriptProperties { VersionMajorAndMinor = versionMm };
+            return TemplateHelper.Render(TemplateHelper.TemplateResource.PhpBashRunTimeInstallationScript, props);
         }
 
         public void SetRequiredTools(ISourceRepo sourceRepo, string targetPlatformVersion, IDictionary<string, string> toolsToVersion)

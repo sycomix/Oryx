@@ -4,7 +4,6 @@
 // --------------------------------------------------------------------------------------------
 
 using System;
-using System.IO;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Oryx.BuildScriptGenerator;
@@ -32,8 +31,12 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli
         internal override int Execute(IServiceProvider serviceProvider, IConsole console)
         {
             var scriptGenerator = serviceProvider.GetRequiredService<IRunTimeInstallationScriptGenerator>();
-
             var options = new RunTimeInstallationScriptGeneratorOptions { PlatformVersion = PlatformVersion };
+
+            if (!scriptGenerator.IsCompatibleWithCurrentOs())
+            {
+                console.WriteErrorLine("Incompatible operating system.");
+            }
 
             var script = scriptGenerator.GenerateBashScript(Platform, options);
             if (string.IsNullOrEmpty(script))

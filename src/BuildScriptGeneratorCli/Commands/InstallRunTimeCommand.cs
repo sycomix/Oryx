@@ -4,8 +4,10 @@
 // --------------------------------------------------------------------------------------------
 
 using System;
+using System.IO;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Oryx.BuildScriptGenerator;
 using Microsoft.Oryx.Common;
 
@@ -31,16 +33,33 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli
         internal override int Execute(IServiceProvider serviceProvider, IConsole console)
         {
             var scriptGenerator = serviceProvider.GetRequiredService<IRunTimeInstallationScriptGenerator>();
+            var logger = serviceProvider.GetRequiredService<ILogger<InstallRunTimeCommand>>();
             var options = new RunTimeInstallationScriptGeneratorOptions { PlatformVersion = PlatformVersion };
 
-            var script = scriptGenerator.GenerateBashScript(Platform, options);
-            if (string.IsNullOrEmpty(script))
+            var scriptContent = scriptGenerator.GenerateBashScript(Platform, options);
+            if (string.IsNullOrEmpty(scriptContent))
             {
                 console.WriteErrorLine("Couldn't generate startup script.");
                 return ProcessConstants.ExitFailure;
             }
 
-            console.WriteLine(script);
+            // Get the path where the generated script should be written into.
+            var tempDirProvider = serviceProvider.GetRequiredService<ITempDirectoryProvider>();
+            var scriptPath = Path.Combine(tempDirProvider.GetTempDirectory(), "install.sh");
+            File.WriteAllText(scriptPath, scriptContent);
+
+            // Run the generated script
+            int exitCode;
+            using (var timedEvent = logger.LogTimedEvent("RunInstallationScript"))
+            {
+                exitCode = serviceProvider.GetRequiredService<IScriptExecutor>().ExecuteScript(
+                    scriptPath,
+                    null,
+                    null,
+                    (sender, args) => { if (args.Data != null) console.WriteLine(args.Data); },
+                    (sender, args) => { if (args.Data != null) console.Error.WriteLine(args.Data); });
+                timedEvent.AddProperty("exitCode", exitCode.ToString());
+            }
 
             return ProcessConstants.ExitSuccess;
         }

@@ -45,8 +45,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator
                     targetPlatform.SupportedVersions);
             }
 
-            var runScript = targetPlatform.GenerateBashRunTimeInstallationScript(opts);
-            return runScript;
+            return targetPlatform.GenerateBashRunTimeInstallationScript(opts);
         }
     }
 }

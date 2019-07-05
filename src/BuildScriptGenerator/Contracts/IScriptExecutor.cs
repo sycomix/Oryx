@@ -3,6 +3,7 @@
 // Licensed under the MIT license.
 // --------------------------------------------------------------------------------------------
 
+using JetBrains.Annotations;
 using System.Diagnostics;
 
 namespace Microsoft.Oryx.BuildScriptGenerator
@@ -23,7 +24,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator
         /// <returns>0 if success</returns>
         int ExecuteScript(
             string scriptPath,
-            string[] args,
+            [CanBeNull] string[] args,
             string workingDirectory,
             DataReceivedEventHandler stdOutHandler,
             DataReceivedEventHandler stdErrHandler);

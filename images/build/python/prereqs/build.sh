@@ -11,10 +11,7 @@ wget https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_
 
 # Try getting the keys 5 times at most
 for i in {1..5}; do
-    gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys $GPG_KEY || \
-    gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys $GPG_KEY || \
-    gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys $GPG_KEY  || \
-    gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys $GPG_KEY;
+    gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys $GPG_KEY
     if [ $? -eq 0 ]; then break; fi
 done
     

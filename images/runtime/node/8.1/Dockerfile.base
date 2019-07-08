@@ -19,9 +19,7 @@ RUN set -ex \
     56730D5401028683275BD23C23EFEFE93C4CFFFE \
   ; do \
       for i in {1..5}; do \
-        gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
-        gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
-        gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key"; \
+        gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys "$key" ; \
         if [ $? -eq 0 ]; then break; fi \
       done; \
   done
@@ -44,9 +42,7 @@ RUN set -ex \
     6A010C5166006599AA17F08146C2130DFD2497F5 \
   ; do \
       for i in {1..5}; do \
-        gpg --batch --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys "$key" || \
-        gpg --batch --keyserver hkp://ipv4.pool.sks-keyservers.net --recv-keys "$key" || \
-        gpg --batch --keyserver hkp://pgp.mit.edu:80 --recv-keys "$key"; \
+        gpg --batch --keyserver hkps://keys.openpgp.org --recv-keys "$key" ; \
         if [ $? -eq 0 ]; then break; fi \
       done; \
   done \

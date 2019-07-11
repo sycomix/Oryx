@@ -125,4 +125,14 @@
       file-name-prefix: __
     - type: csharp
       directory: src/BuildScriptGenerator/Node
-      namespace: Microsoft.Oryx.BuildScriptGenerator.Node      
+      namespace: Microsoft.Oryx.BuildScriptGenerator.Node
+- name: exit-codes
+  constants:
+    success, int: 0
+    failure, int: 1
+  outputs:
+    - type: csharp
+      directory: src/BuildScriptGenerator/Node
+      namespace: Microsoft.Oryx.BuildScriptGenerator.Node
+    - type: go
+      directory: src/startupscriptgenerator/src/common/consts

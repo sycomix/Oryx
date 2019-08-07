@@ -19,7 +19,7 @@ if [[ $PHP_VERSION == 7.1.* || $PHP_VERSION == 7.2.* || $PHP_VERSION == 7.3.* ]]
         curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list
     fi
     
-    apt-get update && ACCEPT_EULA=Y apt-get install -y msodbcsql17 unixodbc-dev
+    apt-get update && ACCEPT_EULA=Y apt-get install -y msodbcsql17
     
     pecl install sqlsrv pdo_sqlsrv
     echo extension=pdo_sqlsrv.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/30-pdo_sqlsrv.ini

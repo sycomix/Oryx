@@ -1,13 +1,13 @@
 #!/bin/bash
 
+envPrepScriptsDir="/opt/oryx/envPrepScripts"
+
 installNode() {
     local versionToBeInstalled="$1"
     if [ ! -d "/opt/nodejs/$versionToBeInstalled" ]; then
         echo "Node version '$versionToBeInstalled' not found. Installing it..."
-        #curl -sL https://git.io/n-install | bash -s -- -ny -
-        #~/n/bin/n -d $versionToBeInstalled
-        #mv /usr/local/n/versions/node /opt/nodejs
-        #rm -rf /usr/local/n ~/n
+        installationScript="$envPrepScriptsDir/installNode.sh"
+        "$installationScript" $versionToBeInstalled
     else
         echo "Node version '$versionToBeInstalled' found. Skipped installation."
     fi
@@ -35,6 +35,8 @@ installDotNet() {
     local versionToBeInstalled="$1"
     if [ ! -d "/opt/dotnet/$versionToBeInstalled" ]; then
         echo "DotNet version '$versionToBeInstalled' not found. Installing it..."
+        installationScript="$envPrepScriptsDir/installDotNetCore.sh"
+        "$installationScript" $versionToBeInstalled
     else
         echo "DotNet version '$versionToBeInstalled' found. Skipped installation."
     fi

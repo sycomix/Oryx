@@ -30,6 +30,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /tmp/scripts
+RUN mkdir -P /opt/oryx/envPrepScripts
 
 # Install .NET Core
 FROM main AS dotnet-install

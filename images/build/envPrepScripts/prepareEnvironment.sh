@@ -6,10 +6,21 @@ installNode() {
     local versionToBeInstalled="$1"
     if [ ! -d "/opt/nodejs/$versionToBeInstalled" ]; then
         echo "Node version '$versionToBeInstalled' not found. Installing it..."
-        installationScript="$envPrepScriptsDir/installNode.sh"
+        installationScript="$envPrepScriptsDir/__installNode.sh"
         "$installationScript" $versionToBeInstalled
     else
         echo "Node version '$versionToBeInstalled' found. Skipped installation."
+    fi
+}
+
+installPython() {
+    local versionToBeInstalled="$1"
+    if [ ! -d "/opt/yarn/$versionToBeInstalled" ]; then
+        echo "Yarn version '$versionToBeInstalled' not found. Installing it..."
+        installationScript="$envPrepScriptsDir/__installYarn.sh"
+        "$installationScript" $versionToBeInstalled
+    else
+        echo "Yarn version '$versionToBeInstalled' found. Skipped installation."
     fi
 }
 
@@ -17,6 +28,8 @@ installPhp() {
     local versionToBeInstalled="$1"
     if [ ! -d "/opt/php/$versionToBeInstalled" ]; then
         echo "Php version '$versionToBeInstalled' not found. Installing it..."
+        installationScript="$envPrepScriptsDir/__installPhp.sh"
+        "$installationScript" $versionToBeInstalled
     else
         echo "Php version '$versionToBeInstalled' found. Skipped installation."
     fi
@@ -26,6 +39,8 @@ installYarn() {
     local versionToBeInstalled="$1"
     if [ ! -d "/opt/yarn/$versionToBeInstalled" ]; then
         echo "Yarn version '$versionToBeInstalled' not found. Installing it..."
+        installationScript="$envPrepScriptsDir/__installYarn.sh"
+        "$installationScript" $versionToBeInstalled
     else
         echo "Yarn version '$versionToBeInstalled' found. Skipped installation."
     fi
@@ -35,7 +50,7 @@ installDotNet() {
     local versionToBeInstalled="$1"
     if [ ! -d "/opt/dotnet/sdks/$versionToBeInstalled" ]; then
         echo "DotNet version '$versionToBeInstalled' not found. Installing it..."
-        installationScript="$envPrepScriptsDir/installDotNetCore.sh"
+        installationScript="$envPrepScriptsDir/__installDotNetCore.sh"
         "$installationScript" $versionToBeInstalled
     else
         echo "DotNet version '$versionToBeInstalled' found. Skipped installation."

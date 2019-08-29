@@ -33,7 +33,7 @@ installYarn() {
 
 installDotNet() {
     local versionToBeInstalled="$1"
-    if [ ! -d "/opt/dotnet/$versionToBeInstalled" ]; then
+    if [ ! -d "/opt/dotnet/sdks/$versionToBeInstalled" ]; then
         echo "DotNet version '$versionToBeInstalled' not found. Installing it..."
         installationScript="$envPrepScriptsDir/installDotNetCore.sh"
         "$installationScript" $versionToBeInstalled

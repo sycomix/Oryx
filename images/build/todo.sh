@@ -4,10 +4,10 @@ installNode() {
     local versionToBeInstalled="$1"
     if [ ! -d "/opt/nodejs/$versionToBeInstalled" ]; then
         echo "Node version '$versionToBeInstalled' not found. Installing it..."
-        curl -sL https://git.io/n-install | bash -s -- -ny -
-        ~/n/bin/n -d $versionToBeInstalled
-        mv /usr/local/n/versions/node /opt/nodejs
-        rm -rf /usr/local/n ~/n
+        #curl -sL https://git.io/n-install | bash -s -- -ny -
+        #~/n/bin/n -d $versionToBeInstalled
+        #mv /usr/local/n/versions/node /opt/nodejs
+        #rm -rf /usr/local/n ~/n
     else
         echo "Node version '$versionToBeInstalled' found. Skipped installation."
     fi
@@ -16,6 +16,7 @@ installNode() {
 installPhp() {
     local versionToBeInstalled="$1"
     if [ ! -d "/opt/php/$versionToBeInstalled" ]; then
+        echo "Php version '$versionToBeInstalled' not found. Installing it..."
     else
         echo "Php version '$versionToBeInstalled' found. Skipped installation."
     fi
@@ -24,6 +25,7 @@ installPhp() {
 installYarn() {
     local versionToBeInstalled="$1"
     if [ ! -d "/opt/yarn/$versionToBeInstalled" ]; then
+        echo "Yarn version '$versionToBeInstalled' not found. Installing it..."
     else
         echo "Yarn version '$versionToBeInstalled' found. Skipped installation."
     fi
@@ -32,9 +34,35 @@ installYarn() {
 installDotNet() {
     local versionToBeInstalled="$1"
     if [ ! -d "/opt/dotnet/$versionToBeInstalled" ]; then
-        if [ "$versionToBeInstalled" == "1."* ]; then
-        elif 
+        echo "DotNet version '$versionToBeInstalled' not found. Installing it..."
     else
         echo "DotNet version '$versionToBeInstalled' found. Skipped installation."
     fi
 }
+
+# Perform case-insensitive comparison
+matchesName() {
+  local expectedName="$1"
+  local providedName="$2"
+  local result=
+  shopt -s nocasematch
+  [[ "$expectedName" == "$providedName" ]] && result=0 || result=1
+  shopt -u nocasematch
+   return $result
+}
+
+while [[ $1 = *"="* ]]; do
+    name=$(echo $1 | sed 's/=.*$//')
+    value=$(echo $1 | sed 's/^.*=//')
+    
+    if matchesName "dotnet" "$name"; then
+        installDotNet $value
+    elif matchesName "node" "$name"; then
+        installNode $value
+    elif matchesName "python" "$name"; then
+        installPython $value
+    elif matchesName "php" "$name"; then
+        installPhp $value
+    fi
+    shift
+done

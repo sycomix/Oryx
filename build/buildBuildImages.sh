@@ -14,14 +14,6 @@ source $REPO_DIR/build/__functions.sh
 source $REPO_DIR/build/__pythonVersions.sh # For PYTHON_BASE_TAG
 source $REPO_DIR/build/__phpVersions.sh    # For PHP_BUILD_BASE_TAG
 
-declare -r BASE_TAG_BUILD_ARGS="--build-arg PYTHON_BASE_TAG=$PYTHON_BASE_TAG \
-                                --build-arg PHP_BUILD_BASE_TAG=$PHP_BUILD_BASE_TAG"
-
-echo
-echo Base tag args used:
-echo $BASE_TAG_BUILD_ARGS
-echo
-
 cd "$BUILD_IMAGES_BUILD_CONTEXT_DIR"
 
 declare BUILD_SIGNED=""
@@ -54,7 +46,7 @@ function BuildAndTagStage()
 
 	echo
 	echo "Building stage '$stageName' with tag '$stageTagName'..."
-	docker build --target $stageName -t $stageTagName $ctxArgs $BASE_TAG_BUILD_ARGS -f "$dockerFile" .
+	docker build --target $stageName -t $stageTagName $ctxArgs -f "$dockerFile" .
 }
 
 function buildDockerImage() {
@@ -64,21 +56,9 @@ function buildDockerImage() {
 	local dockerImageForTestsRepoName="$4"
 	local dockerImageForDevelopmentRepoName="$5"
 
-	# Tag stages to avoid creating dangling images.
-	# NOTE:
-	# These images are not written to artifacts file because they are not expected
-	# to be pushed. This is just a workaround to prevent having dangling images so that
-	# when a cleanup operation is being done on a build agent, a valuable dangling image
-	# is not removed.
-	BuildAndTagStage "$dockerFileToBuild" node-install
-	BuildAndTagStage "$dockerFileToBuild" dotnet-install
-	BuildAndTagStage "$dockerFileToBuild" python
-	BuildAndTagStage "$dockerFileToBuild" buildscriptbuilder
-
 	builtImageTag="$dockerImageRepoName:latest"
 	docker build -t $builtImageTag \
 		--build-arg AGENTBUILD=$BUILD_SIGNED \
-		$BASE_TAG_BUILD_ARGS \
 		--build-arg AI_KEY=$APPLICATION_INSIGHTS_INSTRUMENTATION_KEY \
 		$ctxArgs -f "$dockerFileToBuild" .
 
@@ -117,6 +97,14 @@ mkdir -p "$ARTIFACTS_DIR/images"
 
 touch $ACR_BUILD_IMAGES_ARTIFACTS_FILE
 > $ACR_BUILD_IMAGES_ARTIFACTS_FILE
+
+echo
+echo "-------------Creating no-platforms build image-------------------"
+buildDockerImage "$BUILD_IMAGES_NO_PLATFORMS_DOCKERFILE" \
+				"$ACR_NO_PLATFORMS_BUILD_IMAGE_REPO" \
+				"$ORYXTESTS_NO_PLATFORMS_BUILDIMAGE_DOCKERFILE" \
+				"$ORYXTESTS_NO_PLATFORMS_BUILDIMAGE_REPO" \
+				"$DEVBOX_NO_PLATFORMS_BUILD_IMAGE_REPO" 
 
 echo
 echo "-------------Creating slim build image-------------------"

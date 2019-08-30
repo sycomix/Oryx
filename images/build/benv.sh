@@ -53,15 +53,81 @@ while read benvvar; do
 done < <(set | grep -i '^dotnet_version=')
 unset benvvar # Remove all traces of this part of the script
 
+benv-downloadSdkAndExtract() {
+    local platformName="$1"
+    local version="$2"
+    local blobName="$platformName-$version.tar.gz"
+    
+    currentDir=`pwd`
+    platformDir="/tmp/oryx/$platformName"
+    targetDir="$platformDir/$version"
+    if [ -d "$targetDir" ]; then
+      echo "$platformName version '$version' already exists. Skipping installing it..."
+    else
+      local ORYX_BLOB_URL_BASE="https://oryxsdks.blob.core.windows.net/sdks"
+      curl -I $ORYX_BLOB_URL_BASE/$blobName 2> /tmp/curlError.txt 1> /tmp/curlOut.txt
+      grep "HTTP/1.1 200 OK" /tmp/curlOut.txt &> /dev/null
+      exitCode=$?
+      rm -f /tmp/curlError.txt
+      rm -f /tmp/curlOut.txt
+      if [ ! $exitCode -eq 0 ]; then
+        echo "Could not find version '$version' of '$platformName' in Oryx blob storage."
+        exit 1
+      fi
+
+      echo "Downloading and extracing version '$version' of platform '$platformName'..."
+      cd /tmp
+      curl -SL $ORYX_BLOB_URL_BASE/$platformName-$version.tar.gz --output $platformName-$version.tar.gz &> /dev/null
+      mkdir -p "$targetDir"
+      tar -xzf $platformName-$version.tar.gz -C "$targetDir"
+
+      # Create a link : major.minor => major.minor.patch
+      cd "$platformDir"
+      IFS='.' read -ra SDK_VERSION_PARTS <<< "$version"
+      MAJOR_MINOR="${SDK_VERSION_PARTS[0]}.${SDK_VERSION_PARTS[1]}"
+      echo "Creating link from $MAJOR_MINOR to $version..."
+      ln -s $version $MAJOR_MINOR
+    fi
+
+    cd "$currentDir"
+}
+
+benv-getStringIndex() {
+  local lookUpText="$1"
+  local actualString="$2"
+
+  # Find the string 'before' the text we are looking for
+  # and if found get the length of it which will give index
+  # of the lookup text
+  result="${actualString%%$lookUpText*}"
+  if [ "$result" == "$actualString" ]; then
+    echo -1 
+  else
+    echo "${#result}"
+  fi
+}
+
 # Oryx's paths come to the end of the PATH environment variable so that any user installed platform
 # sdk versions can be picked up. Here we are trying to find the first occurrence of a path like '/opt/'
 # (as in /opt/dotnet) and inserting a more specific provided path before it.
 # Example: (note that all Oryx related patlform paths come in the end)
 # /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/nodejs/6/bin:/opt/dotnet/sdks/2.2.401:/opt/oryx/defaultversions
-updatePath() {
-  local replacingText="$1:/opt/"
+benv-updatePath() {
+  local pathToBeInserted="$1"
   local currentPath="$PATH"
-  local lookUpText="\/opt\/"
+  local builtInInstallDirPrefix="/opt/"
+  local dynamicInstallDirPrefix="/tmp/oryx/"
+  local builtInInstallDirIndex=$(benv-getStringIndex $builtInInstallDirPrefix "$currentPath")
+  local dynamicInstallDirIndex=$(benv-getStringIndex $dynamicInstallDirPrefix "$currentPath")
+
+  if [ $dynamicInstallDirIndex -ne -1 ] && [ $dynamicInstallDirIndex -lt $builtInInstallDirIndex ]; then
+    local replacingText="$pathToBeInserted:$dynamicInstallDirPrefix"
+    local lookUpText="\/tmp\/oryx\/"
+  else
+    local replacingText="$pathToBeInserted:$builtInInstallDirPrefix"
+    local lookUpText="\/opt\/"
+  fi
+
   local newPath=$(echo $currentPath | sed "0,/$lookUpText/ s##$replacingText#")
   export PATH="$newPath"
 }
@@ -79,20 +145,55 @@ benv-versions() {
   done
 }
 
+benv-getPlatformDir() {
+  local platformDirName="$1"
+  local userSuppliedVersion="$2"
+  local builtInInstallDir="/opt/$platformDirName"
+  local dynamicInstallDir="/tmp/oryx/$platformDirName"
+
+  if [ -d "$builtInInstallDir/$userSuppliedVersion" ]; then
+    echo "$builtInInstallDir/$userSuppliedVersion"
+  elif [ -d "$dynamicInstallDir/$userSuppliedVersion" ]; then
+    echo "$dynamicInstallDir/$userSuppliedVersion"
+  else
+    echo "NotFound"
+  fi
+}
+
+benv-showSupportedVersionsErrorInfo() {
+  local userPlatformName="$1"
+  local platformDirName="$2"
+  local userSuppliedVersion="$3"
+  local builtInInstallDir="/opt/$platformDirName"
+  local dynamicInstallDir="/tmp/oryx/$platformDirName"
+
+  echo >&2 benv: "$userPlatformName" version \'$userSuppliedVersion\' not found\; choose one of:
+  benv-versions >&2 "$builtInInstallDir"
+
+  if [ -d "$dynamicInstallDir" ]; then
+    benv-versions >&2 "$dynamicInstallDir"
+  fi
+}
+
 benv-resolve() {
   local name=$(echo $1 | sed 's/=.*$//')
   local value=$(echo $1 | sed 's/^.*=//')
+  local dynamicInstallRootDir="/tmp/oryx"
 
   # Resolve node versions
   if matchesName "node" "$name" || matchesName "node_version" "$name" && [ "${value::1}" != "/" ]; then
-    if [ ! -d "/opt/nodejs/$value" ]; then
-      echo >&2 benv: node version \'$value\' not found\; choose one of:
-      benv-versions >&2 /opt/nodejs
-      return 1
-    fi
+    platformDir=$(benv-getPlatformDir "nodejs" "$value")
+    if [ "$platformDir" == "NotFound" ]; then
+      if [ "$ORYX_ENABLE_DYNAMIC_TOOL_INSTALLATION" == "true" ]; then
+        benv-downloadSdkAndExtract "nodejs" "$value"
+      else
+        benv-showSupportedVersionsErrorInfo "node" "nodejs" "$value"
+        return 1
+      fi
+    fi 
 
-    local DIR="/opt/nodejs/$value/bin"
-    updatePath "$DIR"
+    local DIR="$platformDir/$value/bin"
+    benv-updatePath "$DIR"
     export node="$DIR/node"
     export npm="$DIR/npm"
     if [ -e "$DIR/npx" ]; then
@@ -104,14 +205,18 @@ benv-resolve() {
 
   # Resolve npm versions
   if matchesName "npm" "$name" || matchesName "npm_version" "$name" && [ "${value::1}" != "/" ]; then
-    if [ ! -d "/opt/npm/$value" ]; then
-      echo >&2 benv: npm version \'$value\' not found\; choose one of:
-      benv-versions >&2 /opt/npm
-      return 1
+    platformDir=$(benv-getPlatformDir "npm" "$value")
+    if [ "$platformDir" == "NotFound" ]; then
+      if [ "$ORYX_ENABLE_DYNAMIC_TOOL_INSTALLATION" == "true" ]; then
+        benv-downloadSdkAndExtract "npm" "$value"
+      else
+        benv-showSupportedVersionsErrorInfo "npm" "npm" "$value"
+        return 1
+      fi
     fi
 
-    local DIR="/opt/npm/$value"
-    updatePath "$DIR"
+    local DIR="$platformDir/$value"
+    benv-updatePath "$DIR"
     export npm="$DIR/npm"
     if [ -e "$DIR/npx" ]; then
       export npx="$DIR/npx"
@@ -122,14 +227,19 @@ benv-resolve() {
 
   # Resolve python versions
   if matchesName "python" "$name" || matchesName "python_version" "$name" && [ "${value::1}" != "/" ]; then
-    if [ ! -d "/opt/python/$value" ]; then
-      echo >&2 benv: python version \'$value\' not found\; choose one of:
-      benv-versions >&2 /opt/python
-      return 1
-    fi
+    platformDir=$(benv-getPlatformDir "python" "$value")
+    if [ "$platformDir" == "NotFound" ]; then
+      if [ "$ORYX_ENABLE_DYNAMIC_TOOL_INSTALLATION" == "true" ]; then
+        benv-downloadSdkAndExtract "python" "$value"
+        export LD_LIBRARY_PATH="$dynamicInstallRootDir/python/$value/lib:$LD_LIBRARY_PATH"
+      else
+        benv-showSupportedVersionsErrorInfo "python" "python" "$value"
+        return 1
+      fi
+    fi 
 
-    local DIR="/opt/python/$value/bin"
-    updatePath "$DIR"
+    local DIR="$platformDir/$value/bin"
+    benv-updatePath "$DIR"
     if [ -e "$DIR/python2" ]; then
       export python="$DIR/python2"
     elif [ -e "$DIR/python3" ]; then
@@ -145,15 +255,38 @@ benv-resolve() {
 
   # Resolve PHP versions
   if matchesName "php" "$name" || matchesName "php_version" "$name" && [ "${value::1}" != "/" ]; then
-    if [ ! -d "/opt/php/$value" ]; then
-      echo >&2 benv: php version \'$value\' not found\; choose one of:
-      benv-versions >&2 /opt/php
-      return 1
+    platformDir=$(benv-getPlatformDir "php" "$value")
+    if [ "$platformDir" == "NotFound" ];then
+      if [ "$ORYX_ENABLE_DYNAMIC_TOOL_INSTALLATION" == "true" ]; then
+        benv-downloadSdkAndExtract "php" "$value"
+        export LD_LIBRARY_PATH="$dynamicInstallRootDir/php/$value/lib:$LD_LIBRARY_PATH"
+      else
+        benv-showSupportedVersionsErrorInfo "php" "php" "$value"
+        return 1
+      fi
     fi
 
-    local DIR="/opt/php/$value/bin"
-    updatePath "$DIR"
+    local DIR="$platformDir/$value/bin"
+    benv-updatePath "$DIR"
     export php="$DIR/php"
+
+    return 0
+  fi
+
+  if matchesName "composer" "$name" || matchesName "composer_version" "$name" && [ "${value::1}" != "/" ]; then
+    platformDir=$(benv-getPlatformDir "php-composer" "$value")
+    if [ "$platformDir" == "NotFound" ]; then
+      if [ "$ORYX_ENABLE_DYNAMIC_TOOL_INSTALLATION" == "true" ]; then
+        benv-downloadSdkAndExtract "php-composer" "$value"
+      else
+        benv-showSupportedVersionsErrorInfo "composer" "php-composer" "$value"
+        return 1
+      fi
+    fi
+
+    local DIR="$platformDir/$value"
+    benv-updatePath "$DIR"
+    export composer="$DIR/composer.phar"
 
     return 0
   fi
@@ -168,7 +301,7 @@ benv-resolve() {
     fi
 
     local DIR=$(readlink $"$runtimesDir/$value/sdk")
-    updatePath "$DIR"
+    benv-updatePath "$DIR"
     export dotnet="$DIR/dotnet"
     
     return 0

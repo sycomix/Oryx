@@ -25,7 +25,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Php
             }
 
             options.PhpDefaultVersion = defaultVersion;
-            options.InstalledPhpVersionsDir = PhpConstants.InstalledPhpVersionsDir;
+            options.BuiltInPhpInstallVersionsDir = PhpConstants.BuiltInPhpInstallVersionsDir;
+            options.DynamicPhpInstallVersionsDir = PhpConstants.DynamicPhpInstallVersionsDir;
             options.SupportedPhpVersions = _env.GetEnvironmentVariableAsList(PhpConstants.SupportedVersionsEnvVarName);
         }
     }

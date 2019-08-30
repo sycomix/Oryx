@@ -11,6 +11,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
     {
         public const string BuildImageName = "oryxtests/build:latest";
         public const string SlimBuildImageName = "oryxtests/build-slim:latest";
+        public const string NoPlatformsBuildImageName = "oryxtests/build-no-platforms:latest";
         public const string ProdBuildImageName = "oryxdevmcr.azurecr.io/public/oryx/build:latest";
         public const string ProdSlimBuildImageName = "oryxdevmcr.azurecr.io/public/oryx/build-slim:latest";
 

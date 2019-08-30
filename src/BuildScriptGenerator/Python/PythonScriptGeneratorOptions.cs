@@ -11,7 +11,9 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
     {
         public string PythonDefaultVersion { get; set; }
 
-        public string InstalledPythonVersionsDir { get; set; }
+        public string BuiltInPythonInstallVersionsDir { get; set; }
+
+        public string DynamicPythonInstallVersionsDir { get; set; }
 
         /// <summary>
         /// Gets or sets the user-provided list of python versions.

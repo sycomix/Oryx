@@ -14,7 +14,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
         internal const string PythonDefaultVersionEnvVarName = "ORYX_PYTHON_DEFAULT_VERSION";
         internal const string PythonSupportedVersionsEnvVarName = "PYTHON_SUPPORTED_VERSIONS";
         internal const string PythonLtsVersion = Common.PythonVersions.Python37Version;
-        internal const string InstalledPythonVersionsDir = "/opt/python/";
+        internal const string BuiltInPythonInstallVersionsDir = "/opt/python/";
+        internal const string DynamicPythonInstallVersionsDir = "/tmp/oryx/python/";
         internal const string ZipFileExtension = "tar.gz";
         internal const string ZipVirtualEnvFileNameFormat = "{0}.zip";
         internal const string TarGzVirtualEnvFileNameFormat = "{0}.tar.gz";

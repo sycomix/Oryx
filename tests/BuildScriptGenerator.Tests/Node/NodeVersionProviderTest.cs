@@ -57,7 +57,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Tests.Node
         {
             var options = new NodeScriptGeneratorOptions
             {
-                InstalledNodeVersionsDir = _rootDirPath,
+                BuiltInNodeInstallVersionsDir = _rootDirPath,
                 InstalledNpmVersionsDir = _rootDirPath,
             };
             return new NodeVersionProvider(Options.Create(options));

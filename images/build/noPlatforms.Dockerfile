@@ -31,17 +31,20 @@ RUN apt-get update \
         moreutils \
         rsync \
         zip \
+        tk-dev \
+        uuid-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # A temporary folder to hold all scripts temporarily used to build this image. 
 # This folder is deleted in the final stage of building this image.
 RUN mkdir -p /tmp/scripts
-COPY images/build/installPlatform.sh /tmp/scripts
-RUN chmod +x /tmp/scripts/installPlatform.sh
 
-# This is the folder containing 'links' to versions of sdks present under '/opt' folder
-# These versions are typically the LTS or stable versions of those platforms.
 RUN mkdir -p /opt/oryx/defaultversions
+
+# Copy PHP versions
+COPY images/build/php/prereqs/installPrereqs.sh /tmp/scripts/installPhpPrereqs.sh
+RUN chmod +x /tmp/scripts/installPhpPrereqs.sh
+RUN /tmp/scripts/installPhpPrereqs.sh
 
 # Install .NET Core
 FROM main AS dotnet-install
@@ -57,26 +60,17 @@ RUN apt-get update \
         zlib1g \
     && rm -rf /var/lib/apt/lists/*
 
-ENV DOTNET_RUNNING_IN_CONTAINER=true \
-    DOTNET_USE_POLLING_FILE_WATCHER=true \
-	NUGET_XMLDOC_MODE=skip \
-    DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 \
-	NUGET_PACKAGES=/var/nuget
-
-RUN mkdir /var/nuget
 COPY build/__dotNetCoreSdkVersions.sh /tmp/scripts
 COPY build/__dotNetCoreRunTimeVersions.sh /tmp/scripts
 COPY images/build/installDotNetCore.sh /tmp/scripts
 RUN chmod +x /tmp/scripts/installDotNetCore.sh
 
 # Check https://www.microsoft.com/net/platform/support-policy for support policy of .NET Core versions
+ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 RUN . /tmp/scripts/__dotNetCoreSdkVersions.sh && \
     DOTNET_SDK_VER=$DOT_NET_CORE_21_SDK_VERSION \
+    INSTALL_PACKAGES=false \
     /tmp/scripts/installDotNetCore.sh
-
-RUN set -ex \
-    rm -rf /tmp/NuGetScratch \
-    && find /var/nuget -type d -exec chmod 777 {} \;
 
 RUN set -ex \
  && sdksDir=/opt/dotnet/sdks \
@@ -100,88 +94,6 @@ RUN set -ex \
  && ltsSdk=$(readlink lts/sdk) \
  && ln -s $ltsSdk/dotnet /usr/local/bin/dotnet
 
-# Install Node.js, NPM, Yarn
-FROM main AS node-install
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        jq \
-    && rm -rf /var/lib/apt/lists/*
-COPY build/__nodeVersions.sh /tmp/scripts
-COPY images/build/createNpmLinks.sh /tmp/scripts
-RUN cd /tmp/scripts \
- && . ./__nodeVersions.sh \
- && ./installPlatform.sh nodejs $NODE8_VERSION \
- && ./installPlatform.sh nodejs $NODE10_VERSION \
- && chmod +x ./createNpmLinks.sh \
- && ./createNpmLinks.sh
-
-COPY images/receivePgpKeys.sh /tmp/scripts
-RUN cd /tmp/scripts \
- && chmod +x ./receivePgpKeys.sh \
- && . ./__nodeVersions.sh \
- && ./receivePgpKeys.sh 6A010C5166006599AA17F08146C2130DFD2497F5 \
- && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz" \
- && curl -fsSLO --compressed "https://yarnpkg.com/downloads/$YARN_VERSION/yarn-v$YARN_VERSION.tar.gz.asc" \
- && gpg --batch --verify yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
- && mkdir -p /opt/yarn \
- && tar -xzf yarn-v$YARN_VERSION.tar.gz -C /opt/yarn \
- && mv /opt/yarn/yarn-v$YARN_VERSION /opt/yarn/$YARN_VERSION \
- && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
-
-RUN set -ex \
- && . /tmp/scripts/__nodeVersions.sh \
- && cd /opt/nodejs \
- && ln -s $NODE8_VERSION $NODE8_MAJOR_MINOR_VERSION \
- && ln -s $NODE8_MAJOR_MINOR_VERSION 8 \
- && ln -s $NODE10_VERSION $NODE10_MAJOR_MINOR_VERSION \
- && ln -s $NODE10_MAJOR_MINOR_VERSION 10 \
- && ln -s 10 lts
-RUN set -ex \
- && cd /opt/npm \
- && ln -s 6.9.0 6.9 \
- && ln -s 6.9 6 \
- && ln -s 6 latest
-RUN set -ex \
- && cd /opt/yarn \
- && . /tmp/scripts/__nodeVersions.sh \
- && ln -s $YARN_VERSION stable \
- && ln -s $YARN_VERSION latest \
- && ln -s $YARN_VERSION $YARN_MINOR_VERSION \
- && ln -s $YARN_MINOR_VERSION $YARN_MAJOR_VERSION
-RUN set -ex \
- && mkdir -p /links \
- && cp -s /opt/nodejs/lts/bin/* /links \
- && cp -s /opt/yarn/stable/bin/yarn /opt/yarn/stable/bin/yarnpkg /links
-
-FROM main AS python
-# It's not clear whether these are needed at runtime...
-RUN apt-get update \
- && apt-get install -y --no-install-recommends \
-        tk-dev \
-        uuid-dev \
- && rm -rf /var/lib/apt/lists/*
-# https://github.com/docker-library/python/issues/147
-ENV PYTHONIOENCODING UTF-8
-COPY build/__pythonVersions.sh /tmp/scripts
-RUN set -ex \
- && cd /tmp/scripts \
- && . ./__pythonVersions.sh \
- && ./installPlatform.sh python $PYTHON37_VERSION \
- && [ -d "/opt/python/$PYTHON37_VERSION" ] && echo /opt/python/$PYTHON37_VERSION/lib >> /etc/ld.so.conf.d/python.conf \
- && ldconfig
-# The link from PYTHON38_VERSION to 3.8.0 exists because "3.8.0b1" isn't a valid SemVer string.
-RUN set -ex \
- && . /tmp/scripts/__pythonVersions.sh \
- && cd /opt/python \
- && ln -s $PYTHON37_VERSION latest \
- && ln -s $PYTHON37_VERSION 3.7 \
- && ln -s 3.7 3
-RUN set -ex \
- && cd /opt/oryx/defaultversions \
- && cp -sn /opt/python/3/bin/* . \
- # Make sure the alias 'python' always refers to Python 3 by default
- && ln -sf /opt/python/3/bin/python python
-
 # This stage is used only when building locally
 FROM dotnet-install AS buildscriptbuilder
 COPY src/BuildScriptGenerator /usr/oryx/src/BuildScriptGenerator
@@ -203,31 +115,23 @@ RUN if [ -z "$AGENTBUILD" ]; then \
     fi
 RUN chmod a+x /opt/buildscriptgen/GenerateBuildScript
 
-FROM python AS final
+FROM main AS final
 WORKDIR /
 
 ENV PATH=$PATH:/opt/oryx/defaultversions
-COPY images/build/prepEnv.sh /opt/oryx/defaultversions/prepEnv
 COPY images/build/benv.sh /opt/oryx/defaultversions/benv
 RUN chmod +x /opt/oryx/defaultversions/benv
-RUN chmod +x /opt/oryx/defaultversions/prepEnv
-RUN mkdir -p /usr/local/share/pip-cache/lib
-RUN chmod -R 777 /usr/local/share/pip-cache
 
 # Copy .NET Core related content
 ENV NUGET_XMLDOC_MODE=skip \
 	DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 \
 	NUGET_PACKAGES=/var/nuget
-COPY --from=dotnet-install /opt/dotnet /opt/dotnet
-COPY --from=dotnet-install /var/nuget /var/nuget
-COPY --from=dotnet-install /usr/local/bin /opt/oryx/defaultversions
+
 # Grant read-write permissions to the nuget folder so that dotnet restore
 # can write into it.
-RUN chmod a+rw /var/nuget
-
-# Copy NodeJs, NPM and Yarn related content
-COPY --from=node-install /opt /opt
-COPY --from=node-install /links/ /opt/oryx/defaultversions
+RUN nugetDir="/var/nuget" \
+ && mkdir -p "$nugetDir" \
+ && chmod a+rw "$nugetDir"
 
 # Build script generator content. Docker doesn't support variables in --from
 # so we are building an extra stage to copy binaries from correct build stage
@@ -235,6 +139,10 @@ COPY --from=buildscriptbuilder /opt/buildscriptgen/ /opt/buildscriptgen/
 RUN ln -s /opt/buildscriptgen/GenerateBuildScript /opt/oryx/defaultversions/oryx
 
 RUN rm -rf /tmp/scripts
+
+ENV ORYX_ENABLE_DYNAMIC_TOOL_INSTALLATION=true
+RUN mkdir -p /usr/local/share/pip-cache/lib
+RUN chmod -R 777 /usr/local/share/pip-cache
 
 # Bake Application Insights key from pipeline variable into final image
 ARG AI_KEY

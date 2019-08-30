@@ -3,7 +3,6 @@
 // Licensed under the MIT license.
 // --------------------------------------------------------------------------------------------
 
-using System.IO;
 using Microsoft.Extensions.Options;
 
 namespace Microsoft.Oryx.BuildScriptGenerator.Node
@@ -15,8 +14,10 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Node
         internal const string NodeSupportedVersionsEnvVariable = "NODE_SUPPORTED_VERSIONS";
         internal const string NpmSupportedVersionsEnvVariable = "NPM_SUPPORTED_VERSIONS";
         internal const string LegacyZipNodeModules = "ENABLE_NODE_MODULES_ZIP";
-        internal const string InstalledNodeVersionsDir = "/opt/nodejs/"; // TODO: remove hard-coded paths
+        internal const string BuiltInNodeInstallVersionsDir = "/opt/nodejs/"; // TODO: remove hard-coded paths
+        internal const string DynamicNodeInstallVersionsDir = "/tmp/oryx/nodejs/"; // TODO: remove hard-coded paths
         internal const string InstalledNpmVersionsDir = "/opt/npm/";
+
 
         private readonly IEnvironment _environment;
 
@@ -36,7 +37,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Node
             options.NodeJsDefaultVersion = defaultVersion;
             options.NpmDefaultVersion = _environment.GetEnvironmentVariable(NpmDefaultVersion);
 
-            options.InstalledNodeVersionsDir = InstalledNodeVersionsDir;
+            options.BuiltInNodeInstallVersionsDir = BuiltInNodeInstallVersionsDir;
+            options.DynamicNodeInstallVersionsDir = DynamicNodeInstallVersionsDir;
             options.InstalledNpmVersionsDir = InstalledNpmVersionsDir;
 
             options.SupportedNodeVersions = _environment.GetEnvironmentVariableAsList(

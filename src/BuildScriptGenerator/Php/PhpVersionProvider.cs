@@ -4,7 +4,6 @@
 // --------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.Options;
 
 namespace Microsoft.Oryx.BuildScriptGenerator.Php
@@ -25,9 +24,16 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Php
             {
                 if (_supportedPhpVersions == null)
                 {
-                    _supportedPhpVersions = VersionProviderHelper.GetSupportedVersions(
+                    var supportedVersions = new List<string>();
+                    var versions = VersionProviderHelper.GetSupportedVersions(
                         _opts.SupportedPhpVersions,
-                        _opts.InstalledPhpVersionsDir);
+                        _opts.BuiltInPhpInstallVersionsDir);
+                    supportedVersions.AddRange(versions);
+                    versions = VersionProviderHelper.GetSupportedVersions(
+                        _opts.SupportedPhpVersions,
+                        _opts.DynamicPhpInstallVersionsDir);
+                    supportedVersions.AddRange(versions);
+                    _supportedPhpVersions = supportedVersions;
                 }
 
                 return _supportedPhpVersions;

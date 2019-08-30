@@ -11,7 +11,9 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Php
     {
         public string PhpDefaultVersion { get; set; }
 
-        public string InstalledPhpVersionsDir { get; set; }
+        public string BuiltInPhpInstallVersionsDir { get; set; }
+
+        public string DynamicPhpInstallVersionsDir { get; set; }
 
         /// <summary>
         /// Gets or sets the user-provided list of python versions.

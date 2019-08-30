@@ -39,3 +39,4 @@ function tagBuildImage() {
 
 tagBuildImage "oryxdevmcr.azurecr.io/public/oryx/build:Oryx-CI.$buildNumber" "latest" "$buildNumber"
 tagBuildImage "oryxdevmcr.azurecr.io/public/oryx/build-slim:Oryx-CI.$buildNumber" "slim" "slim-$buildNumber"
+tagBuildImage "oryxdevmcr.azurecr.io/public/oryx/build-no-platforms:Oryx-CI.$buildNumber" "no-platforms" "no-platforms-$buildNumber"

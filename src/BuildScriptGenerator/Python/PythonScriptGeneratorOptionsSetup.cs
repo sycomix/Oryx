@@ -26,7 +26,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
             }
 
             options.PythonDefaultVersion = defaultVersion;
-            options.InstalledPythonVersionsDir = PythonConstants.InstalledPythonVersionsDir;
+            options.BuiltInPythonInstallVersionsDir = PythonConstants.BuiltInPythonInstallVersionsDir;
+            options.DynamicPythonInstallVersionsDir = PythonConstants.DynamicPythonInstallVersionsDir;
 
             // Providing the supported versions through an environment variable allows us to use the tool in
             // other environments, e.g. our local machines for debugging.

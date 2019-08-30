@@ -15,7 +15,7 @@ wget https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_
 gpg --batch --verify /python.tar.xz.asc /python.tar.xz
 tar -xJf /python.tar.xz --strip-components=1 -C .
 
-INSTALLATION_PREFIX=/opt/python/$PYTHON_VERSION
+INSTALLATION_PREFIX=/tmp/oryx/python/$PYTHON_VERSION
 
 if [ "${PYTHON_VERSION::1}" == "2" ]; then
     ./configure \
@@ -70,3 +70,8 @@ fi
 # Replace log level in pip's code as a workaround for https://github.com/pypa/pip/issues/6189
 pipReqSetPath=`find $INSTALLATION_PREFIX/lib -path "*site-packages/pip/_internal/req/req_set.py"`
 sed -i 's|logger\.debug('\''Cleaning up\.\.\.'\'')|logger\.info('\''Cleaning up\.\.\.'\'')|' "$pipReqSetPath"
+
+compressedSdkDir="/tmp/compressedSdk"
+mkdir -p $compressedSdkDir
+cd "$INSTALLATION_PREFIX"
+tar -zcf $compressedSdkDir/python-$PYTHON_VERSION.tar.gz .

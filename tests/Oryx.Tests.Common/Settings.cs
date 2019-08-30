@@ -9,6 +9,7 @@ namespace Microsoft.Oryx.Tests.Common
     {
         public const string BuildImageName = "oryxtests/build:latest";
         public const string SlimBuildImageName = "oryxtests/build-slim:latest";
+        public const string NoPlatformsBuildImageName = "oryxtests/build-no-platforms:latest";
         public const string PackImageName  = "oryxdevmcr.azurecr.io/public/oryx/pack:latest";
         
         public const string RemoveTestContainersEnvironmentVariableName = "ORYX_REMOVE_TEST_CONTAINERS";

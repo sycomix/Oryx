@@ -30,14 +30,36 @@ namespace Microsoft.Oryx.BuildImage.Tests.Node
 
         public static IEnumerable<object[]> SomeVSCodeDependencies => new object[][]
         {
-            new object[] { "applicationinsights", "1.0.8",
-                "git://github.com/microsoft/ApplicationInsights-node.js.git" },
-            new object[] { "iconv-lite", "0.5.0",
-                "git://github.com/ashtuchkin/iconv-lite.git" },
-            new object[] { "keytar", "4.11.0",
-                "git://github.com/atom/node-keytar.git", new[] { "libsecret-1-dev" } },
-            new object[] { "native-keymap", "2.0.0",
-                "git://github.com/Microsoft/node-native-keymap.git", new[] { "libx11-dev", "libxkbfile-dev" } },
+            new object[] { "applicationinsights", "1.0.8", null },
+            new object[] { "iconv-lite", "0.5.0", null },
+            new object[] { "keytar", "4.11.0", null, new[] { "libsecret-1-dev" } },
+            new object[] { "native-keymap", "2.0.0", null, new[] { "libx11-dev", "libxkbfile-dev" } },
+
+            new object[] { "@microsoft/applicationinsights-web", "2.1.1", null },
+            new object[] { "graceful-fs", "4.1.11", null },
+            new object[] { "http-proxy-agent", "2.1.0", null },
+            new object[] { "https-proxy-agent", "2.2.1", null },
+            new object[] { "jschardet", "1.6.0", "28152dd8db5904dc2cf9aa12ef4f8783f713e79a" },
+            new object[] { "native-is-elevated", "0.3.0", null },
+            new object[] { "native-watchdog", "1.0.0", null },
+            new object[] { "node-pty", "0.9.0-beta19", null },
+            new object[] { "nsfw", "1.2.5", null },
+            new object[] { "onigasm-umd", "2.2.2", null },
+            new object[] { "semver-umd", "5.5.3", null },
+            new object[] { "spdlog", "0.9.0", null },
+            new object[] { "sudo-prompt", "9.0.0", null },
+            new object[] { "v8-inspect-profiler", "0.0.20", null },
+            new object[] { "vscode-chokidar", "2.1.7", null },
+            new object[] { "vscode-minimist", "1.2.1", null },
+            new object[] { "vscode-proxy-agent", "0.4.0", null },
+            new object[] { "vscode-ripgrep", "1.5.6", null },
+            new object[] { "vscode-sqlite3", "4.0.8", null },
+            new object[] { "vscode-textmate", "4.2.2", null },
+            new object[] { "xterm", "3.15.0-beta99", null },
+            new object[] { "xterm-addon-search", "0.2.0-beta3", null },
+            new object[] { "xterm-addon-web-links", "0.1.0-beta10", null },
+            new object[] { "yauzl", "2.9.2", null },
+            new object[] { "yazl", "2.4.3", null },
         };
 
         private readonly string[] IgnoredTarEntries = new[] { "package/.npmignore", "package", "package/yarn.lock" };
@@ -47,7 +69,7 @@ namespace Microsoft.Oryx.BuildImage.Tests.Node
         public void CanBuildNpmPackages(
             string pkgName,
             string pkgVersion,
-            string gitRepoUrl,
+            string altCommitId,
             string[] requiredOsPackages = null)
         {
             const string tarListCmd = "tar -tvf";
@@ -59,8 +81,9 @@ namespace Microsoft.Oryx.BuildImage.Tests.Node
             var pkgBuildOutputDir = "/tmp/pkg/out";
             var oryxPackOutput = $"{pkgBuildOutputDir}/{pkgName}-{pkgVersion}.tgz";
 
-            string commitId = GetGitHeadFromNpmRegistry(pkgName, pkgVersion);
-            Assert.NotNull(commitId);
+            (string gitRepoUrl, string commitId) = GetGitInfoFromNpmRegistry(pkgName, pkgVersion);
+            Assert.False(string.IsNullOrEmpty(gitRepoUrl), "Could not find a repository address for package");
+            Assert.False(string.IsNullOrEmpty(commitId),   "Could not find a commit ID for package");
 
             var osReqsParam = string.Empty;
             if (requiredOsPackages != null)
@@ -116,12 +139,13 @@ namespace Microsoft.Oryx.BuildImage.Tests.Node
         }
 
         [CanBeNull]
-        private string GetGitHeadFromNpmRegistry(string name, string version)
+        private (string, string) GetGitInfoFromNpmRegistry(string name, string version)
         {
             var packageJson = JsonConvert.DeserializeObject<dynamic>(
                 _httpClient.GetStringAsync($"http://registry.npmjs.org/{name}/{version}").Result);
+            var gitRepoNode = packageJson?.repository?.url;
             var gitHeadNode = packageJson?.gitHead as Newtonsoft.Json.Linq.JValue;
-            return gitHeadNode?.ToString();
+            return (gitRepoNode?.ToString().Replace("+https", ""), gitHeadNode?.ToString());
         }
     }
 }

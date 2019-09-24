@@ -1,52 +1,55 @@
 variables:
   ascName: OryxMCR
   acrName: oryxdevmcr.azurecr.io
+  acrProdName: oryxmcr.azurecr.io
   skipComponentGovernanceDetection: true
+  artifactsRooDir: '$(Build.SourcesDirectory)/artifacts/images'
 
-stages:
-- stage: Build
-  displayName: Build Stage
-  jobs:
-  - template: templates/_buildimageBasesJobTemplate.yml
+jobs:
+  - template: templates/_buildAndReleaseBaseImageTemplate.yml
     parameters:
-      displayName: Build and push Node base images for runtime
+      jobName: Pull_And_Retag_BuildPack_Deps_Images
+      scriptPath: ./build/pullAndRetagBuildPackDepsImages.sh
+      artifactsFileName: '$(artifactsRooDir)/buildPackDeps-images.txt'
+
+  - template: templates/_buildAndReleaseBaseImageTemplate.yml
+    dependsOn: Pull_And_Retag_BuildPack_Deps_Images
+    parameters:
+      jobName: Build_And_Push_Node_Base_Images_For_Runtime
       scriptPath: ./build/buildRunTimeImageBases.sh
-      imageDir: node
-      artifactsFileName: node-runtimeimage-bases.txt
+      scriptArgs: node
+      artifactsFileName: '$(artifactsRooDir)/node-runtimeimage-bases.txt'
 
-  - template: templates/_buildimageBasesJobTemplate.yml
+  - template: templates/_buildAndReleaseBaseImageTemplate.yml
+    dependsOn: Pull_And_Retag_BuildPack_Deps_Images
     parameters:
-      displayName: Build and push Python base images for build
+      jobName: Build_And_Push_Python_Base_Images_For_Build
       scriptPath: ./build/buildBuildImageBases.sh
-      imageDir: python
-      artifactsFileName: python-buildimage-bases.txt
+      scriptArgs: python
+      artifactsFileName: '$(artifactsRooDir)/python-buildimage-bases.txt'
 
-  - template: templates/_buildimageBasesJobTemplate.yml
+  - template: templates/_buildAndReleaseBaseImageTemplate.yml
+    dependsOn: Pull_And_Retag_BuildPack_Deps_Images
     parameters:
-      displayName: Build and push PHP build base images
+      jobName: Build_And_Push_PHP_Base_Images_For_Build
       scriptPath: ./build/buildBuildImageBases.sh
-      imageDir: php
-      artifactsFileName: php-buildimage-bases.txt
+      scriptArgs: php
+      artifactsFileName: '$(artifactsRooDir)/php-buildimage-bases.txt'
 
-  - template: templates/_buildimageBasesJobTemplate.yml
+  - template: templates/_buildAndReleaseBaseImageTemplate.yml
+    dependsOn: Pull_And_Retag_BuildPack_Deps_Images
     parameters:
-      displayName: Build and push PHP runtime base images
+      jobName: Build_And_Push_PHP_Base_Images_For_Runtime
       scriptPath: ./build/buildRunTimeImageBases.sh
-      imageDir: php
-      artifactsFileName: php-runtimeimage-bases.txt
+      scriptArgs: php
+      artifactsFileName: '$(artifactsRooDir)/php-runtimeimage-bases.txt'
 
-  - template: templates/_buildimageBasesJobTemplate.yml
+  - template: templates/_buildAndReleaseBaseImageTemplate.yml
     parameters:
-      displayName: Build and push Yarn Cache base image
+      jobName: Build_Image_With_YarnCache
       scriptPath: ./build/buildBuildImageBases.sh
-      imageDir: yarn-cache
-      artifactsFileName: yarn-cache-buildimage-bases.txt
-
-- stage: Release
-  displayName: Release Stage
-  condition: or(succeeded(), failed())
-  jobs:
-  - template: templates/_releaseBaseImagesJobTemplate.yml
+      scriptArgs: yarn-cache
+      artifactsFileName: '$(artifactsRooDir)/yarn-cache-buildimage-bases.txt'
 
 trigger:
   branches:

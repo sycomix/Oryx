@@ -27,6 +27,17 @@ mkdir -p `dirname $ARTIFACTS_FILE`
 > $ARTIFACTS_FILE
 
 case $IMAGE_DIR_TO_BUILD in
+	'base')
+		imageName="buildpack-deps:stretch"
+		docker pull "$imageName" 
+		docker tag "$imageName" "oryx-$imageName-$IMAGE_TAG"
+		echo "$imageName-$IMAGE_TAG" >> "$BASE_IMAGES_ARTIFACTS_FILE_PREFIX/base.txt"
+
+		imageName="buildpack-deps:stretch-curl"
+		docker pull "$imageName" 
+		docker tag "$imageName" "oryx-$imageName-$IMAGE_TAG"
+		echo "$imageName-$IMAGE_TAG" >> "$BASE_IMAGES_ARTIFACTS_FILE_PREFIX/base.txt"
+		;;
 	'python')
 		echo "Building Python base images"
 		echo

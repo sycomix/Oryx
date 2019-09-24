@@ -1,0 +1,35 @@
+parameters:
+  jobName: ''
+  subscriptionEndpointName: OryxMCR
+  stagingAcrName: oryxmcr.azurecr.io
+  scriptPath: ''
+  scriptArgs: ''
+  artifactFilePath: ''
+
+jobs:
+- job: ${{ parameters.jobName }}
+  timeoutInMinutes: 250
+  steps:
+  - template: _cleanImageCacheTemplate.yml
+
+  - task: ShellScript@2
+    displayName: Build image
+    inputs:
+      scriptPath: ${{ parameters.scriptPath }}
+      args: ${{ parameters.scriptArgs }}
+
+  - task: Docker@1
+    displayName: 'Push images to Staging ACR'
+    inputs:
+      azureSubscriptionEndpoint: ${{ parameters.subscriptionEndpointName }}
+      azureContainerRegistry: ${{ parameters.stagingAcrName }}
+      command: 'Push an image'
+      pushMultipleImages: true
+      imageNamesPath: '${{ parameters.artifactFilePath }}'
+      includeLatestTag: false
+      enforceDockerNamingConvention: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish build artifacts
+    inputs:
+      pathtoPublish: $(Build.ArtifactStagingDirectory)

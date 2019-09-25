@@ -3,7 +3,7 @@ variables:
   acrName: oryxdevmcr.azurecr.io
   acrProdName: oryxmcr.azurecr.io
   skipComponentGovernanceDetection: true
-  artifactsRooDir: '$(Build.SourcesDirectory)/artifacts/images'
+  artifactsRooDir: '$(Build.SourcesDirectory)/artifacts'
 
 stages:
 - stage: Pull_And_Retag_BuildPack_Deps_Images

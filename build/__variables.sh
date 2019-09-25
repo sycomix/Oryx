@@ -37,6 +37,7 @@ declare -r DEVBOX_SLIM_BUILD_IMAGE_REPO="oryx/build-slim"
 declare -r DEVBOX_RUNTIME_IMAGES_REPO_PREFIX="oryx"
 
 declare -r ACR_DEV_NAME="oryxdevmcr.azurecr.io"
+declare -r ACR_STAGING_NAME="oryxmcr.azurecr.io"
 declare -r ACR_PUBLIC_PREFIX="$ACR_DEV_NAME/public/oryx"
 declare -r ACR_BUILD_IMAGES_REPO="$ACR_DEV_NAME/public/oryx/build"
 declare -r ACR_SLIM_BUILD_IMAGE_REPO="$ACR_DEV_NAME/public/oryx/build-slim"

@@ -18,7 +18,6 @@ stages:
   dependsOn: Pull_And_Retag_BuildPack_Deps_Images
   jobs:
     - template: templates/_buildAndReleaseBaseImageTemplate.yml
-      dependsOn: Pull_And_Retag_BuildPack_Deps_Images
       parameters:
         jobName: Build_And_Push_Node_Base_Images_For_Runtime
         scriptPath: ./build/buildRunTimeImageBases.sh
@@ -26,7 +25,6 @@ stages:
         artifactsFileName: '$(artifactsRooDir)/node-runtimeimage-bases.txt'
 
     - template: templates/_buildAndReleaseBaseImageTemplate.yml
-      dependsOn: Pull_And_Retag_BuildPack_Deps_Images
       parameters:
         jobName: Build_And_Push_Python_Base_Images_For_Build
         scriptPath: ./build/buildBuildImageBases.sh
@@ -34,7 +32,6 @@ stages:
         artifactsFileName: '$(artifactsRooDir)/python-buildimage-bases.txt'
 
     - template: templates/_buildAndReleaseBaseImageTemplate.yml
-      dependsOn: Pull_And_Retag_BuildPack_Deps_Images
       parameters:
         jobName: Build_And_Push_PHP_Base_Images_For_Build
         scriptPath: ./build/buildBuildImageBases.sh
@@ -42,7 +39,6 @@ stages:
         artifactsFileName: '$(artifactsRooDir)/php-buildimage-bases.txt'
 
     - template: templates/_buildAndReleaseBaseImageTemplate.yml
-      dependsOn: Pull_And_Retag_BuildPack_Deps_Images
       parameters:
         jobName: Build_And_Push_PHP_Base_Images_For_Runtime
         scriptPath: ./build/buildRunTimeImageBases.sh

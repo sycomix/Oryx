@@ -28,7 +28,16 @@ jobs:
       imageNamesPath: '${{ parameters.artifactFilePath }}'
       includeLatestTag: false
       enforceDockerNamingConvention: true
-
+  
+  - task: CopyFiles@2
+    displayName: Copy artifacts to staging directory
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/artifacts'
+      contents: '**/*.*'
+      targetFolder: $(Build.ArtifactStagingDirectory)
+      overWrite: true
+    condition: true
+    
   - task: PublishBuildArtifacts@1
     displayName: Publish build artifacts
     inputs:

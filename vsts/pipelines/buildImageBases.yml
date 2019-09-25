@@ -12,6 +12,7 @@ stages:
       parameters:
         jobName: Pull_And_Retag_BuildPack_Deps_Images
         scriptPath: ./build/pullAndRetagBuildPackDepsImages.sh
+        scriptArgs: $(artifactsRooDir)/buildPackDeps-images.txt
         artifactsFileName: '$(artifactsRooDir)/buildPackDeps-images.txt'
 
 - stage: Build_Base_Images

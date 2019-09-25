@@ -10,7 +10,8 @@ declare -r REPO_DIR=$( cd $( dirname "$0" ) && cd .. && pwd )
 
 source $REPO_DIR/build/__variables.sh
 
-artifactFileName="$1"
+mkdir -p "$BASE_IMAGES_ARTIFACTS_FILE_PREFIX"
+artifactFileName="$BASE_IMAGES_ARTIFACTS_FILE_PREFIX/buildPackDeps-images.txt"
 
 imageName="buildpack-deps:stretch"
 docker pull "$imageName" 

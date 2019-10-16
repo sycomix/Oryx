@@ -3,15 +3,6 @@ parameters:
   acrName: oryxdevmcr.azurecr.io
 
 steps:
-- script: |
-    if [ "$(BuildBuildImages)" != "true" ] && [ "$(BuildRuntimeImages)" != "true" ] && [ "$(TestIntegration)" != "true" ]
-    then
-      echo "Invalid configuration."
-      echo "Variable 'BuildBuildImages' or 'BuildRuntimeImages' needs to be 'true' to run this build."
-      exit 1
-    fi
-  displayName: 'Validate pipeline run'
-
 - checkout: self
   clean: true
 

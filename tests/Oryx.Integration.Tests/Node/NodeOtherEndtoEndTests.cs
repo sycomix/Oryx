@@ -553,7 +553,7 @@ namespace Microsoft.Oryx.Integration.Tests
                 volume: volume,
                 buildCmd: "/bin/sh",
                 buildArgs: new[] { "-c", buildScript },
-                runtimeImageName: "oryxdevmcr.azurecr.io/public/oryx/build",
+                runtimeImageName: Settings.BuildImageName,
                 ContainerPort,
                 runCmd: "/bin/sh",
                 runArgs: new[]
@@ -597,7 +597,7 @@ namespace Microsoft.Oryx.Integration.Tests
                 volume: volume,
                 buildCmd: "/bin/sh",
                 buildArgs: new[] { "-c", buildScript },
-                runtimeImageName: "oryxdevmcr.azurecr.io/public/oryx/build",
+                runtimeImageName: Settings.BuildImageName,
                 ContainerPort,
                 runCmd: "/bin/sh",
                 runArgs: new[]
@@ -639,7 +639,7 @@ namespace Microsoft.Oryx.Integration.Tests
                 volume: volume,
                 buildCmd: "/bin/sh",
                 buildArgs: new[] { "-c", buildScript },
-                runtimeImageName: "oryxdevmcr.azurecr.io/public/oryx/build",
+                runtimeImageName: Settings.BuildImageName,
                 ContainerPort,
                 runCmd: "/bin/sh",
                 runArgs: new[]

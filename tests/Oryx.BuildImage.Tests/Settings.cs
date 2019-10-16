@@ -9,10 +9,10 @@ namespace Microsoft.Oryx.BuildImage.Tests
 {
     internal static class Settings
     {
-        public const string BuildImageName = "oryxtests/build:latest";
-        public const string SlimBuildImageName = "oryxtests/build-slim:latest";
-        public const string ProdBuildImageName = "oryxdevmcr.azurecr.io/public/oryx/build:latest";
-        public const string ProdSlimBuildImageName = "oryxdevmcr.azurecr.io/public/oryx/build-slim:latest";
+        public const string BuildImageName = "mcr.microsoft.com/oryx/build:20191015.2";
+        public const string SlimBuildImageName = "mcr.microsoft.com/oryx/build:slim-20191015.2";
+        public const string ProdBuildImageName = "mcr.microsoft.com/oryx/build:20191015.2";
+        public const string ProdSlimBuildImageName = "mcr.microsoft.com/oryx/build:slim-20191015.2";
 
         public const string OryxVersion = "0.2.";
 

@@ -7,9 +7,9 @@ namespace Microsoft.Oryx.Tests.Common
 {
     public class Settings
     {
-        public const string BuildImageName = "oryxtests/build:latest";
-        public const string SlimBuildImageName = "oryxtests/build-slim:latest";
-        public const string PackImageName  = "oryxdevmcr.azurecr.io/public/oryx/pack:latest";
+        public const string BuildImageName = "mcr.microsoft.com/oryx/build:20191015.2";
+        public const string SlimBuildImageName = "mcr.microsoft.com/oryx/build:slim-20191015.2";
+        public const string PackImageName  = "mcr.microsoft.com/oryx/pack:20191015.2";
         
         public const string RemoveTestContainersEnvironmentVariableName = "ORYX_REMOVE_TEST_CONTAINERS";
 

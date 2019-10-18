@@ -104,6 +104,7 @@
     yarn-version: 1.17.3
     yarn-minor-version: 1.17
     yarn-major-version: 1
+    yarn-cache-base-tag: 20191018.1
     node6-version: 6.17.1
     node6-major-minor-version: 6.17
     node8-version: 8.16.2

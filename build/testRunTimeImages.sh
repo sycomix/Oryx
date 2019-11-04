@@ -39,9 +39,11 @@ fi
 
 if [ -n "$4" ]; then
     testCaseFilter="--filter $4"
+    echo
     echo "Running runtime image tests with filter '$testCaseFilter'..."
 else
-    echo "Running all runtime image tests..."
+    echo
+    echo "No test case filter provided. Running all runtime image tests..."
 fi
 
 echo

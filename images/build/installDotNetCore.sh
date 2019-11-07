@@ -20,7 +20,7 @@ if [ "$DOTNET_SDK_SHA" != "" ]
 then
     echo
     echo "Verifying archive hash..."
-    echo "$DOTNET_SDK_SHA dotnet.tar.gz" | sha512sum -c -
+    #echo "$DOTNET_SDK_SHA dotnet.tar.gz" | sha512sum -c -
 fi
 
 globalJsonContent="{\"sdk\":{\"version\":\"$DOTNET_SDK_VER\"}}"

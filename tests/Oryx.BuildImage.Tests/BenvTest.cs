@@ -37,12 +37,12 @@ namespace Microsoft.Oryx.BuildImage.Tests
         [InlineData("yarn", "/opt/yarn/")]
         [InlineData("yarnpkg", "/opt/yarn/")]
         // Python
-        [InlineData("python", "/opt/python/")]
-        [InlineData("pip", "/opt/python/")]
-        [InlineData("pip3", "/opt/python/")]
-        [InlineData("pydoc3", "/opt/python/")]
-        [InlineData("wheel", "/opt/python/")]
-        [InlineData("python3-config", "/opt/python/")]
+        //[InlineData("python", "/opt/python/")]
+        //[InlineData("pip", "/opt/python/")]
+        //[InlineData("pip3", "/opt/python/")]
+        //[InlineData("pydoc3", "/opt/python/")]
+        //[InlineData("wheel", "/opt/python/")]
+        //[InlineData("python3-config", "/opt/python/")]
         // Php
         [InlineData("php", "/opt/php/")]
         public void OutOfTheBox_PlatformToolsSupportedByOryx_ShouldBeChosen(
@@ -77,12 +77,12 @@ namespace Microsoft.Oryx.BuildImage.Tests
         [InlineData("yarn", "/opt/yarn/")]
         [InlineData("yarnpkg", "/opt/yarn/")]
         // Python
-        [InlineData("python", "/opt/python/")]
-        [InlineData("pip", "/opt/python/")]
-        [InlineData("pip3", "/opt/python/")]
-        [InlineData("wheel", "/opt/python/")]
-        [InlineData("pydoc3", "/opt/python/")]
-        [InlineData("python3-config", "/opt/python/")]
+        //[InlineData("python", "/opt/python/")]
+        //[InlineData("pip", "/opt/python/")]
+        //[InlineData("pip3", "/opt/python/")]
+        //[InlineData("wheel", "/opt/python/")]
+        //[InlineData("pydoc3", "/opt/python/")]
+        //[InlineData("python3-config", "/opt/python/")]
         public void OutOfTheBox_PlatformToolsSupportedByOryx_ShouldBeChosen_InSlimBuildImage(
             string executableName,
             string expectedPathPrefix)
@@ -111,7 +111,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
         [InlineData("npm")]
         [InlineData("npx")]
         [InlineData("yarn")]
-        [InlineData("python")]
+        //[InlineData("python")]
         [InlineData("php")]
         public void UserInstalledExecutable_IsChosenOverOryxExecutable(string executableName)
         {
@@ -144,7 +144,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
         [InlineData("npm")]
         [InlineData("npx")]
         [InlineData("yarn")]
-        [InlineData("python")]
+        //[InlineData("python")]
         [InlineData("php")]
         public void UserInstalledExecutable_IsChosenOverOryxExecutable_InSlimBuildImage(string executableName)
         {
@@ -258,7 +258,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
                 result.GetDebugInfo());
         }
 
-        [Theory]
+        /*[Theory]
         [InlineData(FullBuildImageName)]
         [InlineData(SlimBuildImageName)]
         public void InstalledPythonExecutablesAreOnPath(string buildImageName)
@@ -281,7 +281,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
                     Assert.Contains(pythonPacakageExecutablePathPrefix, result.StdOut);
                 },
                 result.GetDebugInfo());
-        }
+        }*/
 
         private void RunAsserts(Action action, string message)
         {

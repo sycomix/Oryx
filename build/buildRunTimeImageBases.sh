@@ -4,7 +4,7 @@
 # Licensed under the MIT license.
 # --------------------------------------------------------------------------------------------
 
-set -ex
+set -e
 
 declare -r REPO_DIR=$( cd $( dirname "$0" ) && cd .. && pwd )
 
@@ -12,6 +12,7 @@ declare -r REPO_DIR=$( cd $( dirname "$0" ) && cd .. && pwd )
 source $REPO_DIR/build/__variables.sh
 source $REPO_DIR/build/__functions.sh
 source $REPO_DIR/build/__nodeVersions.sh
+source $REPO_DIR/build/__baseImageTags.sh
 
 runtimeImagesSourceDir="$RUNTIME_IMAGES_SRC_DIR"
 runtimeSubDir="$1"
@@ -24,17 +25,8 @@ then
     fi
 fi
 
-echo
-echo "Building the common base image '$RUNTIME_BASE_IMAGE_NAME'..."
-echo
-# Build the common base image first, so other images that depend on it get the latest version.
-# We don't retrieve this image from a repository but rather build locally to make sure we get
-# the latest version of its own base image.
-docker build \
-    --pull \
-    -f "$RUNTIME_BASE_IMAGE_DOCKERFILE_PATH" \
-    -t "$RUNTIME_BASE_IMAGE_NAME" \
-    $REPO_DIR
+labels="--label com.microsoft.oryx.git-commit=$GIT_COMMIT "
+labels+="--label com.microsoft.oryx.build-number=$BUILD_NUMBER"
 
 if [ "$runtimeSubDir" == "node" ]; then
     docker build \
@@ -43,8 +35,6 @@ if [ "$runtimeSubDir" == "node" ]; then
         $REPO_DIR
 fi
 
-labels="--label com.microsoft.oryx.git-commit=$GIT_COMMIT"
-labels="$labels --label com.microsoft.oryx.build-number=$BUILD_NUMBER"
 
 execAllGenerateDockerfiles "$runtimeImagesSourceDir"
 
@@ -67,6 +57,20 @@ if [ -f "$initFile" ]; then
     $initFile
 fi
 
+function getBuildArgs() {
+    local fileToRead="$1"
+    local args=""
+    while IFS= read -r line
+    do
+        if [[ $line = \#* ]] || [ -z "$line" ]; then
+            continue
+        fi
+        args+="--build-arg $line "
+    done < "$fileToRead"
+    getBuildArgs_Result="$args"
+    echo "$getBuildArgs_Result"
+}
+
 clearedOutput=false
 for dockerFile in $dockerFiles; do
     dockerFileDir=$(dirname "${dockerFile}")
@@ -86,17 +90,34 @@ for dockerFile in $dockerFiles; do
 
     cd $REPO_DIR
 
-    echo
-    docker build -f $dockerFile \
-        -t $localImageTagName \
-        --build-arg CACHEBUST=$(date +%s) \
-        --build-arg NODE6_VERSION=$NODE6_VERSION \
-        --build-arg NODE8_VERSION=$NODE8_VERSION \
-        --build-arg NODE10_VERSION=$NODE10_VERSION \
-        --build-arg NODE12_VERSION=$NODE12_VERSION \
-        $labels \
-        .
+    args=""
+    case $platformName in
+        'node')
+            args=$(getBuildArgs "$REPO_DIR/build/__nodeVersions.sh")
+            ;;
+        'php')
+            args=$(getBuildArgs "$REPO_DIR/build/__phpVersions.sh")
+            ;;            
+        'python')
+            args=$(getBuildArgs "$REPO_DIR/build/__pythonVersions.sh")
+            ;;
+        'dotnetcore')
+            runtime=$(getBuildArgs "$REPO_DIR/build/__dotNetCoreRunTimeVersions.sh")
+            sdk=$(getBuildArgs "$REPO_DIR/build/__dotNetCoreRunTimeVersions.sh")
+            args="$runtime $sdk"
+            ;;
+        *)
+        echo "Unknown platform '$platformName'"
+        ;;
+    esac
 
+    baseImageTags=$(getBuildArgs "$REPO_DIR/build/__baseImageTags.sh")
+    args+=" $baseImageTags"
+    args+=" --build-arg CACHEBUST=$(date +%s)"
+    
+    dockerCmd="docker build -f $dockerFile -t $localImageTagName $args $labels ."
+    eval $dockerCmd
+    
     # Retag build image with build numbers as ACR tags
     if [ "$AGENT_BUILD" == "true" ]
     then

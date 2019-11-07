@@ -1,4 +1,4 @@
-FROM buildpack-deps:stretch-curl
+FROM oryxmcr.azurecr.io/public/oryx/base:buildpack-deps-buster-curl
 
 RUN apt-get update \
 	&& apt-get upgrade -y \

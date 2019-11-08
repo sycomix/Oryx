@@ -7,8 +7,9 @@ ARG SDK_DIR="/opt/dotnet/sdks"
 ARG DOTNET_DIR="${SDK_DIR}/${DOTNET_SDK_VER}"
 ARG DOWNLOAD_DIR="/tmp/dotnet-3.1"
 RUN mkdir -p ${DOWNLOAD_DIR} \
-    && curl -SL ${DOTNET_SDK_URL} --output ${DOWNLOAD_DIR}/dotnet.tar.gz \
+    && curl -SL ${DEFAULT_DOTNET_SDK_URL} --output ${DOWNLOAD_DIR}/dotnet.tar.gz \
     && echo "${DOTNET_SDK_SHA} ${DOWNLOAD_DIR}/dotnet.tar.gz" | sha512sum -c - \
+    && mkdir -p ${DOTNET_DIR} \
     && tar -xzf ${DOWNLOAD_DIR}/dotnet.tar.gz -C ${DOTNET_DIR} \
     && rm -rf ${DOWNLOAD_DIR} \
     && ln -s ${DOTNET_SDK_VER} ${SDK_DIR}/3.1 \

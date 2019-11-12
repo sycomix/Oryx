@@ -31,6 +31,7 @@ declare -r PACK_IMAGE_NAME='pack'
 declare -r PACK_STACK_BASE_IMAGE_NAME="pack-stack-base"
 declare -r PACK_BUILDER_IMAGE_NAME="pack-builder"
 declare -r ORYXTESTS_BUILDIMAGE_REPO="oryxtests/build"
+declare -r ORYXTESTS_SLIM_BUILDIMAGE_REPO="oryxtests/build:slim"
 
 declare -r DEVBOX_BUILD_IMAGES_REPO="oryx/build"
 declare -r DEVBOX_RUNTIME_IMAGES_REPO_PREFIX="oryx"

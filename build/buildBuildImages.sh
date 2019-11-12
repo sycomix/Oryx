@@ -62,10 +62,8 @@ function BuildAndTagStage()
 function buildDockerImage() {
 	local dockerFileToBuild="$1"
 	local dockerImageRepoName="$2"
-	local dockerFileForTestsToBuild="$3"
-	local dockerImageForTestsRepoName="$4"
-	local dockerImageForDevelopmentRepoName="$5"
-	local dockerImageBaseTag="$6"
+	local dockerImageForDevelopmentRepoName="$3"
+	local dockerImageBaseTag="$4"
 
 	# Tag stages to avoid creating dangling images.
 	# NOTE:
@@ -92,12 +90,7 @@ function buildDockerImage() {
 		$ctxArgs \
 		-f "$dockerFileToBuild" \
 		.
-
-	echo
-	echo Building a base image for tests...
-	# Do not write this image tag to the artifacts file as we do not intend to push it
-	testImageTag="$dockerImageForTestsRepoName:$dockerImageBaseTag"
-	docker build -t $testImageTag -f "$dockerFileForTestsToBuild" .
+	
 
 	echo "$dockerImageRepoName:$dockerImageBaseTag" >> $ACR_BUILD_IMAGES_ARTIFACTS_FILE
 
@@ -139,16 +132,13 @@ echo "-------------Creating slim build image-------------------"
 buildDockerImage "$BUILD_IMAGES_SLIM_DOCKERFILE" \
 				"$ACR_BUILD_IMAGES_REPO" \
 				"$ORYXTESTS_SLIM_BUILDIMAGE_DOCKERFILE" \
-				"$ORYXTESTS_BUILDIMAGE_REPO" \
-				"$DEVBOX_BUILD_IMAGES_REPO" \
-				"slim"
+				"$DEVBOX_SLIM_BUILD_IMAGE_REPO" 
 
 echo
 echo "-------------Creating full build image-------------------"
 buildDockerImage "$BUILD_IMAGES_DOCKERFILE" \
 				"$ACR_BUILD_IMAGES_REPO" \
 				"$ORYXTESTS_BUILDIMAGE_DOCKERFILE" \
-				"$ORYXTESTS_BUILDIMAGE_REPO" \
 				"$DEVBOX_BUILD_IMAGES_REPO"
 
 # Build buildpack images

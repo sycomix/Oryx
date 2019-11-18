@@ -1,6 +1,4 @@
 ARG DOT_NET_CORE_RUNTIME_BASE_TAG
-ARG NET_CORE_APP_22
-ARG NET_CORE_APP_22_SHA
 ARG DOT_NET_CORE_22_SDK_VERSION
 
 # dotnet tools are currently available as part of SDK so we need to create them in an sdk image
@@ -19,11 +17,13 @@ COPY --from=tools-install /dotnetcore-tools /opt/dotnetcore-tools
 ENV PATH="/opt/dotnetcore-tools:${PATH}"
 
 # Install ASP.NET Core
+ARG NET_CORE_APP_22
+ARG NET_CORE_APP_22_SHA
 ENV ASPNETCORE_VERSION ${NET_CORE_APP_22}
 
-RUN curl -SL --output aspnetcore.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/aspnetcore/Runtime/$ASPNETCORE_VERSION/aspnetcore-runtime-$ASPNETCORE_VERSION-linux-x64.tar.gz \
-    && aspnetcore_sha512='${NET_CORE_APP_22_SHA}' \
-    && echo "$aspnetcore_sha512  aspnetcore.tar.gz" | sha512sum -c - \
+RUN set -ex \
+    && curl -SL --output aspnetcore.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/aspnetcore/Runtime/$ASPNETCORE_VERSION/aspnetcore-runtime-$ASPNETCORE_VERSION-linux-x64.tar.gz \
+    && echo "$NET_CORE_APP_22_SHA  aspnetcore.tar.gz" | sha512sum -c - \
     && mkdir -p /usr/share/dotnet \
     && tar -zxf aspnetcore.tar.gz -C /usr/share/dotnet \
     && rm aspnetcore.tar.gz \

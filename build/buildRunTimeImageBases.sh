@@ -4,7 +4,7 @@
 # Licensed under the MIT license.
 # --------------------------------------------------------------------------------------------
 
-set -e
+set -ex
 
 declare -r REPO_DIR=$( cd $( dirname "$0" ) && cd .. && pwd )
 
@@ -103,7 +103,7 @@ for dockerFile in $dockerFiles; do
             ;;
         'dotnetcore')
             runtime=$(getBuildArgs "$REPO_DIR/build/__dotNetCoreRunTimeVersions.sh")
-            sdk=$(getBuildArgs "$REPO_DIR/build/__dotNetCoreRunTimeVersions.sh")
+            sdk=$(getBuildArgs "$REPO_DIR/build/__dotNetCoreSdkVersions.sh")
             args="$runtime $sdk"
             ;;
         *)

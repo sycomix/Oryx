@@ -1,5 +1,5 @@
 # Commit b4319e8f767f1200c9013e08baf2c34b9c84e301 from repo https://github.com/docker-library/php.git
-ARG PHP_RUNTIME_BASE_TAG=""
+ARG PHP_RUNTIME_BASE_TAG
 FROM mcr.microsoft.com/oryx/base:php-runtime-stretch${PHP_RUNTIME_BASE_TAG}
 
 RUN apt-get update \

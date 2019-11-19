@@ -24,14 +24,14 @@ ENV PATH="/opt/dotnetcore-tools:${PATH}"
 
 ARG NET_CORE_APP_30
 ARG NET_CORE_APP_30_SHA
-ARG DOT_NET_CORE_30_SDK_VERSION
-ARG DOT_NET_CORE_30_SDK_SHA512
+ARG ASP_NET_CORE_RUN_TIME_VERSION_30
+ARG ASP_NET_CORE_RUN_TIME_VERSION_30_SHA
 
 # Install .NET Core & ASP.NET Core runtimes
 RUN set -ex \
     && . /tmp/scripts/installDotNetCore.sh \
-    && installDotNetCoreRuntime $DOT_NET_CORE_30_SDK_VERSION $DOT_NET_CORE_30_SDK_SHA512 \
-    && installAspNetCoreRuntime $NET_CORE_APP_30 $NET_CORE_APP_30_SHA
+    && installDotNetCoreRuntime $NET_CORE_APP_30 $NET_CORE_APP_30_SHA \
+    && installAspNetCoreRuntime $ASP_NET_CORE_RUN_TIME_VERSION_30 $ASP_NET_CORE_RUN_TIME_VERSION_30_SHA
 
 RUN dotnet-sos install
 RUN rm -rf /tmp/scripts

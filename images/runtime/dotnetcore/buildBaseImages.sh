@@ -12,6 +12,7 @@ declare -r CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && p
 source $REPO_DIR/build/__variables.sh
 source $REPO_DIR/build/__baseImageTags.sh
 source $REPO_DIR/build/__dotNetCoreRunTimeVersions.sh
+source $REPO_DIR/build/__aspNetCoreRunTimeVersions.sh
 source $REPO_DIR/build/__dotNetCoreSdkVersions.sh
 
 dockerFiles=$(find $CURRENT_DIR -type f \( -name "base.Dockerfile" \) )
@@ -52,8 +53,8 @@ for dockerFile in $dockerFiles; do
             buildArgs+=" --build-arg DOT_NET_CORE_30_SDK_SHA512=$DOT_NET_CORE_30_SDK_SHA512"
             buildArgs+=" --build-arg NET_CORE_APP_30=$NET_CORE_APP_30"
             buildArgs+=" --build-arg NET_CORE_APP_30_SHA=$NET_CORE_APP_30_SHA"
-            buildArgs+=" --build-arg NET_CORE_APP_30=$NET_CORE_APP_30"
-            buildArgs+=" --build-arg NET_CORE_APP_30_SHA=$NET_CORE_APP_30_SHA"
+            buildArgs+=" --build-arg ASP_NET_CORE_RUN_TIME_VERSION_30=$ASP_NET_CORE_RUN_TIME_VERSION_30"
+            buildArgs+=" --build-arg ASP_NET_CORE_RUN_TIME_VERSION_30_SHA=$ASP_NET_CORE_RUN_TIME_VERSION_30_SHA"
             ;;
         *)
             echo "Unknown version directory"

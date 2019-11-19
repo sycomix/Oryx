@@ -47,10 +47,10 @@
     - type: shell
       directory: build
       file-name-prefix: __
-- name: dot-net-net-core-run-time-versions
+- name: asp-net-core-run-time-versions
   constants:
-    dot-net-core-run-time-version-30: 3.0.0
-    dot-net-core-run-time-version-30-sha: 0cabf85877eb3ee0415e6f8de9390c95ec90fa8f5a0fdb104f1163924fd52d89932a51c2e07b5c13a6b9802d5b6962676042a586ec8aff4f2a641d33c6c84dec
+    asp-net-core-run-time-version-30: 3.0.0
+    asp-net-core-run-time-version-30-sha: 344a6cbfb2ae75e518dcc82a7aa4860da606673ec6be571552da79467ef0bc340aa49275c28290e6a47390bb330c196b7db88be1140c22da789cc6920d5a94a6
   outputs:
     - type: csharp
       directory: src/BuildScriptGenerator/DotNetCore
@@ -58,7 +58,7 @@
     - type: shell
       directory: build
       file-name-prefix: __
-- name: asp-net-net-core-run-time-versions
+- name: dot-net-core-run-time-versions
   constants:
     net-core-app-10: 1.0.16
     net-core-app-11: 1.1.13
@@ -68,7 +68,7 @@
     net-core-app-22: 2.2.7
     net-core-app-22-sha: 3fdc874a20d5cd318deabf12d73d26bd1f9b767cf351d05bfed5efc6d66c1d774ebd911d7dc28a5a7f6af9976d50068b217ef051024d3c91496d4a44b89b374a
     net-core-app-30: 3.0.0
-    net-core-app-30-sha: 344a6cbfb2ae75e518dcc82a7aa4860da606673ec6be571552da79467ef0bc340aa49275c28290e6a47390bb330c196b7db88be1140c22da789cc6920d5a94a6
+    net-core-app-30-sha: 0cabf85877eb3ee0415e6f8de9390c95ec90fa8f5a0fdb104f1163924fd52d89932a51c2e07b5c13a6b9802d5b6962676042a586ec8aff4f2a641d33c6c84dec
   outputs:
     - type: csharp
       directory: src/BuildScriptGenerator/DotNetCore

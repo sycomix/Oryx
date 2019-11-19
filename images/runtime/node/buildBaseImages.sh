@@ -44,7 +44,7 @@ for dockerFile in $dockerFiles; do
     uniqueTagSuffix=${RELEASE_TAG_NAME:+-$RELEASE_TAG_NAME}
 
     echo
-    echo "Building base image for .NET Core version '$version'..."
+    echo "Building base image for Node version '$version'..."
     docker build \
         -t $BASE_IMAGES_REPO:node-$version$uniqueTagSuffix \
         -f $dockerFile \

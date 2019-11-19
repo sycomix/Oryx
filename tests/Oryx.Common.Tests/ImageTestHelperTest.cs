@@ -4,243 +4,123 @@
 // --------------------------------------------------------------------------------------------
 
 using Microsoft.Oryx.Tests.Common;
-using System;
-using System.IO;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Microsoft.Oryx.Common.Tests
 {
     public class ImageTestHelperTest
     {
-        private const string _imageBaseEnvironmentVariable = "ORYX_TEST_IMAGE_BASE";
-        private const string _tagSuffixEnvironmentVariable = "ORYX_TEST_TAG_SUFFIX";
-        private const string _defaultImageBase = "oryxdevmcr.azurecr.io/public/oryx";
-
-        private const string _buildRepository = "build";
-        private const string _packRepository = "pack";
-        private const string _latestTag = "latest";
-        private const string _slimTag = "slim";
-
-        private readonly ITestOutputHelper _output;
-
-        public ImageTestHelperTest(ITestOutputHelper output)
-        {
-            _output = output;
-        }
-
-        [Fact]
-        public void GetTestRuntimeImage_Validate_ImageBaseSet()
+        [Theory]
+        [InlineData("", "", ImageTestHelper.DefaultRepoPrefix + "/oryx/node:10.10")]
+        [InlineData("", "20191008.1", ImageTestHelper.DefaultRepoPrefix + "/oryx/node:10.10-20191008.1")]
+        [InlineData("mcr.microsoft.com", "", "mcr.microsoft.com/oryx/node:10.10")]
+        [InlineData("mcr.microsoft.com", "20191008.1", "mcr.microsoft.com/oryx/node:10.10-20191008.1")]
+        public void GetRuntimeImage(string repoPrefix, string tagSuffix, string expectedImageName)
         {
             // Arrange
-            var platformName = "test";
-            var platformVersion = "1.0";
-            var imageBaseValue = "oryxtest";
-            var tagSuffixValue = string.Empty;
-            var imageHelper = new ImageTestHelper(_output, imageBaseValue, tagSuffixValue);
+            var platformName = "node";
+            var platformVersion = "10.10";
+            var imageHelper = new ImageTestHelper(repoPrefix, tagSuffix);
 
             // Act
-            var runtimeImage = imageHelper.GetTestRuntimeImage(platformName, platformVersion);
+            var runtimeImage = imageHelper.GetRuntimeImage(platformName, platformVersion);
 
             // Assert
-            var expectedImage = $"{imageBaseValue}/{platformName}:{platformVersion}";
-            Assert.Equal(expectedImage, runtimeImage);
+            Assert.Equal(expectedImageName, runtimeImage);
         }
 
-        [Fact]
-        public void GetTestRuntimeImage_Validate_TagSuffixSet()
+        [Theory]
+        [InlineData("", "", "oryxtests/build:latest")]
+        [InlineData("", "20191008.1", "oryxtests/build:latest")]
+        [InlineData("mcr.microsoft.com", "", "oryxtests/build:latest")]
+        [InlineData("mcr.microsoft.com", "20191008.1", "oryxtests/build:latest")]
+        public void GetBuildImage_ByDefaultReturnsImage_WithUnelevatedPrivileges(
+            string repoPrefix,
+            string tagSuffix,
+            string expectedImageName)
         {
             // Arrange
-            var platformName = "test";
-            var platformVersion = "1.0";
-            var imageBaseValue = string.Empty;
-            var tagSuffixValue = "-buildNumber";
-            var imageHelper = new ImageTestHelper(_output, imageBaseValue, tagSuffixValue);
+            var imageHelper = new ImageTestHelper(repoPrefix, tagSuffix);
 
             // Act
-            var runtimeImage = imageHelper.GetTestRuntimeImage(platformName, platformVersion);
+            var runtimeImage = imageHelper.GetBuildImage();
 
             // Assert
-            var expectedImage = $"{_defaultImageBase}/{platformName}:{platformVersion}{tagSuffixValue}";
-            Assert.Equal(expectedImage, runtimeImage);
+            Assert.Equal(expectedImageName, runtimeImage);
         }
 
-        [Fact]
-        public void GetTestRuntimeImage_Validate_NoImageBaseOrTagSuffixSet()
+        [Theory]
+        [InlineData("", "", ImageTestHelper.DefaultRepoPrefix + "/oryx/build:latest")]
+        [InlineData("", "20191008.1", ImageTestHelper.DefaultRepoPrefix + "/oryx/build:20191008.1")]
+        [InlineData("mcr.microsoft.com", "", "mcr.microsoft.com/oryx/build:latest")]
+        [InlineData("mcr.microsoft.com", "20191008.1", "mcr.microsoft.com/oryx/build:20191008.1")]
+        public void GetBuildImage_ReturnsImageName_WithElevatedPrivileges(
+            string repoPrefix,
+            string tagSuffix,
+            string expectedImageName)
         {
             // Arrange
-            var platformName = "test";
-            var platformVersion = "1.0";
-            var imageBaseValue = string.Empty;
-            var tagSuffixValue = string.Empty;
-            var imageHelper = new ImageTestHelper(_output, imageBaseValue, tagSuffixValue);
+            var imageHelper = new ImageTestHelper(repoPrefix, tagSuffix);
 
             // Act
-            var runtimeImage = imageHelper.GetTestRuntimeImage(platformName, platformVersion);
+            var runtimeImage = imageHelper.GetBuildImage(withElevatedPrivileges: true);
 
             // Assert
-            var expectedImage = $"{_defaultImageBase}/{platformName}:{platformVersion}";
-            Assert.Equal(expectedImage, runtimeImage);
+            Assert.Equal(expectedImageName, runtimeImage);
         }
 
-        [Fact]
-        public void GetTestRuntimeImage_Validate_BothImageBaseAndTagSuffixSet()
+        [Theory]
+        [InlineData("", "", "oryxtests/build:slim")]
+        [InlineData("", "20191008.1", "oryxtests/build:slim")]
+        [InlineData("mcr.microsoft.com", "", "oryxtests/build:slim")]
+        [InlineData("mcr.microsoft.com", "20191008.1", "oryxtests/build:slim")]
+        public void GetSlimBuildImage_ByDefaultReturnsImage_WithUnelevatedPrivileges(
+            string repoPrefix,
+            string tagSuffix,
+            string expectedImageName)
         {
             // Arrange
-            var platformName = "test";
-            var platformVersion = "1.0";
-            var imageBaseValue = "oryxtest";
-            var tagSuffixValue = "-buildNumber";
-            var imageHelper = new ImageTestHelper(_output, imageBaseValue, tagSuffixValue);
+            var imageHelper = new ImageTestHelper(repoPrefix, tagSuffix);
 
             // Act
-            var runtimeImage = imageHelper.GetTestRuntimeImage(platformName, platformVersion);
+            var runtimeImage = imageHelper.GetSlimBuildImage();
 
             // Assert
-            var expectedImage = $"{imageBaseValue}/{platformName}:{platformVersion}{tagSuffixValue}";
-            Assert.Equal(expectedImage, runtimeImage);
+            Assert.Equal(expectedImageName, runtimeImage);
         }
 
-        [Fact]
-        public void GetTestBuildImage_Validate_ImageBaseSet()
+        [Theory]
+        [InlineData("", "", ImageTestHelper.DefaultRepoPrefix + "/oryx/build:slim")]
+        [InlineData("", "20191008.1", ImageTestHelper.DefaultRepoPrefix + "/oryx/build:slim-20191008.1")]
+        [InlineData("mcr.microsoft.com", "", "mcr.microsoft.com/oryx/build:slim")]
+        [InlineData("mcr.microsoft.com", "20191008.1", "mcr.microsoft.com/oryx/build:slim-20191008.1")]
+        public void GetSlimBuildImage_ReturnsImageName_WithElevatedPrivileges(string repoPrefix, string tagSuffix, string expectedImageName)
         {
             // Arrange
-            var imageBaseValue = "oryxtest";
-            var tagSuffixValue = string.Empty;
-            var imageHelper = new ImageTestHelper(_output, imageBaseValue, tagSuffixValue);
+            var imageHelper = new ImageTestHelper(repoPrefix, tagSuffix);
 
             // Act
-            var buildImage = imageHelper.GetTestBuildImage();
+            var runtimeImage = imageHelper.GetSlimBuildImage(withElevatedPrivileges: true);
 
             // Assert
-            var expectedImage = $"{imageBaseValue}/{_buildRepository}:{_latestTag}";
-            Assert.Equal(expectedImage, buildImage);
+            Assert.Equal(expectedImageName, runtimeImage);
         }
 
-        [Fact]
-        public void GetTestBuildImage_Validate_TagSuffixSet()
+        [Theory]
+        [InlineData("", "", ImageTestHelper.DefaultRepoPrefix + "/oryx/pack:latest")]
+        [InlineData("", "20191008.1", ImageTestHelper.DefaultRepoPrefix + "/oryx/pack:20191008.1")]
+        [InlineData("mcr.microsoft.com", "", "mcr.microsoft.com/oryx/pack:latest")]
+        [InlineData("mcr.microsoft.com", "20191008.1", "mcr.microsoft.com/oryx/pack:20191008.1")]
+        public void GetPackImage(string repoPrefix, string tagSuffix, string expectedImageName)
         {
             // Arrange
-            var imageBaseValue = string.Empty;
-            var tagSuffixValue = "-buildNumber";
-            var imageHelper = new ImageTestHelper(_output, imageBaseValue, tagSuffixValue);
+            var imageHelper = new ImageTestHelper(repoPrefix, tagSuffix);
 
             // Act
-            var buildImage = imageHelper.GetTestBuildImage();
+            var runtimeImage = imageHelper.GetPackImage();
 
             // Assert
-            var expectedTag = tagSuffixValue.TrimStart('-');
-            var expectedImage = $"{_defaultImageBase}/{_buildRepository}:{expectedTag}";
-            Assert.Equal(expectedImage, buildImage);
-        }
-
-        [Fact]
-        public void GetTestSlimBuildImage_Validate_ImageBaseSet()
-        {
-            // Arrange
-            var imageBaseValue = "oryxtest";
-            var tagSuffixValue = string.Empty;
-            var imageHelper = new ImageTestHelper(_output, imageBaseValue, tagSuffixValue);
-
-            // Act
-            var buildImage = imageHelper.GetTestSlimBuildImage();
-
-            // Assert
-            var expectedImage = $"{imageBaseValue}/{_buildRepository}:{_slimTag}";
-            Assert.Equal(expectedImage, buildImage);
-        }
-
-        [Fact]
-        public void GetTestSlimBuildImage_Validate_TagSuffixSet()
-        {
-            // Arrange
-            var imageBaseValue = string.Empty;
-            var tagSuffixValue = "-buildNumber";
-            var imageHelper = new ImageTestHelper(_output, imageBaseValue, tagSuffixValue);
-
-            // Act
-            var buildImage = imageHelper.GetTestSlimBuildImage();
-
-            // Assert
-            var expectedImage = $"{_defaultImageBase}/{_buildRepository}:{_slimTag}{tagSuffixValue}";
-            Assert.Equal(expectedImage, buildImage);
-        }
-
-        [Fact]
-        public void GetTestPackImage_Validate_ImageBaseSet()
-        {
-            // Arrange
-            var imageBaseValue = "oryxtest";
-            var tagSuffixValue = string.Empty;
-            var imageHelper = new ImageTestHelper(_output, imageBaseValue, tagSuffixValue);
-
-            // Act
-            var packImage = imageHelper.GetTestPackImage();
-
-            // Assert
-            var expectedImage = $"{imageBaseValue}/{_packRepository}:{_latestTag}";
-            Assert.Equal(expectedImage, packImage);
-        }
-
-        [Fact]
-        public void GetTestPackImage_Validate_TagSuffixSet()
-        {
-            // Arrange
-            var imageBaseValue = string.Empty;
-            var tagSuffixValue = "-buildNumber";
-            var imageHelper = new ImageTestHelper(_output, imageBaseValue, tagSuffixValue);
-
-            // Act
-            var packImage = imageHelper.GetTestPackImage();
-
-            // Assert
-            var expectedTag = tagSuffixValue.TrimStart('-');
-            var expectedImage = $"{_defaultImageBase}/{_packRepository}:{expectedTag}";
-            Assert.Equal(expectedImage, packImage);
-        }
-
-        [Fact]
-        public void GetTestBuildImage_Validate_LatestTag()
-        {
-            // Arrange
-            var imageBaseValue = string.Empty;
-            var tagSuffixValue = string.Empty;
-            var imageHelper = new ImageTestHelper(_output, imageBaseValue, tagSuffixValue);
-
-            // Act
-            var buildImage = imageHelper.GetTestBuildImage(_latestTag);
-
-            // Assert
-            var expectedImage = $"{_defaultImageBase}/{_buildRepository}:{_latestTag}";
-            Assert.Equal(expectedImage, buildImage);
-        }
-
-        [Fact]
-        public void GetTestBuildImage_Validate_SlimTag()
-        {
-            // Arrange
-            var imageBaseValue = string.Empty;
-            var tagSuffixValue = string.Empty;
-            var imageHelper = new ImageTestHelper(_output, imageBaseValue, tagSuffixValue);
-
-            // Act
-            var buildImage = imageHelper.GetTestBuildImage(_slimTag);
-
-            // Assert
-            var expectedImage = $"{_defaultImageBase}/{_buildRepository}:{_slimTag}";
-            Assert.Equal(expectedImage, buildImage);
-        }
-
-        [Fact]
-        public void GetTestBuildImage_Validate_InvalidTag()
-        {
-            // Arrange
-            var imageBaseValue = string.Empty;
-            var tagSuffixValue = string.Empty;
-            var imageHelper = new ImageTestHelper(_output, imageBaseValue, tagSuffixValue);
-
-            // Assert
-            Assert.Throws<NotSupportedException>(() => { imageHelper.GetTestBuildImage("invalidTag"); });
+            Assert.Equal(expectedImageName, runtimeImage);
         }
     }
 }

@@ -4,11 +4,9 @@
 // --------------------------------------------------------------------------------------------
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Sockets;
-using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Oryx.Common;
 using Xunit;
@@ -275,12 +273,12 @@ namespace Microsoft.Oryx.Tests.Common
             Func<int, Task> assertAction)
         {
             const int port = 8080;
-            var imageHelper = new ImageTestHelper(output);
+            var imageHelper = new ImageTestHelper();
 
             return BuildRunAndAssertAppAsync(
                 output,
                 new[] { appVolume, DockerVolume.DockerDaemonSocket },
-                imageHelper.GetTestPackImage(),
+                imageHelper.GetPackImage(),
                 buildCmd: null, // `pack` is already in the image's ENTRYPOINT
                 new[]
                 {

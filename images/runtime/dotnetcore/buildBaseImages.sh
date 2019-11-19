@@ -56,8 +56,8 @@ for dockerFile in $dockerFiles; do
             buildArgs+=" --build-arg ASP_NET_CORE_RUN_TIME_VERSION_30_SHA=$ASP_NET_CORE_RUN_TIME_VERSION_30_SHA"
             ;;
         *)
-            echo "Unknown version directory"
-            ;;
+        echo "Unknown version directory"
+        ;;
     esac
 
     uniqueTagSuffix=${RELEASE_TAG_NAME:+-$RELEASE_TAG_NAME}

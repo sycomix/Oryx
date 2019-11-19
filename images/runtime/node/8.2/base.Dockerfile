@@ -2,7 +2,7 @@
 # to fetch the latest strech release with the required fixes.
 # https://github.com/nodejs/docker-node.git, commit ID 9b863beddf7dee9b8a6eba0dd8334b1d7980f958.
 ARG NODE_RUNTIME_BASE_TAG
-FROM oryxmcr.azurecr.io/public/oryx/base:node-runtime-stretch
+FROM oryxmcr.azurecr.io/public/oryx/base:node-runtime-stretch${NODE_RUNTIME_BASE_TAG}
 
 RUN groupadd --gid 1000 node \
   && useradd --uid 1000 --gid node --shell /bin/bash --create-home node

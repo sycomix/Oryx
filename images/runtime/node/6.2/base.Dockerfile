@@ -2,7 +2,7 @@
 # to fetch the latest stretch release with the required fixes.
 # https://github.com/nodejs/docker-node.git, commit ID 547a43b337615894836d16323b34d1d292aae0ab
 ARG NODE_RUNTIME_BASE_TAG
-FROM oryxmcr.azurecr.io/public/oryx/base:node-runtime-stretch
+FROM oryxmcr.azurecr.io/public/oryx/base:node-runtime-stretch${NODE_RUNTIME_BASE_TAG}
 
 ENV NPM_CONFIG_LOGLEVEL info
 ENV NODE_VERSION 6.2.2

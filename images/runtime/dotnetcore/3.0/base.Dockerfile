@@ -11,9 +11,6 @@ RUN dotnet tool install --tool-path /dotnetcore-tools dotnet-counters
 
 FROM mcr.microsoft.com/oryx/base:dotnetcore-runtime-buster${DOT_NET_CORE_RUNTIME_BASE_TAG}
 
-RUN mkdir -p /tmp/scripts
-COPY images/runtime/dotnetcore/installDotNetCore.sh /tmp/scripts
-
 # Configure web servers to bind to port 80 when present
 ENV ASPNETCORE_URLS=http://+:80 \
     # Enable detection of running in a container
@@ -27,11 +24,21 @@ ARG NET_CORE_APP_30_SHA
 ARG ASP_NET_CORE_RUN_TIME_VERSION_30
 ARG ASP_NET_CORE_RUN_TIME_VERSION_30_SHA
 
-# Install .NET Core & ASP.NET Core runtimes
+# Install .NET Core
 RUN set -ex \
-    && . /tmp/scripts/installDotNetCore.sh \
-    && installDotNetCoreRuntime $NET_CORE_APP_30 $NET_CORE_APP_30_SHA \
-    && installAspNetCoreRuntime $ASP_NET_CORE_RUN_TIME_VERSION_30 $ASP_NET_CORE_RUN_TIME_VERSION_30_SHA
+    && curl -SL --output dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Runtime/$NET_CORE_APP_30/dotnet-runtime-$NET_CORE_APP_30-linux-x64.tar.gz \
+    && echo "$NET_CORE_APP_30_SHA dotnet.tar.gz" | sha512sum -c - \
+    && mkdir -p /usr/share/dotnet \
+    && tar -zxf dotnet.tar.gz -C /usr/share/dotnet \
+    && rm dotnet.tar.gz \
+    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+    
+# Install ASP.NET Core
+RUN set -ex \
+    && curl -SL --output aspnetcore.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/aspnetcore/Runtime/$ASP_NET_CORE_RUN_TIME_VERSION_30/aspnetcore-runtime-$ASP_NET_CORE_RUN_TIME_VERSION_30-linux-x64.tar.gz \
+    && echo "$ASP_NET_CORE_RUN_TIME_VERSION_30_SHA  aspnetcore.tar.gz" | sha512sum -c - \
+    && mkdir -p /usr/share/dotnet \
+    && tar -zxf aspnetcore.tar.gz -C /usr/share/dotnet ./shared/Microsoft.AspNetCore.App \
+    && rm aspnetcore.tar.gz
 
 RUN dotnet-sos install
-RUN rm -rf /tmp/scripts

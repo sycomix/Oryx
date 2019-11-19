@@ -50,7 +50,6 @@ for dockerFile in $dockerFiles; do
             ;;
         '3.0')
             buildArgs+=" --build-arg DOT_NET_CORE_30_SDK_VERSION=$DOT_NET_CORE_30_SDK_VERSION"
-            buildArgs+=" --build-arg DOT_NET_CORE_30_SDK_SHA512=$DOT_NET_CORE_30_SDK_SHA512"
             buildArgs+=" --build-arg NET_CORE_APP_30=$NET_CORE_APP_30"
             buildArgs+=" --build-arg NET_CORE_APP_30_SHA=$NET_CORE_APP_30_SHA"
             buildArgs+=" --build-arg ASP_NET_CORE_RUN_TIME_VERSION_30=$ASP_NET_CORE_RUN_TIME_VERSION_30"

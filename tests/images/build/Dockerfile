@@ -1,6 +1,6 @@
 ARG REPO_PREFIX="oryxdevmcr.azurecr.io/public"
 ARG TAG="latest"
-FROM ${REPO_PREFIX}/oryx/build:${TAG}
+FROM ${REPO_PREFIX}/build:${TAG}
 
 # Following is a pattern that AppService currently uses
 RUN groupadd -g 1002 oryx_group

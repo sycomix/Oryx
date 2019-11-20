@@ -1,5 +1,5 @@
 ARG REPO_PREFIX="oryxdevmcr.azurecr.io/public"
-ARG TAG=""
+ARG TAG
 FROM ${REPO_PREFIX}/build:slim${TAG}
 
 # Following is a pattern that AppService currently uses

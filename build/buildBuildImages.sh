@@ -131,14 +131,13 @@ echo
 echo "-------------Creating slim build image-------------------"
 buildDockerImage "$BUILD_IMAGES_SLIM_DOCKERFILE" \
 				"$ACR_BUILD_IMAGES_REPO" \
-				"$ORYXTESTS_SLIM_BUILDIMAGE_DOCKERFILE" \
-				"$DEVBOX_SLIM_BUILD_IMAGE_REPO" 
+				"$DEVBOX_BUILD_IMAGES_REPO" \
+				"slim"
 
 echo
 echo "-------------Creating full build image-------------------"
 buildDockerImage "$BUILD_IMAGES_DOCKERFILE" \
 				"$ACR_BUILD_IMAGES_REPO" \
-				"$ORYXTESTS_BUILDIMAGE_DOCKERFILE" \
 				"$DEVBOX_BUILD_IMAGES_REPO"
 
 # Build buildpack images

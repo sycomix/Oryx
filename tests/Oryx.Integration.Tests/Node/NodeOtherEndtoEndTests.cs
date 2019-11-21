@@ -3,13 +3,13 @@
 // Licensed under the MIT license.
 // --------------------------------------------------------------------------------------------
 
-using Microsoft.Oryx.BuildScriptGenerator.Node;
-using Microsoft.Oryx.Common;
-using Microsoft.Oryx.Tests.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Oryx.BuildScriptGenerator.Node;
+using Microsoft.Oryx.Common;
+using Microsoft.Oryx.Tests.Common;
 using Xunit;
 using Xunit.Abstractions;
 

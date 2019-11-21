@@ -3,11 +3,11 @@
 // Licensed under the MIT license.
 // --------------------------------------------------------------------------------------------
 
-using Microsoft.Oryx.Common;
-using Microsoft.Oryx.Tests.Common;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Oryx.Common;
+using Microsoft.Oryx.Tests.Common;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -41,16 +41,19 @@ namespace Microsoft.Oryx.RuntimeImage.Tests
             var aIEnabled = ExtVarNames.UserAppInsightsEnableEnv;
             int containerDebugPort = 8080;
 
+            var appDirInContainer = "/tmp/app";
             var script = new ShellScriptBuilder()
                 .AddCommand($"export {aIKey}=asdas")
                 .AddCommand($"export {aIEnabled}=TRUE")
-                .AddCommand($"cd {appDir}")
+                .AddCommand($"mkdir -p {appDirInContainer}")
+                .AddCommand($"cp -rf {appDir}/. {appDirInContainer}")
+                .AddCommand($"cd {appDirInContainer}")
                 .AddCommand("npm install")
-                .AddCommand($"oryx -appPath {appDir}")
-                .AddDirectoryExistsCheck($"{appDir}/node_modules")
-                .AddDirectoryDoesNotExistCheck($"{appDir}/node_modules/applicationinsights")
+                .AddCommand($"oryx -appPath {appDirInContainer}")
+                .AddDirectoryExistsCheck($"{appDirInContainer}/node_modules")
+                .AddDirectoryDoesNotExistCheck($"{appDirInContainer}/node_modules/applicationinsights")
                 .AddCommand("./run.sh")
-                .AddFileExistsCheck($"{appDir}/oryx-appinsightsloader.js")
+                .AddFileExistsCheck($"{appDirInContainer}/oryx-appinsightsloader.js")
                 .ToString();
 
             await EndToEndTestHelper.RunAndAssertAppAsync(
@@ -89,15 +92,18 @@ namespace Microsoft.Oryx.RuntimeImage.Tests
             var aIEnabled = ExtVarNames.UserAppInsightsEnableEnv;
             int containerDebugPort = 8080;
 
+            var appDirInContainer = "/tmp/app";
             var script = new ShellScriptBuilder()
                 .AddCommand($"export {aIEnabled}=disabled")
-                .AddCommand($"cd {appDir}")
+                .AddCommand($"mkdir -p {appDirInContainer}")
+                .AddCommand($"cp -rf {appDir}/. {appDirInContainer}")
+                .AddCommand($"cd {appDirInContainer}")
                 .AddCommand("npm install")
-                .AddCommand($"oryx -appPath {appDir}")
-                .AddDirectoryExistsCheck($"{appDir}/node_modules")
-                .AddDirectoryDoesNotExistCheck($"{appDir}/node_modules/applicationinsights")
+                .AddCommand($"oryx -appPath {appDirInContainer}")
+                .AddDirectoryExistsCheck($"{appDirInContainer}/node_modules")
+                .AddDirectoryDoesNotExistCheck($"{appDirInContainer}/node_modules/applicationinsights")
                 .AddCommand("./run.sh")
-                .AddFileDoesNotExistCheck($"{appDir}/oryx-appinsightsloader.js")
+                .AddFileDoesNotExistCheck($"{appDirInContainer}/oryx-appinsightsloader.js")
                 .ToString();
 
             await EndToEndTestHelper.RunAndAssertAppAsync(

@@ -3,12 +3,10 @@
 // Licensed under the MIT license.
 // --------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Oryx.Common;
 using Microsoft.Oryx.Tests.Common;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -29,9 +27,7 @@ namespace Microsoft.Oryx.Integration.Tests
         public async Task CanBuildAndRunNodeApp_WithDebugger(string nodeVersion)
         {
             // Arrange
-            var appOutputDirPath = Directory.CreateDirectory(Path.Combine(_tempRootDir, Guid.NewGuid().ToString("N")))
-                .FullName;
-            var appOutputDirVolume = DockerVolume.CreateMirror(appOutputDirPath);
+            var appOutputDirVolume = CreateOutputVolume();
             var appOutputDir = appOutputDirVolume.ContainerDir;
             var appName = "linxnodeexpress";
             var volume = CreateAppVolume(appName);

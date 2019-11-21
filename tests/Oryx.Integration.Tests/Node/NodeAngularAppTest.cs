@@ -32,21 +32,23 @@ namespace Microsoft.Oryx.Integration.Tests
         {
             // Arrange
             var appName = "angular6app";
+            var appOutputDirVolume = CreateOutputVolume();
+            var appOutputDir = appOutputDirVolume.ContainerDir;
             var volume = CreateAppVolume(appName);
             var appDir = volume.ContainerDir;
             var buildScript = new ShellScriptBuilder()
-               .AddCommand($"oryx build {appDir} --platform nodejs --platform-version {nodeVersion}")
+               .AddCommand($"oryx build {appDir} -i /tmp/int -o {appOutputDir} --platform nodejs --platform-version {nodeVersion}")
                .ToString();
             var runScript = new ShellScriptBuilder()
                 .AddCommand($"export PORT=4200")
-                .AddCommand($"oryx -appPath {appDir}")
+                .AddCommand($"oryx -appPath {appOutputDir}")
                 .AddCommand(DefaultStartupFilePath)
                 .ToString();
 
             await EndToEndTestHelper.BuildRunAndAssertAppAsync(
                 appName,
                 _output,
-                volume,
+                new List<DockerVolume> { appOutputDirVolume, volume },
                 "/bin/sh",
                 new[]
                 {
@@ -84,9 +86,7 @@ namespace Microsoft.Oryx.Integration.Tests
             //    having issues with volume mounted directories
 
             // Arrange
-            var appOutputDirPath = Directory.CreateDirectory(Path.Combine(_tempRootDir, Guid.NewGuid().ToString("N")))
-                .FullName;
-            var appOutputDirVolume = DockerVolume.CreateMirror(appOutputDirPath);
+            var appOutputDirVolume = CreateOutputVolume();
             var appOutputDir = appOutputDirVolume.ContainerDir;
             var appName = "angular6app";
             var volume = CreateAppVolume(appName);
@@ -161,21 +161,23 @@ namespace Microsoft.Oryx.Integration.Tests
         {
             // Arrange
             var appName = "angular8app";
+            var appOutputDirVolume = CreateOutputVolume();
+            var appOutputDir = appOutputDirVolume.ContainerDir;
             var volume = CreateAppVolume(appName);
             var appDir = volume.ContainerDir;
             var buildScript = new ShellScriptBuilder()
-               .AddCommand($"oryx build {appDir} --platform nodejs --platform-version {nodeVersion}")
+               .AddCommand($"oryx build {appDir} -i /tmp/int -o {appOutputDir} --platform nodejs --platform-version {nodeVersion}")
                .ToString();
             var runScript = new ShellScriptBuilder()
                 .AddCommand($"export PORT=4200")
-                .AddCommand($"oryx -appPath {appDir}")
+                .AddCommand($"oryx -appPath {appOutputDir}")
                 .AddCommand(DefaultStartupFilePath)
                 .ToString();
 
             await EndToEndTestHelper.BuildRunAndAssertAppAsync(
                 appName,
                 _output,
-                volume,
+                new List<DockerVolume> { appOutputDirVolume, volume },
                 "/bin/sh",
                 new[]
                 {
@@ -211,9 +213,7 @@ namespace Microsoft.Oryx.Integration.Tests
             //    having issues with volume mounted directories
 
             // Arrange
-            var appOutputDirPath = Directory.CreateDirectory(Path.Combine(_tempRootDir, Guid.NewGuid().ToString("N")))
-                .FullName;
-            var appOutputDirVolume = DockerVolume.CreateMirror(appOutputDirPath);
+            var appOutputDirVolume = CreateOutputVolume();
             var appOutputDir = appOutputDirVolume.ContainerDir;
             var appName = "angular8app";
             var volume = CreateAppVolume(appName);

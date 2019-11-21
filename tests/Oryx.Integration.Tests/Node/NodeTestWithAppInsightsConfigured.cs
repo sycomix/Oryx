@@ -3,11 +3,10 @@
 // Licensed under the MIT license.
 // --------------------------------------------------------------------------------------------
 
-using Microsoft.Oryx.BuildScriptGenerator.Node;
-using Microsoft.Oryx.Common;
-using Microsoft.Oryx.Tests.Common;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Oryx.Common;
+using Microsoft.Oryx.Tests.Common;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -28,26 +27,28 @@ namespace Microsoft.Oryx.Integration.Tests
         {
             // Arrange
             var appName = "linxnodeexpress";
+            var appOutputDirVolume = CreateOutputVolume();
+            var appOutputDir = appOutputDirVolume.ContainerDir;
             var volume = CreateAppVolume(appName);
             var appDir = volume.ContainerDir;
             var spcifyNodeVersionCommand = "--platform nodejs --platform-version=" + nodeVersion;
             var aIKey = ExtVarNames.UserAppInsightsKeyEnv;
             var aIEnabled = ExtVarNames.UserAppInsightsEnableEnv;
             var buildScript = new ShellScriptBuilder()
-                .AddCommand($"oryx build {appDir} -o {appDir} {spcifyNodeVersionCommand} --log-file {appDir}/1.log")
-                .AddDirectoryExistsCheck($"{appDir}/node_modules").ToString();
+                .AddCommand($"oryx build {appDir} -i /tmp/int -o {appOutputDir} {spcifyNodeVersionCommand} --log-file {appDir}/1.log")
+                .AddDirectoryExistsCheck($"{appOutputDir}/node_modules").ToString();
             var runScript = new ShellScriptBuilder()
                 .AddCommand($"export {aIKey}=asdas")
                 .AddCommand($"export {aIEnabled}=true")
-                .AddCommand($"oryx -appPath {appDir} -bindPort {ContainerPort}")
+                .AddCommand($"oryx -appPath {appOutputDir} -bindPort {ContainerPort}")
                 .AddCommand(DefaultStartupFilePath)
-                .AddFileExistsCheck($"{appDir}/oryx-appinsightsloader.js")
+                .AddFileExistsCheck($"{appOutputDir}/oryx-appinsightsloader.js")
                 .ToString();
 
             await EndToEndTestHelper.BuildRunAndAssertAppAsync(
                 appName,
                 _output,
-                new List<DockerVolume> { volume },
+                new List<DockerVolume> { appOutputDirVolume, volume },
                 Settings.BuildImageName,
                 "/bin/bash",
                  new[]
@@ -78,26 +79,28 @@ namespace Microsoft.Oryx.Integration.Tests
         {
             // Arrange
             var appName = "linxnodeexpress-appinsights";
+            var appOutputDirVolume = CreateOutputVolume();
+            var appOutputDir = appOutputDirVolume.ContainerDir;
             var volume = CreateAppVolume(appName);
             var appDir = volume.ContainerDir;
             var spcifyNodeVersionCommand = "--platform nodejs --platform-version=" + nodeVersion;
             var aIKey = ExtVarNames.UserAppInsightsKeyEnv;
             var aIEnabled = ExtVarNames.UserAppInsightsEnableEnv;
             var buildScript = new ShellScriptBuilder()
-                .AddCommand($"oryx build {appDir} -o {appDir} {spcifyNodeVersionCommand} --log-file {appDir}/1.log")
-                .AddDirectoryExistsCheck($"{appDir}/node_modules").ToString();
+                .AddCommand($"oryx build {appDir} -i /tmp/int -o {appOutputDir} {spcifyNodeVersionCommand} --log-file {appDir}/1.log")
+                .AddDirectoryExistsCheck($"{appOutputDir}/node_modules").ToString();
             var runScript = new ShellScriptBuilder()
                 .AddCommand($"export {aIKey}=asdas")
                 .AddCommand($"export {aIEnabled}=true")
-                .AddCommand($"oryx -appPath {appDir} -bindPort {ContainerPort}")
+                .AddCommand($"oryx -appPath {appOutputDir} -bindPort {ContainerPort}")
                 .AddCommand(DefaultStartupFilePath)
-                .AddFileExistsCheck($"{appDir}/oryx-appinsightsloader.js")
+                .AddFileExistsCheck($"{appOutputDir}/oryx-appinsightsloader.js")
                 .ToString();
 
             await EndToEndTestHelper.BuildRunAndAssertAppAsync(
                 appName,
                 _output,
-                new List<DockerVolume> { volume },
+                new List<DockerVolume> { appOutputDirVolume, volume },
                 Settings.BuildImageName,
                 "/bin/bash",
                  new[]
@@ -128,25 +131,27 @@ namespace Microsoft.Oryx.Integration.Tests
         {
             // Arrange
             var appName = "linxnodeexpress-appinsights";
+            var appOutputDirVolume = CreateOutputVolume();
+            var appOutputDir = appOutputDirVolume.ContainerDir;
             var volume = CreateAppVolume(appName);
             var appDir = volume.ContainerDir;
             var spcifyNodeVersionCommand = "--platform nodejs --platform-version=" + nodeVersion;
             var aIKey = ExtVarNames.UserAppInsightsKeyEnv;
             var aIEnabled = ExtVarNames.UserAppInsightsEnableEnv;
             var buildScript = new ShellScriptBuilder()
-                .AddCommand($"oryx build {appDir} -o {appDir} {spcifyNodeVersionCommand} --log-file {appDir}/1.log")
-                .AddDirectoryExistsCheck($"{appDir}/node_modules").ToString();
+                .AddCommand($"oryx build {appDir} -i /tmp/int -o {appOutputDir} {spcifyNodeVersionCommand} --log-file {appDir}/1.log")
+                .AddDirectoryExistsCheck($"{appOutputDir}/node_modules").ToString();
             var runScript = new ShellScriptBuilder()
                 .AddCommand($"export {aIKey}=asdas")
-                .AddCommand($"oryx -appPath {appDir} -bindPort {ContainerPort}")
+                .AddCommand($"oryx -appPath {appOutputDir} -bindPort {ContainerPort}")
                 .AddCommand(DefaultStartupFilePath)
-                .AddFileDoesNotExistCheck($"{appDir}/oryx-appinsightsloader.js")
+                .AddFileDoesNotExistCheck($"{appOutputDir}/oryx-appinsightsloader.js")
                 .ToString();
 
             await EndToEndTestHelper.BuildRunAndAssertAppAsync(
                 appName,
                 _output,
-                new List<DockerVolume> { volume },
+                new List<DockerVolume> { appOutputDirVolume, volume },
                 Settings.BuildImageName,
                 "/bin/bash",
                  new[]

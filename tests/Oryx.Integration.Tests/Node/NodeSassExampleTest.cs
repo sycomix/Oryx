@@ -3,9 +3,10 @@
 // Licensed under the MIT license.
 // --------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Oryx.Common;
 using Microsoft.Oryx.Tests.Common;
-using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -28,20 +29,22 @@ namespace Microsoft.Oryx.Integration.Tests
         {
             // Arrange
             var appName = "node-sass-example";
+            var appOutputDirVolume = CreateOutputVolume();
+            var appOutputDir = appOutputDirVolume.ContainerDir;
             var volume = CreateAppVolume(appName);
             var appDir = volume.ContainerDir;
             var buildScript = new ShellScriptBuilder()
-               .AddCommand($"oryx build {appDir} --platform nodejs --platform-version {nodeVersion}")
+               .AddCommand($"oryx build {appDir} -i /tmp/int -o {appOutputDir} --platform nodejs --platform-version {nodeVersion}")
                .ToString();
             var runScript = new ShellScriptBuilder()
-                .AddCommand($"oryx -appPath {appDir} -bindPort {ContainerPort}")
+                .AddCommand($"oryx -appPath {appOutputDir} -bindPort {ContainerPort}")
                 .AddCommand(DefaultStartupFilePath)
                 .ToString();
 
             await EndToEndTestHelper.BuildRunAndAssertAppAsync(
                 appName,
                 _output,
-                volume,
+                new List<DockerVolume> { appOutputDirVolume, volume },
                 "/bin/sh",
                 new[]
                 {

@@ -517,7 +517,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
 
             var appDir = volume.ContainerDir;
             var script = new ShellScriptBuilder()
-                .AddBuildCommand($"{appDir} --platform nodejs --platform-version 6")
+                .AddBuildCommand($"{appDir} -i /tmp/int --platform nodejs --platform-version 6")
                 .ToString();
 
             // Act

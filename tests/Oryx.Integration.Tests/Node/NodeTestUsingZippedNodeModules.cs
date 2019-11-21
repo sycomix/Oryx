@@ -3,13 +3,11 @@
 // Licensed under the MIT license.
 // --------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.Oryx.BuildScriptGenerator.Node;
 using Microsoft.Oryx.Common;
 using Microsoft.Oryx.Tests.Common;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -37,9 +35,7 @@ namespace Microsoft.Oryx.Integration.Tests
 
             // Arrange
             var compressFormat = "tar-gz";
-            var appOutputDirPath = Directory.CreateDirectory(Path.Combine(_tempRootDir, Guid.NewGuid().ToString("N")))
-                .FullName;
-            var appOutputDirVolume = DockerVolume.CreateMirror(appOutputDirPath);
+            var appOutputDirVolume = CreateOutputVolume();
             var appOutputDir = appOutputDirVolume.ContainerDir;
             var appName = "linxnodeexpress";
             var volume = CreateAppVolume(appName);
@@ -88,9 +84,7 @@ namespace Microsoft.Oryx.Integration.Tests
         {
             // Arrange
             // Use a separate volume for output due to rsync errors
-            var appOutputDirPath = Directory.CreateDirectory(Path.Combine(_tempRootDir, Guid.NewGuid().ToString("N")))
-                .FullName;
-            var appOutputDirVolume = DockerVolume.CreateMirror(appOutputDirPath);
+            var appOutputDirVolume = CreateOutputVolume();
             var appOutputDir = appOutputDirVolume.ContainerDir;
             var appName = "create-react-app-sample";
             var volume = CreateAppVolume(appName);
@@ -128,10 +122,8 @@ namespace Microsoft.Oryx.Integration.Tests
         {
             // Arrange
             // Use a separate volume for output due to rsync errors
-            var appOutputDirPath = Directory.CreateDirectory(Path.Combine(_tempRootDir, Guid.NewGuid().ToString("N")))
-                .FullName;
             var nodeVersion = "10";
-            var appOutputDirVolume = DockerVolume.CreateMirror(appOutputDirPath);
+            var appOutputDirVolume = CreateOutputVolume();
             var appOutputDir = appOutputDirVolume.ContainerDir;
             var appName = "webfrontend";
             var volume = CreateAppVolume(appName);
@@ -172,10 +164,8 @@ namespace Microsoft.Oryx.Integration.Tests
         {
             // Arrange
             // Use a separate volume for output due to rsync errors
-            var appOutputDirPath = Directory.CreateDirectory(Path.Combine(_tempRootDir, Guid.NewGuid().ToString("N")))
-                .FullName;
             var nodeVersion = "10";
-            var appOutputDirVolume = DockerVolume.CreateMirror(appOutputDirPath);
+            var appOutputDirVolume = CreateOutputVolume();
             var appOutputDir = appOutputDirVolume.ContainerDir;
             var appName = "node-nested-nodemodules";
             var volume = CreateAppVolume(appName);
@@ -189,7 +179,7 @@ namespace Microsoft.Oryx.Integration.Tests
             var buildScript = new ShellScriptBuilder()
                .AddCommand(
                 $"oryx build {appDir} -i /tmp/int -o /tmp/out --platform nodejs " +
-                $"--platform-version {nodeVersion} -p {NodePlatform.CompressNodeModulesPropertyKey}=tar-gz"+
+                $"--platform-version {nodeVersion} -p {NodePlatform.CompressNodeModulesPropertyKey}=tar-gz" +
                 $" -p {NodePlatform.PruneDevDependenciesPropertyKey}={pruneDevDependency}")
                 .AddCommand($"cp -rf /tmp/out/* {appOutputDir}")
                 .AddDirectoryExistsCheck($"{appOutputDir}/another-directory/node_modules")

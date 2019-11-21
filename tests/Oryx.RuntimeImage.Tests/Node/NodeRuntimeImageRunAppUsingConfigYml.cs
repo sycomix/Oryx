@@ -3,11 +3,11 @@
 // Licensed under the MIT license.
 // --------------------------------------------------------------------------------------------
 
-using Microsoft.Oryx.Common;
-using Microsoft.Oryx.Tests.Common;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Oryx.Common;
+using Microsoft.Oryx.Tests.Common;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -32,8 +32,11 @@ namespace Microsoft.Oryx.RuntimeImage.Tests
             var dir = volume.ContainerDir;
             int containerPort = 80;
 
+            var appDirInContainer = "/tmp/app";
             var runAppScript = new ShellScriptBuilder()
-                .AddCommand($"cd {dir}/app")
+                .AddCommand($"mkdir -p {appDirInContainer}")
+                .AddCommand($"cp -rf {dir}/. {appDirInContainer}")
+                .AddCommand($"cd {appDirInContainer}/app")
                 .AddCommand("npm install")
                 .AddCommand("cd ..")
                 .AddCommand($"oryx -bindPort {containerPort} -userStartupCommand config.yml")

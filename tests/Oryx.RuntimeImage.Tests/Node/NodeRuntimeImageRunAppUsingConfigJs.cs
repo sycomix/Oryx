@@ -3,11 +3,11 @@
 // Licensed under the MIT license.
 // --------------------------------------------------------------------------------------------
 
-using Microsoft.Oryx.Common;
-using Microsoft.Oryx.Tests.Common;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Oryx.Common;
+using Microsoft.Oryx.Tests.Common;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -25,15 +25,17 @@ namespace Microsoft.Oryx.RuntimeImage.Tests
         [MemberData(nameof(TestValueGenerator.GetNodeVersions_SupportPm2), MemberType = typeof(TestValueGenerator))]
         public async Task RunNodeAppUsingConfigJs(string nodeVersion)
         {
-
             var appName = "express-config-js";
             var hostDir = Path.Combine(_hostSamplesDir, "nodejs", appName);
             var volume = DockerVolume.CreateMirror(hostDir);
             var dir = volume.ContainerDir;
             int containerPort = 80;
 
+            var appDirInContainer = "/tmp/app";
             var runAppScript = new ShellScriptBuilder()
-                .AddCommand($"cd {dir}/app")
+                .AddCommand($"mkdir -p {appDirInContainer}")
+                .AddCommand($"cp -rf {dir}/. {appDirInContainer}")
+                .AddCommand($"cd {appDirInContainer}/app")
                 .AddCommand("npm install")
                 .AddCommand("cd ..")
                 .AddCommand($"oryx -bindPort {containerPort}")

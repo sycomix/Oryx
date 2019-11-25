@@ -82,7 +82,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator.DotNetCore
                 return null;
             }
 
-            languageVersion = VerifyAndResolveVersion(languageVersion);
+            languageVersion = string.IsNullOrEmpty(languageVersion) ?
+                _scriptGeneratorOptions.DefaultVersion : languageVersion;
 
             return new LanguageDetectorResult
             {
@@ -106,32 +107,6 @@ namespace Microsoft.Oryx.BuildScriptGenerator.DotNetCore
             }
 
             return null;
-        }
-
-        private string VerifyAndResolveVersion(string version)
-        {
-            if (string.IsNullOrEmpty(version))
-            {
-                return _scriptGeneratorOptions.DefaultVersion;
-            }
-            else
-            {
-                var maxSatisfyingVersion = SemanticVersionResolver.GetMaxSatisfyingVersion(
-                    version,
-                    _versionProvider.SupportedDotNetCoreVersions);
-
-                if (string.IsNullOrEmpty(maxSatisfyingVersion))
-                {
-                    var exc = new UnsupportedVersionException(
-                        DotNetCoreConstants.LanguageName,
-                        version,
-                        _versionProvider.SupportedDotNetCoreVersions);
-                    _logger.LogError(exc, $"Exception caught, the given version '{version}' is not supported for the .NET Core platform.");
-                    throw exc;
-                }
-
-                return maxSatisfyingVersion;
-            }
         }
 
         private dynamic GetGlobalJsonObject(ISourceRepo sourceRepo)

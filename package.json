@@ -5,9 +5,7 @@
   "scripts": {
     "build": "gulp",
     "clean": "gulp clean",
-    "start": "node server/index.js",
-    "start-dev": "nodemon --exec npm start",
-    "populatemongodb": "gulp populate-mongodb"
+    "start": "node --version"
   },
   "engines": {
     "node": ">=10.1",

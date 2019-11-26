@@ -24,7 +24,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator.DotNetCore
             {
                 if (_supportedVersions == null)
                 {
-                    _supportedVersions = new[] { "1.1", "2.2", "3.0" };
+                    _supportedVersions = new[] { "1", "2", "3" };
                 }
 
                 return _supportedVersions;

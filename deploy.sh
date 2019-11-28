@@ -103,26 +103,34 @@ echo Handling react app deployment.
 # 1. Install npm packages
 if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
   cd "$DEPLOYMENT_SOURCE"
+  rm -rf node_modules
+  rm package-lock.json
+  ls -l
   echo "Running npm cache clean"
   eval npm cache clean --force
   exitWithMessageOnError "npm cache clean failed"
-  echo "Running npm install with verizon standard cdn endpoint"
+  echo "Running npm install with verizon standard cdn endpoint started: "$SECONDS
   start1=$SECONDS
-  eval npm install --registry https://arroyc-st-verizon.azureedge.net 
+  eval npm install --registry https://arroyc-st-msft.azureedge.net 
   exitWithMessageOnError "npm install from cdn endpoint failed"
   end1=$SECONDS
+  echo "************************************************************"
   echo "time taken for installation from cdn: "$(( $end1 - $start1 ))
+  echo "************************************************************"
   rm -rf node_modules
-  rm package-lock*
+  rm package-lock.json
+  ls -l
   echo "Running npm cache clean"
   eval npm cache clean --force
   exitWithMessageOnError "npm cache clean failed"
-  echo "Running npm install with standard npm registry"
+  echo "Running npm install with standard npm registry started: "$SECONDS
   start2=$SECONDS
   eval npm install 
   exitWithMessageOnError "npm install from npm standard registry failed"
   end2=$SECONDS
-  echo "time taken for installation from npm registry: "$(( $end2 - $start2 ))
+  echo "************************************************************"
+  echo "time taken for installation from npm: "$(( $end2 - $start2 ))
+  echo "************************************************************"
  cd - > /dev/null
 fi
 

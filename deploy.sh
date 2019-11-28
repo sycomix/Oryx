@@ -98,7 +98,7 @@ selectNodeVersion () {
 # Deployment
 # ----------
 
-echo Handling react app deployment.
+echo Handling TailwindTrader app deployment.
 
 # 1. Install npm packages
 if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
@@ -109,7 +109,7 @@ if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
   echo "Running npm cache clean"
   eval npm cache clean --force
   exitWithMessageOnError "npm cache clean failed"
-  echo "Running npm install with verizon standard cdn endpoint started: "$SECONDS
+  echo "Running npm install with microsoft standard cdn endpoint started: "$SECONDS
   start1=$SECONDS
   eval npm install --registry https://arroyc-st-msft.azureedge.net 
   exitWithMessageOnError "npm install from cdn endpoint failed"

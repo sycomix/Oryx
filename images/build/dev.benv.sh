@@ -76,7 +76,7 @@ benv-resolve() {
 
   # Resolve node versions
   if matchesName "node" "$name" || matchesName "node_version" "$name" && [ "${value::1}" != "/" ]; then
-    resolvedVersion=`oryx resolveVersion node "$value"`
+    resolvedVersion=`oryx resolveVersion "$value" --platform node`
     echo "Installing NodeJS version $resolvedVersion..."
     nvm install $resolvedVersion
     return 0
@@ -84,7 +84,7 @@ benv-resolve() {
 
   # Resolve python versions
   if matchesName "python" "$name" || matchesName "python_version" "$name" && [ "${value::1}" != "/" ]; then
-    resolvedVersion=`oryx resolveVersion python "$value"`
+    resolvedVersion=`oryx resolveVersion "$value" --platform python`
     echo "Installing Python version $resolvedVersion..."
     pyenv install $resolvedVersion
     return 0
@@ -92,7 +92,7 @@ benv-resolve() {
 
   # Resolve PHP versions
   if matchesName "php" "$name" || matchesName "php_version" "$name" && [ "${value::1}" != "/" ]; then
-    resolvedVersion=`oryx resolveVersion php "$value"`
+    resolvedVersion=`oryx resolveVersion "$value" --platform php`
     echo "Installing PHP version $resolvedVersion..."
     phpbrew install $resolvedVersion
     return 0
@@ -100,7 +100,7 @@ benv-resolve() {
 
   # Resolve dotnet versions
   if matchesName "dotnet" "$name" || matchesName "dotnet_version" "$name" && [ "${value::1}" != "/" ]; then
-    resolvedVersion=`oryx resolveVersion dotnet "$value"`
+    resolvedVersion=`oryx resolveVersion "$value" --platform php`
     echo "Installing .NET Core SDK version $resolvedVersion..."
     apt-get install -y --no-install-recommends dotnet-sdk-$resolvedVersion
     return 0

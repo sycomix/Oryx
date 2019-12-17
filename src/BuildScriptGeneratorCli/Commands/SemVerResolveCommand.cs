@@ -26,21 +26,36 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli.Commands
         public const string Name = "resolveVersion";
         private HttpClient httpClient;
 
-        [Argument(0, Description = "Platform for which ")]
+        [Argument(0, Description = "Version range.")]
+        public string Range { get; set; }
+
+        [Option("--platform", CommandOptionType.SingleValue, Description = "Platform for which to find the supporting version")]
         public string Platform { get; set; }
 
         [Argument(1, Description = "Version to look for. Could be a range.")]
         public string VersionToLookFor { get; set; }
 
+        [Option("--versions", CommandOptionType.SingleValue, Description = "Comma separated list of supported versions")]
+        public string SupportedVersions { get; set; }
+
         internal override int Execute(IServiceProvider serviceProvider, IConsole console)
         {
             var logger = serviceProvider.GetRequiredService<ILogger<SemVerResolveCommand>>();
-            httpClient = new HttpClient();
-            // NOTE: Setting user agent is required to avoid receiving 403 Forbidden response.
-            httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("oryx", "1.0"));
+            
+            IEnumerable<string> supportedVersions;
+            if (string.IsNullOrEmpty(SupportedVersions))
+            {
+                httpClient = new HttpClient();
+                // NOTE: Setting user agent is required to avoid receiving 403 Forbidden response.
+                httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("oryx", "1.0"));
 
-            var supportedVersions = GetSupportedVersions().Result;
-            logger.LogInformation($"Supported versions for platform {Platform} are: {string.Join(", ", supportedVersions)}");
+                supportedVersions = GetSupportedVersions().Result;
+                logger.LogInformation($"Supported versions for platform {Platform} are: {string.Join(", ", supportedVersions)}");
+            }
+            else
+            {
+                supportedVersions = SupportedVersions.Split(",").Select(version => version.Trim());
+            }
 
             // We ignore text like 'lts' etc and let the underlying scripts to handle them.
             var result = VersionToLookFor;

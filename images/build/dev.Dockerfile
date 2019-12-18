@@ -119,6 +119,10 @@ RUN cd /usr/local/include \
         libcurl4-gnutls-dev \
         libonig-dev
 
+# Install composer
+RUN phpbrew app get composer
+RUN echo 'export PATH="$PATH:$HOME/.phpbrew/bin"' >> $BASH_RC
+
 #RUN phpbrew install 7.3
 #RUN phpbrew install 7.4
 
@@ -132,4 +136,6 @@ ENV PATH="$PATH:/opt/oryx"
 COPY --from=buildscriptbuilder /opt/buildscriptgen/ /opt/buildscriptgen/
 RUN ln -s /opt/buildscriptgen/GenerateBuildScript /opt/oryx/oryx
 
-RUN apt-get install -y rsync
+RUN apt-get install -y \
+    rsync \
+    moreutils

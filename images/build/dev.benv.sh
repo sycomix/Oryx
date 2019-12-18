@@ -87,6 +87,7 @@ benv-resolve() {
     resolvedVersion=`oryx resolveVersion "$value" --platform python`
     echo "Installing Python version $resolvedVersion..."
     pyenv install $resolvedVersion
+    export PYENV_VERSION=$resolvedVersion
     return 0
   fi
 

@@ -131,3 +131,5 @@ ENV PATH="$PATH:/opt/oryx"
 # so we are building an extra stage to copy binaries from correct build stage
 COPY --from=buildscriptbuilder /opt/buildscriptgen/ /opt/buildscriptgen/
 RUN ln -s /opt/buildscriptgen/GenerateBuildScript /opt/oryx/oryx
+
+RUN apt-get install -y rsync

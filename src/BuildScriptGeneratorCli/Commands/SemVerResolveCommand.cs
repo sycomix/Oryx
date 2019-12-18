@@ -32,16 +32,13 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli.Commands
         [Option("--platform", CommandOptionType.SingleValue, Description = "Platform for which to find the supporting version")]
         public string Platform { get; set; }
 
-        [Argument(1, Description = "Version to look for. Could be a range.")]
-        public string VersionToLookFor { get; set; }
-
         [Option("--versions", CommandOptionType.SingleValue, Description = "Comma separated list of supported versions")]
         public string SupportedVersions { get; set; }
 
         internal override int Execute(IServiceProvider serviceProvider, IConsole console)
         {
             var logger = serviceProvider.GetRequiredService<ILogger<SemVerResolveCommand>>();
-            
+
             IEnumerable<string> supportedVersions;
             if (string.IsNullOrEmpty(SupportedVersions))
             {
@@ -58,8 +55,8 @@ namespace Microsoft.Oryx.BuildScriptGeneratorCli.Commands
             }
 
             // We ignore text like 'lts' etc and let the underlying scripts to handle them.
-            var result = VersionToLookFor;
-            var isValidRange = TryGetRange(VersionToLookFor, out var range);
+            var result = Range;
+            var isValidRange = TryGetRange(Range, out var range);
             logger.LogInformation($"Version range to consider: {range}");
             if (isValidRange)
             {

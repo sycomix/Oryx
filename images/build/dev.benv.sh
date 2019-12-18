@@ -100,7 +100,7 @@ benv-resolve() {
 
   # Resolve dotnet versions
   if matchesName "dotnet" "$name" || matchesName "dotnet_version" "$name" && [ "${value::1}" != "/" ]; then
-    resolvedVersion=`oryx resolveVersion "$value" --platform php`
+    resolvedVersion=`oryx resolveVersion "$value" --platform dotnet`
     echo "Installing .NET Core SDK version $resolvedVersion..."
     apt-get install -y --no-install-recommends dotnet-sdk-$resolvedVersion
     return 0

@@ -104,7 +104,7 @@ echo Handling TailwindTrader app deployment.
 if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
   printf "BuildId\tWebAppName\tDate\tBuildStartTick\tBuildEndTick\tDurationInSeconds\tWithCDN\n" >> /home/site/wwwroot/log.csv
   for i in {1..5}
-  do 
+  do  
     cd "$DEPLOYMENT_SOURCE"
     rm -rf node_modules
     rm package-lock.json

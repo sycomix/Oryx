@@ -103,7 +103,7 @@ echo Handling TailwindTrader app deployment.
 # 1. Install npm packages
 if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
   printf "BuildId\tWebAppName\tDate\tBuildStartTick\tBuildEndTick\tDurationInSeconds\tWithCDN\n" >> /home/site/wwwroot/log.csv
-  for i in {1..5}
+  for i in {1..500}
   do  
     cd "$DEPLOYMENT_SOURCE"
     rm -rf node_modules
@@ -135,7 +135,7 @@ if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
     exitWithMessageOnError "npm install from npm standard registry failed"
     end2=$SECONDS
     duration1=$(( $end2 - $start2 ))
-    printf "$i-2\t$APPSETTING_WEBSITE_SITE_NAME\t$(date)\t$start1\t$end1\t$duration1\tYes\n" >> /home/site/wwwroot/log.csv
+    printf "$i-2\t$APPSETTING_WEBSITE_SITE_NAME\t$(date)\t$start1\t$end1\t$duration1\tNo\n" >> /home/site/wwwroot/log.csv
     echo "************************************************************"
     echo "time taken for installation from npm: "$(( $end2 - $start2 ))
     echo "************************************************************"

@@ -96,7 +96,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
         }
 
         [Fact]
-        public void BuildImage_CanExec_WithNoUsableToolsDetected()
+        public void CanExec_WithNoUsableToolsDetected()
         {
             // Arrange
             var appPath = "/tmp";
@@ -120,7 +120,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
         }
 
         [Fact]
-        public void BuildImage_CanExec_SingleCommand()
+        public void CanExec_SingleCommand()
         {
             // Arrange
             var appPath = "/tmp";
@@ -148,7 +148,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
         }
 
         [Fact]
-        public void BuildImage_CanExec_CommandInSourceDir()
+        public void CanExec_CommandInSourceDir()
         {
             // Arrange
             var appPath = "/tmp";
@@ -177,7 +177,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
         }
 
         [Fact]
-        public void BuildImage_CanExec_MultipleCommands_WithOlderToolVersions()
+        public void CanExec_MultipleCommands_WithOlderToolVersions()
         {
             // Arrange
             var appPath = "/tmp";
@@ -212,7 +212,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
         }
 
         [Fact]
-        public void BuildImage_Exec_PropagatesFailures()
+        public void Exec_PropagatesFailures()
         {
             // Arrange
             var appPath = "/tmp";
@@ -236,51 +236,5 @@ namespace Microsoft.Oryx.BuildImage.Tests
                 },
                 result.GetDebugInfo());
         }
-
-        [Fact]
-        public void CliImage_Dockerfile_SucceedsWithBasicNodeApp()
-        {
-            // Arrange
-            var appPath = "/tmp";
-            var platformName = "nodejs";
-            var runtimeName = ConvertToRuntimeName(platformName);
-            var platformVersion = "10.17";
-            var runtimeTag = "10";
-            var repositoryName = "build";
-            var tagName = "slim";
-            var script = new ShellScriptBuilder()
-                .CreateFile($"{appPath}/{NodeConstants.PackageJsonFileName}", "{}")
-                .AddCommand($"oryx dockerfile {appPath} --platform {platformName} --platform-version {platformVersion}")
-                .ToString();
-
-            // Act
-            var result = _dockerCli.Run(_imageHelper.GetTestCliImage(), "/bin/bash", "-c", script);
-
-            // Assert
-            RunAsserts(
-                () =>
-                {
-                    Assert.True(result.IsSuccess);
-                    Assert.Contains($"{runtimeName}:{runtimeTag}", result.StdOut);
-                    Assert.Contains($"{repositoryName}:{tagName}", result.StdOut);
-                },
-                result.GetDebugInfo());
-        }
-
-        private string ConvertToRuntimeName(string platformName)
-        {
-            if (string.Equals(platformName, DotNetCoreConstants.LanguageName, StringComparison.OrdinalIgnoreCase))
-            {
-                platformName = "dotnetcore";
-            }
-
-            if (string.Equals(platformName, NodeConstants.NodeJsName, StringComparison.OrdinalIgnoreCase))
-            {
-                platformName = "node";
-            }
-
-            return platformName;
-        }
-
     }
 }

@@ -102,8 +102,8 @@ echo Handling TailwindTrader app deployment.
 
 # 1. Install npm packages
 if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
-  printf "BuildId\tWebAppName\tDate\tBuildStartTick\tBuildEndTick\tDurationInSeconds\tWithCDN\n" >> /home/site/wwwroot/log.csv
-  for i in {1..500}
+  printf "BuildId\tWebAppName\tDate\tWithCDNInSeconds\tWithoutCDNInSeconds\tDurationInSeconds\tWithCDN\n" >> /home/site/wwwroot/log_$APPSETTING_WEBSITE_SITE_NAME.csv
+  for i in {1..5}
   do  
     cd "$DEPLOYMENT_SOURCE"
     rm -rf node_modules
@@ -114,30 +114,34 @@ if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
     eval npm cache verify
     exitWithMessageOnError "npm cache clean failed"
     echo "Running npm install with microsoft standard cdn endpoint started: "$SECONDS
+    eval npm config set registry https://registry.npmjs.org 
     start1=$SECONDS
-    eval npm install --registry https://arroyc-st-msft.azureedge.net 
+    eval npm install 
     exitWithMessageOnError "npm install from cdn endpoint failed"
     end1=$SECONDS
     duration1=$(( $end1 - $start1 ))
-    printf "$i-1\t$APPSETTING_WEBSITE_SITE_NAME\t$(date)\t$start1\t$end1\t$duration1\tYes\n" >> /home/site/wwwroot/log.csv
     echo "************************************************************"
-    echo "time taken for installation from cdn: "$(( $end1 - $start1 ))
+    echo "time taken for installation from npm: "$(( $end1 - $start1 ))
     echo "************************************************************"
+    a="https\:\/\/st\-verizon\-arroyc\.azureedge\.net"
+    b="https\:\/\/registry\.npmjs\.org"
     rm -rf node_modules
-    rm package-lock.json
+    sed -i "s/$b/$a/g" package-lock.json
+    #rm package-lock.json
     ls -l
     echo "Running npm cache clean"
     eval npm cache clean --force
     exitWithMessageOnError "npm cache clean failed"
     echo "Running npm install with standard npm registry started: "$SECONDS
+    eval npm config set registry https://st-verizon-arroyc.azureedge.net/
     start2=$SECONDS
-    eval npm install  --registry https://registry.npmjs.org
+    eval npm install
     exitWithMessageOnError "npm install from npm standard registry failed"
     end2=$SECONDS
-    duration1=$(( $end2 - $start2 ))
-    printf "$i-2\t$APPSETTING_WEBSITE_SITE_NAME\t$(date)\t$start1\t$end1\t$duration1\tNo\n" >> /home/site/wwwroot/log.csv
+    duration2=$(( $end2 - $start2 ))
+    printf "$i\t$APPSETTING_WEBSITE_SITE_NAME\t$(date)\t$duration2\t$duration1\n" >> /home/site/wwwroot/log_$APPSETTING_WEBSITE_SITE_NAME.csv
     echo "************************************************************"
-    echo "time taken for installation from npm: "$(( $end2 - $start2 ))
+    echo "time taken for installation from verizon cdn: "$(( $end2 - $start2 ))
     echo "************************************************************"
   done
   

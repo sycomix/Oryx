@@ -113,11 +113,11 @@ if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
     eval npm cache clean --force
     eval npm cache verify
     exitWithMessageOnError "npm cache clean failed"
-    echo "Running npm install with microsoft standard cdn endpoint started: "$SECONDS
+    echo "Running npm install with npm endpoint started: "$SECONDS
     eval npm config set registry https://registry.npmjs.org 
     start1=$SECONDS
     eval npm install 
-    exitWithMessageOnError "npm install from cdn endpoint failed"
+    exitWithMessageOnError "npm install from npm endpoint failed"
     end1=$SECONDS
     duration1=$(( $end1 - $start1 ))
     echo "************************************************************"
@@ -132,11 +132,11 @@ if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
     echo "Running npm cache clean"
     eval npm cache clean --force
     exitWithMessageOnError "npm cache clean failed"
-    echo "Running npm install with standard npm registry started: "$SECONDS
+    echo "Running npm install with cdn started: "$SECONDS
     eval npm config set registry https://st-verizon-arroyc.azureedge.net/
     start2=$SECONDS
     eval npm install
-    exitWithMessageOnError "npm install from npm standard registry failed"
+    exitWithMessageOnError "npm install from cdn failed"
     end2=$SECONDS
     duration2=$(( $end2 - $start2 ))
     printf "$i\t$APPSETTING_WEBSITE_SITE_NAME\t$(date)\t$duration2\t$duration1\n" >> /home/site/wwwroot/log_$APPSETTING_WEBSITE_SITE_NAME.csv

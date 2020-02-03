@@ -1,24 +1,24 @@
-FROM %PHP_BASE_IMAGE%
+FROM php-fpm-7.4
 SHELL ["/bin/bash", "-c"]
-ENV PHP_VERSION %PHP_VERSION%
+ENV PHP_VERSION 7.4.2
 
-RUN a2enmod rewrite expires include deflate remoteip headers
-
-ENV APACHE_RUN_USER www-data
+# An environment variable for oryx run-script to know the origin of php image so that
+# start-up command can be determined while creating run script
+ENV PHP_ORIGIN php-fpm
+ENV NGINX_RUN_USER www-data
 # Edit the default DocumentRoot setting
-ENV APACHE_DOCUMENT_ROOT /home/site/wwwroot
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+ENV NGINX_DOCUMENT_ROOT /home/site/wwwroot
+# Install NGINX 
+RUN apt-get update \
+    && apt-get install nano nginx -y
+RUN ls -l /etc/nginx
+COPY images/runtime/php-fpm/nginx_conf/default.conf /etc/nginx/sites-available/default
+COPY images/runtime/php-fpm/nginx_conf/default.conf /etc/nginx/sites-enabled/default
+RUN sed -ri -e 's!worker_connections 768!worker_connections 10068!g' /etc/nginx/nginx.conf
+RUN sed -ri -e 's!# multi_accept on!multi_accept on!g' /etc/nginx/nginx.conf
+RUN ls -l /etc/nginx
 # Edit the default port setting
-ENV APACHE_PORT 8080
-RUN sed -ri -e 's!<VirtualHost \*:80>!<VirtualHost *:${APACHE_PORT}>!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!<VirtualHost _default_:443>!<VirtualHost _default_:${APACHE_PORT}>!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!Listen 80!Listen ${APACHE_PORT}!g' /etc/apache2/ports.conf
-# Edit Configuration to instruct Apache on how to process PHP files
-RUN echo -e '<FilesMatch "\.(?i:ph([[p]?[0-9]*|tm[l]?))$">\n SetHandler application/x-httpd-php\n</FilesMatch>' >> /etc/apache2/apache2.conf
-# Disable Apache2 server signature
-RUN echo -e 'ServerSignature Off' >> /etc/apache2/apache2.conf
-RUN echo -e 'ServerTokens Prod' >> /etc/apache2/apache2.conf
+ENV NGINX_PORT 8080
 
 # Install common PHP extensions
 RUN apt-get update \
@@ -58,14 +58,13 @@ RUN apt-get update \
         wddx \
         xmlrpc \
         xsl \
-    && pecl install imagick && docker-php-ext-enable imagick \
-    && pecl install mongodb && docker-php-ext-enable mongodb
+    && pecl install imagick && docker-php-ext-enable imagick
 
 # Install the Microsoft SQL Server PDO driver on supported versions only.
 #  - https://docs.microsoft.com/en-us/sql/connect/php/installation-tutorial-linux-mac
 #  - https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server
 RUN set -eux; \
-    if [[ $PHP_VERSION == 7.1.* || $PHP_VERSION == 7.2.* || $PHP_VERSION == 7.3.* || $PHP_VERSION == 7.4.* ]]; then \
+    if [[ $PHP_VERSION == 7.2.* || $PHP_VERSION == 7.3.* || $PHP_VERSION == 7.4.* ]]; then \
         pecl install sqlsrv pdo_sqlsrv \
         && echo extension=pdo_sqlsrv.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/30-pdo_sqlsrv.ini \
         && echo extension=sqlsrv.so >> `php --ini | grep "Scan for additional .ini files" | sed -e "s|.*:\s*||"`/20-sqlsrv.ini; \
@@ -97,5 +96,3 @@ RUN set -x \
     && chmod +x ./configure \
     && ./configure --with-unixODBC=shared,/usr \
     && docker-php-ext-install odbc
-
-RUN rm -rf /tmp/oryx

@@ -13,10 +13,6 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Node
 
         public string NpmDefaultVersion { get; set; }
 
-        public string InstalledNodeVersionsDir { get; set; }
-
-        public string InstalledNpmVersionsDir { get; set; }
-
         /// <summary>
         /// Gets or sets the list of supported NodeJs versions.
         /// </summary>

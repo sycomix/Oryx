@@ -4,19 +4,17 @@
 // --------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Extensions.Options;
 
 namespace Microsoft.Oryx.BuildScriptGenerator.Python
 {
     internal class PythonVersionProvider : IPythonVersionProvider
     {
-        private readonly PythonScriptGeneratorOptions _options;
+        private readonly VersionProviderHelper _versionProviderHelper;
         private IEnumerable<string> _supportedPythonVersions;
 
-        public PythonVersionProvider(IOptions<PythonScriptGeneratorOptions> options)
+        public PythonVersionProvider(VersionProviderHelper versionProviderHelper)
         {
-            _options = options.Value;
+            _versionProviderHelper = versionProviderHelper;
         }
 
         public IEnumerable<string> SupportedPythonVersions
@@ -25,9 +23,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
             {
                 if (_supportedPythonVersions == null)
                 {
-                    _supportedPythonVersions = VersionProviderHelper.GetSupportedVersions(
-                        _options.SupportedPythonVersions,
-                        _options.InstalledPythonVersionsDir);
+                    _supportedPythonVersions = _versionProviderHelper.GetVersionsFromDirectory(
+                        PythonConstants.InstalledPythonVersionsDir);
                 }
 
                 return _supportedPythonVersions;

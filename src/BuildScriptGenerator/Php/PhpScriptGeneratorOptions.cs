@@ -10,12 +10,5 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Php
     public class PhpScriptGeneratorOptions
     {
         public string PhpDefaultVersion { get; set; }
-
-        public string InstalledPhpVersionsDir { get; set; }
-
-        /// <summary>
-        /// Gets or sets the user-provided list of PHP versions.
-        /// </summary>
-        public IList<string> SupportedPhpVersions { get; set; }
     }
 }

@@ -10,16 +10,10 @@ using System.Linq;
 
 namespace Microsoft.Oryx.BuildScriptGenerator
 {
-    internal static class VersionProviderHelper
+    internal class VersionProviderHelper
     {
-        internal static IEnumerable<string> GetSupportedVersions(
-            IEnumerable<string> optionsVersions,
-            string versionsDir)
-        {
-            return optionsVersions != null ? optionsVersions : GetVersionsFromDirectory(versionsDir);
-        }
-
-        internal static IEnumerable<string> GetVersionsFromDirectory(string versionsDir)
+        // To enable unit testing
+        internal virtual IEnumerable<string> GetVersionsFromDirectory(string versionsDir)
         {
             var listOptions = new EnumerationOptions()
             {

@@ -55,12 +55,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Tests.Node
 
         private NodeVersionProvider GetNodeVersionProvider()
         {
-            var options = new NodeScriptGeneratorOptions
-            {
-                InstalledNodeVersionsDir = _rootDirPath,
-                InstalledNpmVersionsDir = _rootDirPath,
-            };
-            return new NodeVersionProvider(Options.Create(options));
+            return new NodeVersionProvider(new VersionProviderHelper());
         }
 
         public class TestFixture : IDisposable

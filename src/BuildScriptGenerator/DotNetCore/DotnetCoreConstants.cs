@@ -7,6 +7,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator.DotNetCore
 {
     public static class DotNetCoreConstants
     {
+        public const string InstalledVersionsDir = "/opt/dotnet/runtimes";
+
         public const string LanguageName = "dotnet";
         public const string CSharpProjectFileExtension = "csproj";
         public const string FSharpProjectFileExtension = "fsproj";

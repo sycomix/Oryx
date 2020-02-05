@@ -3,12 +3,8 @@
 // Licensed under the MIT license.
 // --------------------------------------------------------------------------------------------
 
-using Microsoft.Oryx.Tests.Common;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using Microsoft.Oryx.Tests.Common;
 using Xunit;
 
 namespace Microsoft.Oryx.BuildScriptGenerator.Tests
@@ -29,9 +25,10 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Tests
             var expectedVersion = "1.0.0";
             CreateSubDirectory(expectedVersion);
             CreateSubDirectory("2.0b"); // Invalid SemVer string
+            var versionProviderHelper = new VersionProviderHelper();
 
             // Act
-            var versions = VersionProviderHelper.GetVersionsFromDirectory(_tempDirRoot);
+            var versions = versionProviderHelper.GetVersionsFromDirectory(_tempDirRoot);
 
             // Assert
             Assert.Single(versions, expectedVersion);

@@ -4,19 +4,18 @@
 // --------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
-using Microsoft.Extensions.Options;
 
 namespace Microsoft.Oryx.BuildScriptGenerator.Node
 {
     internal class NodeVersionProvider : INodeVersionProvider
     {
-        private readonly NodeScriptGeneratorOptions _options;
+        private readonly VersionProviderHelper _versionProviderHelper;
         private IEnumerable<string> _supportedNodeVersions;
         private IEnumerable<string> _supportedNpmVersions;
 
-        public NodeVersionProvider(IOptions<NodeScriptGeneratorOptions> options)
+        public NodeVersionProvider(VersionProviderHelper versionProviderHelper)
         {
-            _options = options.Value;
+            _versionProviderHelper = versionProviderHelper;
         }
 
         public IEnumerable<string> SupportedNodeVersions
@@ -25,9 +24,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Node
             {
                 if (_supportedNodeVersions == null)
                 {
-                    _supportedNodeVersions = VersionProviderHelper.GetSupportedVersions(
-                        _options.SupportedNodeVersions,
-                        _options.InstalledNodeVersionsDir);
+                    _supportedNodeVersions = _versionProviderHelper.GetVersionsFromDirectory(
+                        NodeConstants.InstalledNodeVersionsDir);
                 }
 
                 return _supportedNodeVersions;
@@ -40,9 +38,8 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Node
             {
                 if (_supportedNpmVersions == null)
                 {
-                    _supportedNpmVersions = VersionProviderHelper.GetSupportedVersions(
-                        _options.SupportedNpmVersions,
-                        _options.InstalledNpmVersionsDir);
+                    _supportedNpmVersions = _versionProviderHelper.GetVersionsFromDirectory(
+                        NodeConstants.InstalledNpmVersionsDir);
                 }
 
                 return _supportedNpmVersions;

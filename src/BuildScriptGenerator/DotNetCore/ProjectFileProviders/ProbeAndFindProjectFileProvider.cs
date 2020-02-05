@@ -119,7 +119,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator.DotNetCore
                 throw new InvalidUsageException(string.Format(
                     Resources.Labels.DotNetCoreAmbiguityInSelectingProjectFile,
                     projectList,
-                    EnvironmentSettingsKeys.Project));
+                    DotNetCoreEnvironmentSettingsKeys.Project));
             }
 
             if (projects.Count == 1)

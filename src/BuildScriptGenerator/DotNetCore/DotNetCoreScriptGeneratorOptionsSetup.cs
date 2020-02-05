@@ -20,16 +20,17 @@ namespace Microsoft.Oryx.BuildScriptGenerator.DotNetCore
 
         public void Configure(DotNetCoreScriptGeneratorOptions options)
         {
-            var defaultVersion = _environment.GetEnvironmentVariable(EnvironmentSettingsKeys.DotNetCoreDefaultVersion);
+            var defaultVersion = _environment.GetEnvironmentVariable(
+                DotNetCoreEnvironmentSettingsKeys.DotNetCoreDefaultVersion);
             if (string.IsNullOrEmpty(defaultVersion))
             {
                 defaultVersion = DefaultVersion;
             }
 
             options.DefaultVersion = defaultVersion;
-            options.Project = _environment.GetEnvironmentVariable(EnvironmentSettingsKeys.Project);
+            options.Project = _environment.GetEnvironmentVariable(DotNetCoreEnvironmentSettingsKeys.Project);
             options.MSBuildConfiguration = _environment.GetEnvironmentVariable(
-                EnvironmentSettingsKeys.MSBuildConfiguration);
+                DotNetCoreEnvironmentSettingsKeys.MSBuildConfiguration);
         }
     }
 }

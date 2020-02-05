@@ -35,7 +35,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator.DotNetCore
             {
                 _logger.LogDebug(
                     "No request to build a particular project file explicitly either using the " +
-                    $"'{EnvironmentSettingsKeys.Project}' environment variable or the " +
+                    $"'{DotNetCoreEnvironmentSettingsKeys.Project}' environment variable or the " +
                     $"'{DotNetCoreConstants.ProjectBuildPropertyKey}' build property");
                 return null;
             }

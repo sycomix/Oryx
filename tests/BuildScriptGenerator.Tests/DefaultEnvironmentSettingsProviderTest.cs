@@ -30,13 +30,13 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Tests
             var scriptFile = Path.Combine(sourceDir, "a b.sh");
             File.Create(scriptFile);
             var testEnvironment = new TestEnvironment();
-            testEnvironment.SetEnvironmentVariable(EnvironmentSettingsKeys.PreBuildCommand, " \" a b c \" ");
+            testEnvironment.SetEnvironmentVariable(CommonEnvironmentSettingsKeys.PreBuildCommand, " \" a b c \" ");
             testEnvironment.SetEnvironmentVariable(
-                EnvironmentSettingsKeys.PreBuildScriptPath,
+                CommonEnvironmentSettingsKeys.PreBuildScriptPath,
                 $" \"{scriptFile}\" ");
-            testEnvironment.SetEnvironmentVariable(EnvironmentSettingsKeys.PostBuildCommand, " \" a b c \" ");
+            testEnvironment.SetEnvironmentVariable(CommonEnvironmentSettingsKeys.PostBuildCommand, " \" a b c \" ");
             testEnvironment.SetEnvironmentVariable(
-                EnvironmentSettingsKeys.PostBuildScriptPath,
+                CommonEnvironmentSettingsKeys.PostBuildScriptPath,
                 $" \"{scriptFile}\" ");
             var provider = CreateProvider(sourceDir, testEnvironment);
 
@@ -59,7 +59,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Tests
             // Arrange
             var sourceDir = CreateNewDir();
             var testEnvironment = new TestEnvironment();
-            testEnvironment.SetEnvironmentVariable(EnvironmentSettingsKeys.PreBuildCommand, value);
+            testEnvironment.SetEnvironmentVariable(CommonEnvironmentSettingsKeys.PreBuildCommand, value);
             var provider = CreateProvider(sourceDir, testEnvironment);
 
             // Act

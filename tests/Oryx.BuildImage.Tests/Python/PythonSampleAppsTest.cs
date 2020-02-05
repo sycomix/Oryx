@@ -1095,7 +1095,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
             if (string.IsNullOrEmpty(disableCollectStatic))
             {
                 scriptBuilder.AddCommand(
-                    $"export {EnvironmentSettingsKeys.DisableCollectStatic}={disableCollectStatic}");
+                    $"export {PythonEnvironmentSettingsKeys.DisableCollectStatic}={disableCollectStatic}");
             }
             var script = scriptBuilder
                 .AddBuildCommand(
@@ -1182,7 +1182,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
             var appDir = volume.ContainerDir;
             var appOutputDir = "/tmp/app-output";
             var script = new ShellScriptBuilder()
-                .AddCommand($"export {EnvironmentSettingsKeys.DisableCollectStatic}={disableCollectStatic}")
+                .AddCommand($"export {PythonEnvironmentSettingsKeys.DisableCollectStatic}={disableCollectStatic}")
                 .AddBuildCommand(
                 $"{appDir} -o {appOutputDir} --platform python --platform-version {PythonVersions.Python37Version}")
                 // These css files should NOT be available since 'collectstatic' is set off

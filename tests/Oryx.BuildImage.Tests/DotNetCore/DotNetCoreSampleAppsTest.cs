@@ -627,7 +627,7 @@ namespace Microsoft.Oryx.BuildImage.Tests
             var appOutputDir = "/tmp/MultiWebAppRepo-output";
             var intermediateDir = "/tmp/int";
             var script = new ShellScriptBuilder()
-                .SetEnvironmentVariable(EnvironmentSettingsKeys.Project, "src/WebApp1/WebApp1.csproj")
+                .SetEnvironmentVariable(DotNetCoreEnvironmentSettingsKeys.Project, "src/WebApp1/WebApp1.csproj")
                 .AddCommand($"rm -rf {projectDir}/bin")
                 .AddBuildCommand($"{appDir} -i {intermediateDir} -o {appOutputDir}")
                 .AddDirectoryDoesNotExistCheck($"{projectDir}/bin")

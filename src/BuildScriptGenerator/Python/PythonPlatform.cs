@@ -89,11 +89,11 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
                     virtualEnvName = GetDefaultVirtualEnvName(context);
                 }
 
-                manifestFileProperties[ManifestFilePropertyKeys.VirtualEnvName] = virtualEnvName;
+                manifestFileProperties[PythonManifestFilePropertyKeys.VirtualEnvName] = virtualEnvName;
             }
             else
             {
-                manifestFileProperties[ManifestFilePropertyKeys.PackageDir] = packageDir;
+                manifestFileProperties[PythonManifestFilePropertyKeys.PackageDir] = packageDir;
             }
 
             var virtualEnvModule = string.Empty;
@@ -122,7 +122,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
 
             if (!string.IsNullOrWhiteSpace(compressedVirtualEnvFileName))
             {
-                manifestFileProperties[ManifestFilePropertyKeys.CompressedVirtualEnvFile]
+                manifestFileProperties[PythonManifestFilePropertyKeys.CompressedVirtualEnvFile]
                     = compressedVirtualEnvFileName;
             }
 
@@ -291,7 +291,7 @@ namespace Microsoft.Oryx.BuildScriptGenerator.Python
             // Collect static is enabled by default, but users can opt-out of it
             var enableCollectStatic = true;
             var disableCollectStaticEnvValue = _environment.GetEnvironmentVariable(
-                EnvironmentSettingsKeys.DisableCollectStatic);
+                PythonEnvironmentSettingsKeys.DisableCollectStatic);
             if (disableCollectStaticEnvValue.EqualsIgnoreCase(Constants.True))
             {
                 enableCollectStatic = false;
